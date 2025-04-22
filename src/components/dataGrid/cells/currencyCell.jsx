@@ -52,7 +52,7 @@ export const CurrencyCell = ({ getValue, row, column, table, ...props }) => {
         backgroundColor: "transparent",
         height: "32px",
         paddingInline: "8px",
-        outlineColor: "#8528CE",
+        outlineColor: "#0474AF",
         fontSize: "14px",
         width: "100%",
       }}

@@ -9,7 +9,7 @@ export const invertedChart = () => {
     >
       <path
         d="M1 1.15674V8.65674M5.16667 1.15674V5.24765M9.33333 1.15674V10.7022"
-        stroke="#805AD5"
+        stroke="#0474AF"
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"

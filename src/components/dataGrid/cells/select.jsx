@@ -1,8 +1,5 @@
 import { useEffect, useState } from "react";
-import {
-  NativeSelectField,
-  NativeSelectRoot,
-} from "../../ui/native-select";
+import { NativeSelectField, NativeSelectRoot } from "../../ui/native-select";
 
 export const SelectCell = ({ getValue, row, column, table, ...rest }) => {
   const initialValue = getValue();

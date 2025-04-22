@@ -86,7 +86,6 @@ export const ServicosTomados = () => {
             _placeholder={{ color: "gray.400" }}
             placeIcon="right"
             iconSize={16}
-            iconColor="purple"
             value={searchTerm}
             onChange={setSearchTerm}
           />

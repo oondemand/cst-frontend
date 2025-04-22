@@ -44,8 +44,7 @@ export function PlanejamentoMensal() {
             py="4"
             gap="4"
           >
-            <Target size={38} color="#8529CD" />
-
+            <Target size={38} color="#0474AF" />
             <Box>
               <Text fontSize="lg" color="gray.500">
                 Valor provisionado
@@ -116,7 +115,7 @@ export function PlanejamentoMensal() {
               h="6"
               rounded="lg"
               color="white"
-              bg="blue.500"
+              bg="orange.400"
               value="selecao-manual"
             >
               Seleção manual
@@ -126,7 +125,7 @@ export function PlanejamentoMensal() {
               h="6"
               rounded="lg"
               color="white"
-              bg="blue.500"
+              bg="orange.400"
               value="sincronizar"
             >
               Sincronizar

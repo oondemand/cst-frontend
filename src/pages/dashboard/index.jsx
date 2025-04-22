@@ -85,7 +85,7 @@ export const Dashboard = () => {
           <Flex>
             <Flex alignItems="center" gap="4">
               <Box bg="white" rounded="lg" p="1">
-                <PiggyBank size={36} color="purple" />
+                <PiggyBank size={36} color="#0474AF" />
               </Box>
               <Text color="gray.100" fontWeight="medium">
                 Valor total <br /> dos serviços

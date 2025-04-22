@@ -27,7 +27,10 @@ export const AlterarSenha = () => {
               Central de Serviços
             </Text>
 
-            <img src="/logo_rakuten.png" alt="RAKUTEN" />
+            {/* <img src="/logo_rakuten.png" alt="RAKUTEN" /> */}
+            <Text fontSize="2xl" fontWeight="700" color="white">
+              oondemand
+            </Text>
           </Flex>
           <Text color="white" fontSize="sm" fontWeight="semibold">
             v {env.VITE_SERVICE_VERSION}

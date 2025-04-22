@@ -128,7 +128,10 @@ export const AuthLayout = () => {
         >
           <Link to="/" viewTransition>
             <Box w="120px">
-              <img src="/logo_rakuten_purple.png" alt="RAKUTEN" />
+              {/* <img src="/logo_rakuten_purple.png" alt="RAKUTEN" /> */}
+              <Text fontSize="lg" fontWeight="700">
+                oondemand
+              </Text>
             </Box>
           </Link>
         </Flex>
@@ -199,7 +202,7 @@ export const AuthLayout = () => {
           fontSize="sm"
           cursor="pointer"
         >
-          <LogOut color="#8528CE" size={18} /> Sair
+          <LogOut color="#0474AF" size={18} /> Sair
         </Button>
       </Flex>
 

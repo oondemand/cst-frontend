@@ -33,7 +33,10 @@ export const Header = () => {
     >
       <Link to="/">
         <Box as="span" fontSize="xl" fontWeight="bold" color="brand.500">
-          <img src="/logo_rakuten_purple.png" alt="RAKUTEN" />
+          {/* <img src="/logo_rakuten_purple.png" alt="RAKUTEN" /> */}
+          <Text fontSize="2xl" fontWeight="700">
+            oondemand
+          </Text>
         </Box>
       </Link>
 
