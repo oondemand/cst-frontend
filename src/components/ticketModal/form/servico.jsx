@@ -181,103 +181,101 @@ export const ServicoForm = ({ ticket, onlyReading }) => {
                     Competência
                   </Table.ColumnHeader>
                   <Table.ColumnHeader
-                    width="25%"
+                    width="50%"
                     color="gray.500"
                     fontSize="sm"
                   >
-                    Valor principal
+                    Descrição
                   </Table.ColumnHeader>
-                  <Table.ColumnHeader
+                  {/* <Table.ColumnHeader
                     width="25%"
                     color="gray.500"
                     fontSize="sm"
                   >
                     Valor Revisão
-                  </Table.ColumnHeader>
+                  </Table.ColumnHeader> */}
                   <Table.ColumnHeader
                     width="25%"
                     color="gray.500"
                     fontSize="sm"
                   >
-                    Valor total
+                    Valor
                   </Table.ColumnHeader>
                   <Table.ColumnHeader width="20px" />
                 </Table.Row>
               </Table.Header>
               <Table.Body>
                 {servicos?.map((servico) => (
-                  <Tooltip
-                    key={servico._id}
-                    content={<ServicoTooltipCard servico={servico} />}
-                    positioning={{ placement: "top" }}
-                    openDelay={1000}
-                    closeDelay={50}
-                    contentProps={{
-                      css: {
-                        "--tooltip-bg": "transparent",
-                        width: "700px !important",
-                        minWidth: "700px !important",
-                        color: "gray.600",
-                        shadow: "none",
-                      },
-                    }}
-                  >
-                    <Table.Row>
-                      <Table.Cell>
-                        <Text
-                          fontSize="xs"
-                          color="gray.400"
-                          mr="6"
-                          px="1"
-                          borderColor="gray.200"
-                          rounded="xs"
-                        >
-                          {servico?.tipoDocumentoFiscal}
-                        </Text>
-                      </Table.Cell>
-                      <Table.Cell>
-                        <Text fontSize="xs" color="gray.400">
-                          {servico?.competencia?.mes
-                            .toString()
-                            .padStart(2, "0")}
-                          /{servico?.competencia?.ano}
-                        </Text>
-                      </Table.Cell>
+                  // <Tooltip
+                  //   key={servico._id}
+                  //   content={<ServicoTooltipCard servico={servico} />}
+                  //   positioning={{ placement: "top" }}
+                  //   openDelay={1000}
+                  //   closeDelay={50}
+                  //   contentProps={{
+                  //     css: {
+                  //       "--tooltip-bg": "transparent",
+                  //       width: "700px !important",
+                  //       minWidth: "700px !important",
+                  //       color: "gray.600",
+                  //       shadow: "none",
+                  //     },
+                  //   }}
+                  // >
+                  <Table.Row>
+                    <Table.Cell>
+                      <Text
+                        fontSize="xs"
+                        color="gray.400"
+                        mr="6"
+                        px="1"
+                        borderColor="gray.200"
+                        rounded="xs"
+                      >
+                        {servico?.tipoDocumentoFiscal}
+                      </Text>
+                    </Table.Cell>
+                    <Table.Cell>
+                      <Text fontSize="xs" color="gray.400">
+                        {servico?.competencia?.mes.toString().padStart(2, "0")}/
+                        {servico?.competencia?.ano}
+                      </Text>
+                    </Table.Cell>
 
-                      <Table.Cell>
-                        <Text fontSize="xs" color="gray.400">
-                          {currency.format(servico?.valores?.totalServico)}
-                        </Text>
-                      </Table.Cell>
+                    <Table.Cell>
+                      <Text truncate fontSize="xs" color="gray.400">
+                        {servico?.descricao}
+                      </Text>
+                    </Table.Cell>
 
-                      <Table.Cell>
+                    {/* <Table.Cell>
                         <Text fontSize="xs" color="gray.400">
                           {currency.format(servico?.valores?.totalRevisao)}
                         </Text>
-                      </Table.Cell>
+                      </Table.Cell> */}
 
-                      <Table.Cell>
-                        <Text fontSize="xs" fontWeight="medium">
-                          {currency.format(servico?.valor)}
-                        </Text>
-                      </Table.Cell>
+                    <Table.Cell>
+                      <Text fontSize="xs" fontWeight="medium">
+                        {currency.format(servico?.valor)}
+                      </Text>
+                    </Table.Cell>
 
-                      <Table.Cell>
-                        {!onlyReading && (
-                          <Button
-                            size="xs"
-                            variant="ghost"
-                            onClick={(e) => {
-                              handleDeleteTicket({ id: servico._id });
-                            }}
-                            _hover={{ bg: "transparent" }}
-                          >
-                            <CircleX size={15} color="red" />
-                          </Button>
-                        )}
-                      </Table.Cell>
-                    </Table.Row>
-                  </Tooltip>
+                    <Table.Cell>
+                      {!onlyReading && (
+                        <Button
+                          size="xs"
+                          variant="ghost"
+                          onClick={(e) => {
+                            handleDeleteTicket({ id: servico._id });
+                          }}
+                          _hover={{ bg: "transparent" }}
+                        >
+                          <CircleX size={15} color="red" />
+                        </Button>
+                      )}
+                    </Table.Cell>
+                  </Table.Row>
+                  // </Tooltip>
                 ))}
               </Table.Body>
             </Table.Root>

@@ -2,8 +2,6 @@ import { Box, Text, Grid, GridItem, Flex } from "@chakra-ui/react";
 import { currency } from "../../../utils/currency";
 
 export const ServicoTooltipCard = ({ servico }) => {
-  console.log("Servico", servico);
-
   return (
     <Box
       bg="white"
