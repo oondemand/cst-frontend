@@ -27,7 +27,7 @@ const obterPrestadores = async (inputValue) => {
     return {
       ...item,
       value: item._id,
-      label: `${item.nome} ${item.sid ? `SID. ${item.sid}` : ""} ${`${
+      label: `${item.nome} ${`${
         item.documento ? `DOC. ${item.documento}` : ""
       }`}`,
     };

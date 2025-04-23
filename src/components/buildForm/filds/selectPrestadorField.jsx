@@ -25,7 +25,7 @@ export const SelectPrestadorField = ({ ...props }) => {
   };
 
   const createPrestadorOption = (prestador) => ({
-    label: `${prestador.nome} - ${prestador.sid} - ${prestador.documento}`,
+    label: `${prestador.nome} - ${prestador.documento}`,
     value: prestador._id,
   });
 

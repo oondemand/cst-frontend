@@ -31,7 +31,7 @@ export const SelectPrestadorCell = ({
   };
 
   const createPrestadorOption = (prestador) => ({
-    label: `${prestador.nome} - ${prestador.sid} - ${prestador.documento}`,
+    label: `${prestador.nome} - ${prestador.documento}`,
     value: prestador._id,
   });
 
@@ -70,7 +70,7 @@ export const SelectPrestadorCell = ({
 
   const revertToInitialValue = () => {
     setValue({
-      label: `${initialValue?.nome} - ${initialValue?.sid} - ${initialValue?.documento}`,
+      label: `${initialValue?.nome} - ${initialValue?.documento}`,
       value: initialValue?._id,
     });
   };
@@ -87,7 +87,7 @@ export const SelectPrestadorCell = ({
 
   const initializeValue = () => {
     setValue({
-      label: `${initialValue?.nome} - ${initialValue?.sid} - ${initialValue?.documento}`,
+      label: `${initialValue?.nome} - ${initialValue?.documento}`,
       value: initialValue?._id,
     });
   };

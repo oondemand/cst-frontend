@@ -52,15 +52,6 @@ export const UsuariosDialog = ({
     mutationFn: async ({ id, body }) =>
       await UsuarioService.alterarUsuario({ body, id }),
     onSuccess(data) {
-      // setData((prev) => ({
-      //   ...data?.prestador,
-      //   pessoaFisica: {
-      //     ...data?.prestador.pessoaFisica,
-      //     dataNascimento: formatDateToDDMMYYYY(
-      //       data?.prestador.pessoaFisica?.dataNascimento
-      //     ),
-      //   },
-      // }));
       queryClient.invalidateQueries(["listar-usuarios"]);
       toaster.create({
         title: "Usuario atualizado com sucesso",
@@ -80,15 +71,6 @@ export const UsuariosDialog = ({
       await UsuarioService.adicionarUsuario({ body }),
 
     onSuccess(data) {
-      // setData((prev) => ({
-      //   ...data?.prestador,
-      //   pessoaFisica: {
-      //     ...data?.prestador.pessoaFisica,
-      //     dataNascimento: formatDateToDDMMYYYY(
-      //       data?.prestador.pessoaFisica?.dataNascimento
-      //     ),
-      //   },
-      // }));
       queryClient.invalidateQueries(["listar-usuarios"]);
       toaster.create({
         title: "Usuario criado com sucesso",

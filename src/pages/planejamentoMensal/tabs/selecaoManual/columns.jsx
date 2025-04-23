@@ -17,17 +17,6 @@ export const makeServicoDynamicColumns = () => {
       cell: (props) => <CheckActionCell {...props} />,
     },
     {
-      accessorKey: "prestador.sid",
-      header: "Sid",
-      enableSorting: false,
-      cell: DefaultCell,
-      size: 120,
-      enableColumnFilter: true,
-      meta: {
-        filterKey: "prestador.sid",
-      },
-    },
-    {
       accessorKey: "prestador.nome",
       header: "Nome",
       enableSorting: false,

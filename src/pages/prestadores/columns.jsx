@@ -16,7 +16,6 @@ import { IconButton } from "@chakra-ui/react";
 import { Pencil } from "lucide-react";
 import { formatDateToDDMMYYYY } from "../../utils/formatting";
 import { EnviarConvitePrestadorAction } from "../../components/dataGrid/actions/enviarConvite";
-import { Tooltip } from "../../components/ui/tooltip";
 
 export const makePrestadorDynamicColumns = () => {
   return [
@@ -49,14 +48,6 @@ export const makePrestadorDynamicColumns = () => {
       ),
     },
     {
-      accessorKey: "sciUnico",
-      header: "SCI Único",
-      cell: DefaultEditableCell,
-      enableColumnFilter: true,
-      enableSorting: false,
-      meta: { filterKey: "sciUnico" },
-    },
-    {
       accessorKey: "manager",
       header: "Manager",
       cell: (props) => <SelectListaCell {...props} cod="manager" />,
@@ -71,14 +62,6 @@ export const makePrestadorDynamicColumns = () => {
       enableColumnFilter: true,
       enableSorting: false,
       meta: { filterKey: "nome" },
-    },
-    {
-      accessorKey: "sid",
-      header: "SID",
-      cell: DefaultEditableCell,
-      enableColumnFilter: true,
-      enableSorting: false,
-      meta: { filterKey: "sid" },
     },
     {
       accessorKey: "tipo",

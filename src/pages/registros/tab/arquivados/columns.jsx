@@ -43,14 +43,6 @@ export const makeTicketsArquivadosDynamicColumns = () => {
       meta: { filterKey: "prestador.nome" },
     },
     {
-      accessorKey: "prestador.sid",
-      header: "SID",
-      cell: DefaultCell,
-      enableSorting: false,
-      enableColumnFilter: true,
-      meta: { filterKey: "prestador.sid" },
-    },
-    {
       accessorKey: "prestador.documento",
       header: "Documento",
       cell: DefaultCell,

@@ -38,25 +38,6 @@ export const createDynamicFormFields = () => {
       colSpan: 2,
     },
     {
-      accessorKey: "sid",
-      label: "SID",
-      render: DefaultField,
-      validation: z.coerce
-        .string()
-        .regex(/^\d{7}$/, "O SID deve ter exatamente 7 dígitos."),
-      colSpan: 1,
-    },
-    {
-      accessorKey: "sciUnico",
-      label: "SCI Único",
-      render: DefaultField,
-      validation: z.coerce
-        .string()
-        .regex(/^(?:\d{6})?$/, "O sci deve ter 6 dígitos.")
-        .nullable(),
-      colSpan: 1,
-    },
-    {
       accessorKey: "email",
       label: "E-mail",
       render: DefaultField,
