@@ -100,7 +100,6 @@ export const ServicosList = () => {
 
     return servicos.map((e) => ({
       ...e,
-      dataProvisaoContabil: formatDateToDDMMYYYY(e?.dataProvisaoContabil),
       dataRegistro: formatDateToDDMMYYYY(e?.dataRegistro),
       revisionMonthProvision: formatDateToDDMMYYYY(e?.revisionMonthProvision),
       competencia: `${e?.competencia?.mes.toString().padStart(2, 0)}/${

@@ -46,9 +46,10 @@ export const ServicoForm = ({ ticket, onlyReading }) => {
       .toString()
       .padStart(2, "0")}/${
       e?.competencia?.ano
-    }   REGIST. ${formatDateToDDMMYYYY(e?.dataRegistro, "dd/MM/yyyy")} ${
-      e?.campanha ?? ""
-    }  ${currency.format(e?.valor ?? 0)}`,
+    }   REGIST. ${formatDateToDDMMYYYY(
+      e?.dataRegistro,
+      "dd/MM/yyyy"
+    )} ${currency.format(e?.valor ?? 0)}`,
 
     value: e?._id,
   }));

@@ -18,7 +18,7 @@ import { queryClient } from "../../config/react-query";
 import { useConfirmation } from "../../hooks/useConfirmation";
 
 export function Listas() {
-  const [tab, setTab] = useStateWithStorage("LISTAS-TAB", "campanha");
+  const [tab, setTab] = useStateWithStorage("LISTAS-TAB");
   const { requestConfirmation } = useConfirmation();
 
   const { data } = useQuery({
