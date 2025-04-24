@@ -9,7 +9,7 @@ export const SelectListaField = ({ cod, ...props }) => {
   const { data: lista } = useQuery({
     queryFn: async () => ListaService.getListByCode({ cod }),
     queryKey: [`list-${cod}`],
-    staleTime: 1000 * 60 * 10, //10 minutos
+    staleTime: 1000 * 60 * 10, // 10 minutos
   });
 
   const options = lista?.valores?.map((e) => ({
