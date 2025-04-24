@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: cst-rakuten-frontend
-  namespace: rakuten
+  name: cst-frontend
+  namespace: cst
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: cst-rakuten-frontend
+      app: cst-frontend
   template:
     metadata:
       labels:
-        app: cst-rakuten-frontend
+        app: cst-frontend
     spec:
       containers:
-        - name: cst-rakuten-frontend-container
-          image: ghcr.io/oondemand/cst-rakuten-frontend:${IMAGE_TAG}-homolog
+        - name: cst-frontend-container
+          image: ghcr.io/oondemand/cst-frontend:${IMAGE_TAG}-homolog
           ports:
             - containerPort: 3000
           resources:
