@@ -54,7 +54,7 @@ export const AlterarSenha = () => {
               Bem vindo(a) :)
             </Heading>
             <Text mb="4" color="brand.500" textAlign="center">
-              Crie sua nova senha para acessar a Central de Serviços Rakuten.
+              Crie sua nova senha para acessar a Central de Serviços.
             </Text>
 
             <LoginForm />
