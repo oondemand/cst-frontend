@@ -21,27 +21,6 @@ const dateValidation = z
 
 export const FORMS = [
   {
-    title: "Omie",
-    fields: [
-      {
-        accessorKey: "omie.id_conta_corrente",
-        label: "Id conta corrente",
-        render: SelectContaCorrenteField,
-        validation: z.number(),
-        colSpan: 1,
-      },
-      {
-        accessorKey: "omie.codigo_categoria",
-        label: "Codigo categoria",
-        render: SelectCategoriaField,
-        validation: z
-          .string()
-          .nonempty("Código categoria é um campo obrigatório"),
-        colSpan: 1,
-      },
-    ],
-  },
-  {
     title: "Geral",
     fields: [
       {
@@ -63,6 +42,27 @@ export const FORMS = [
         label: "Data de corte app publisher",
         render: DateField,
         validation: dateValidation,
+        colSpan: 1,
+      },
+    ],
+  },
+  {
+    title: "Omie",
+    fields: [
+      {
+        accessorKey: "omie.id_conta_corrente",
+        label: "Id conta corrente",
+        render: SelectContaCorrenteField,
+        validation: z.number(),
+        colSpan: 1,
+      },
+      {
+        accessorKey: "omie.codigo_categoria",
+        label: "Codigo categoria",
+        render: SelectCategoriaField,
+        validation: z
+          .string()
+          .nonempty("Código categoria é um campo obrigatório"),
         colSpan: 1,
       },
     ],

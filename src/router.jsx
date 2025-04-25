@@ -16,6 +16,7 @@ import { RegistrosPage } from "./pages/registros";
 import { Listas } from "./pages/listas";
 import { SistemaPage } from "./pages/sistema";
 import { TicketsPagosPage } from "./pages/ticketsPagos";
+import { EtapasPage } from "./pages/etapas";
 
 export const router = createBrowserRouter([
   {
@@ -35,6 +36,7 @@ export const router = createBrowserRouter([
       { path: "/sistema", element: <SistemaPage /> },
       { path: "/doc", element: <Doc /> },
       { path: "/pagos", element: <TicketsPagosPage /> },
+      { path: "/etapas", element: <EtapasPage /> },
     ],
   },
 

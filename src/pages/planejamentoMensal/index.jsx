@@ -114,8 +114,7 @@ export function PlanejamentoMensal() {
               fontSize="xs"
               h="6"
               rounded="lg"
-              color="white"
-              bg="orange.400"
+              color="gray.600"
               value="selecao-manual"
             >
               Seleção manual
@@ -124,8 +123,7 @@ export function PlanejamentoMensal() {
               fontSize="xs"
               h="6"
               rounded="lg"
-              color="white"
-              bg="orange.400"
+              color="gray.600"
               value="sincronizar"
             >
               Sincronizar

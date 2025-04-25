@@ -10,7 +10,7 @@ import { BuildForm } from "../../components/buildForm/index";
 import { VisibilityControlDialog } from "../../components/vibilityControlDialog";
 import { useVisibleInputForm } from "../../hooks/useVisibleInputForms";
 import { toaster } from "../../components/ui/toaster";
-import { UsuarioService } from "../../service/usuario";
+import { EtapaService } from "../../service/etapa";
 
 import {
   DialogRoot,
@@ -32,54 +32,53 @@ const DefaultTrigger = (props) => {
       color="brand.500"
       _hover={{ backgroundColor: "gray.50" }}
     >
-      Criar um usuario
+      Criar um etapa
     </Button>
   );
 };
 
-export const UsuariosDialog = ({
+export const EtapasDialog = ({
   defaultValues = null,
   trigger,
-  label = "Criar usuário",
+  label = "Criar etapa",
 }) => {
   const [data, setData] = useState(defaultValues);
   const [open, setOpen] = useState(false);
   const { inputsVisibility, setInputsVisibility } = useVisibleInputForm({
-    key: "USUARIOS",
+    key: "ETAPAS",
   });
 
-  const { mutateAsync: updateUsuarioMutation } = useMutation({
+  const { mutateAsync: updateEtapaMutation } = useMutation({
     mutationFn: async ({ id, body }) =>
-      await UsuarioService.alterarUsuario({ body, id }),
+      await EtapaService.alterarEtapa({ body, id }),
     onSuccess(data) {
-      queryClient.invalidateQueries(["listar-usuarios"]);
+      queryClient.invalidateQueries(["listar-etapas"]);
       toaster.create({
-        title: "Usuario atualizado com sucesso",
+        title: "Etapa atualizado com sucesso",
         type: "success",
       });
     },
     onError: (error) => {
       toaster.create({
-        title: "Ouve um erro ao atualizar o usuario",
+        title: "Ouve um erro ao atualizar o etapa",
         type: "error",
       });
     },
   });
 
-  const { mutateAsync: createUsuarioMutation } = useMutation({
-    mutationFn: async ({ body }) =>
-      await UsuarioService.adicionarUsuario({ body }),
+  const { mutateAsync: createEtapaMutation } = useMutation({
+    mutationFn: async ({ body }) => await EtapaService.adicionarEtapa({ body }),
 
     onSuccess(data) {
-      queryClient.invalidateQueries(["listar-usuarios"]);
+      queryClient.invalidateQueries(["listar-etapas"]);
       toaster.create({
-        title: "Usuario criado com sucesso",
+        title: "Etapa criado com sucesso",
         type: "success",
       });
     },
     onError: (error) => {
       toaster.create({
-        title: "Ouve um erro ao criar um usuario",
+        title: "Ouve um erro ao criar um etapa",
         type: "error",
       });
     },
@@ -92,10 +91,10 @@ export const UsuariosDialog = ({
     };
 
     if (!data) {
-      return await createUsuarioMutation({ body });
+      return await createEtapaMutation({ body });
     }
 
-    return await updateUsuarioMutation({ id: data._id, body });
+    return await updateEtapaMutation({ id: data._id, body });
   };
 
   const fields = useMemo(() => {

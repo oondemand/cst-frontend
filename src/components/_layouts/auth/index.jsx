@@ -79,6 +79,10 @@ const navigationItems = [
         href: "/sistema",
       },
       {
+        title: "Etapas",
+        href: "/etapas",
+      },
+      {
         title: "Doc",
         href: "/doc",
       },
