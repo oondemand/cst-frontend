@@ -1,7 +1,12 @@
 import { api } from "../config/api";
 
-const listarEtapas = async () => {
+const listarEtapasAtivas = async () => {
   const { data } = await api.get("/etapas/ativas");
+  return data;
+};
+
+const listarEtapas = async ({ filters }) => {
+  const { data } = await api.get("/etapas", { params: filters });
   return data;
 };
 
@@ -19,4 +24,5 @@ export const EtapaService = {
   listarEtapas,
   alterarEtapa,
   adicionarEtapa,
+  listarEtapasAtivas,
 };

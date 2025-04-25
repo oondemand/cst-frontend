@@ -30,7 +30,7 @@ export const ServicosTomados = () => {
     isLoading: isEtapasLoading,
   } = useQuery({
     queryKey: ["listar-etapas"],
-    queryFn: EtapaService.listarEtapas,
+    queryFn: EtapaService.listarEtapasAtivas,
     staleTime: 1000 * 60 * 10, // 10 minutos
   });
 

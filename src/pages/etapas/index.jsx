@@ -135,7 +135,7 @@ export const EtapasPage = () => {
             sorting={sortingState}
             columns={columns}
             pagination={paginationState}
-            data={data || []}
+            data={data?.etapas || []}
             columnVisibility={columnVisibility}
             setColumnVisibility={setColumnVisibility}
             columnSizing={columnSizing}
