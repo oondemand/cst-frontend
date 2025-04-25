@@ -33,7 +33,7 @@ export const ListaOmieComponent = () => {
     <Box p="4">
       {data?.map((item) => {
         return (
-          <Flex key={item._id} justifyContent="space-between" mb="2">
+          <Flex key={item._id} justifyContent="space-between" alignItems="center" mb="2.5">
             <Text fontSize="sm" color="gray.600">
               {item?.call} - {item?.url}
             </Text>
