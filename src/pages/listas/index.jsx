@@ -16,6 +16,7 @@ import { api } from "../../config/api";
 import { queryClient } from "../../config/react-query";
 
 import { useConfirmation } from "../../hooks/useConfirmation";
+import { ListaOmieComponent } from "./listaOmie";
 
 export function Listas() {
   const [tab, setTab] = useStateWithStorage("LISTAS-TAB");
@@ -99,7 +100,7 @@ export function Listas() {
       <Text fontSize="lg" color="gray.700" fontWeight="semibold">
         Listas
       </Text>
-      <Flex mt="4">
+      <Flex mt="4" gap="4">
         <Tabs.Root
           value={tab}
           onValueChange={(e) => setTab(e.value)}
@@ -113,9 +114,6 @@ export function Listas() {
               data?.length > 0 &&
               data.map((item) => (
                 <Tabs.Trigger
-                  // fontSize="xs"
-                  // h="6"
-                  // rounded="lg"
                   color="gray.500"
                   value={item?.codigo}
                   key={item?.codigo}
@@ -124,19 +122,19 @@ export function Listas() {
                     item?.codigo.slice(1).replace(/[-_]/g, " ")}
                 </Tabs.Trigger>
               ))}
+
+            <Tabs.Trigger color="gray.500" value="omie">
+              Omie
+            </Tabs.Trigger>
           </Tabs.List>
           {data &&
             data?.length > 0 &&
             data.map((lista) => (
               <Tabs.Content key={lista?.codigo} value={lista?.codigo} p="0">
                 <Box
-                  // mt="8"
                   px="6"
                   py="4"
                   pb="8"
-                  // bg="white"
-                  // rounded="lg"
-                  // shadow="sm"
                   maxH="600px"
                   overflow="auto"
                   className="custom-scrollbar"
@@ -190,7 +188,7 @@ export function Listas() {
                             itemId: item._id,
                           });
                         }}
-                        variant="surface"
+                        variant="subtle"
                         colorPalette="red"
                         size="2xs"
                       >
@@ -201,6 +199,10 @@ export function Listas() {
                 </Box>
               </Tabs.Content>
             ))}
+
+          <Tabs.Content value="omie" p="0">
+            <ListaOmieComponent />
+          </Tabs.Content>
         </Tabs.Root>
       </Flex>
     </Flex>
