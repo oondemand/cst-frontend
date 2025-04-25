@@ -4,15 +4,16 @@ import { api } from "../../config/api";
 import { FolderSync, RotateCcw, RotateCw } from "lucide-react";
 import { Tooltip } from "../../components/ui/tooltip";
 import { toaster } from "../../components/ui/toaster";
+import { ListaOmieService } from "../../service/lista-omie";
 
 export const ListaOmieComponent = () => {
   const { data } = useQuery({
     queryKey: ["listas-omie"],
-    queryFn: async () => await api.get("/lista-omie"),
+    queryFn: ListaOmieService.getListas,
   });
 
   const { mutateAsync: onSyncOmieLista, isPending } = useMutation({
-    mutationFn: async ({ id }) => await api.put(`/lista-omie/sync-omie/${id}`),
+    mutationFn: async ({ id }) => ListaOmieService.update({ id }),
     onSuccess: () => {
       toaster.create({
         title: "Lista sincronizada com sucesso!",
@@ -30,8 +31,7 @@ export const ListaOmieComponent = () => {
 
   return (
     <Box p="4">
-      {data?.data?.map((item) => {
-        console.log(item);
+      {data?.map((item) => {
         return (
           <Flex key={item._id} justifyContent="space-between" mb="2">
             <Text fontSize="sm" color="gray.600">

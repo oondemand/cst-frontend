@@ -4,12 +4,13 @@ import { Box, Text } from "@chakra-ui/react";
 import { Controller } from "react-hook-form";
 import { useMemo } from "react";
 import { createChakraStyles } from "./chakraStyles";
-import { SistemaService } from "../../../service/sistema";
+import { ListaOmieService } from "../../../service/lista-omie";
 
 export const SelectContaCorrenteField = ({ ...props }) => {
   const { data } = useQuery({
     queryKey: ["listar-conta-corrente"],
-    queryFn: SistemaService.listarContaCorrente,
+    queryFn: async () =>
+      ListaOmieService.getListByCode({ cod: "conta_corrente" }),
     staleTime: Infinity,
   });
 

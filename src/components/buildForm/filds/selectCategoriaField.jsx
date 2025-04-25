@@ -4,12 +4,13 @@ import { Box, Text } from "@chakra-ui/react";
 import { Controller } from "react-hook-form";
 import { useMemo } from "react";
 import { createChakraStyles } from "./chakraStyles";
-import { SistemaService } from "../../../service/sistema";
+import { ListaOmieService } from "../../../service/lista-omie";
 
 export const SelectCategoriaField = ({ ...props }) => {
   const { data } = useQuery({
     queryKey: ["listar-categorias"],
-    queryFn: SistemaService.listarCategorias,
+    queryFn: async () =>
+      ListaOmieService.getListByCode({ cod: "listar-categorias" }),
     staleTime: Infinity,
   });
 
