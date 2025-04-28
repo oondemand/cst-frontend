@@ -39,6 +39,7 @@ import { TicketStatus } from "./ticketStatus";
 import { TicketActions } from "./ticketActions";
 import { FilesForm } from "./form/files";
 import { ServicoForm } from "./form/servico";
+import { InformacoesAdicionaisForm } from "./form/informacoes-adicionais";
 
 export const CreateTicketModal = ({
   open,
@@ -174,6 +175,12 @@ export const CreateTicketModal = ({
             onlyReading={onlyReading}
             ticket={ticket}
             updateTicketMutation={updateTicketMutation}
+          />
+
+          <InformacoesAdicionaisForm
+            ticket={ticket}
+            updateTicketMutation={updateTicketMutation}
+            onlyReading={onlyReading}
           />
 
           <FilesForm

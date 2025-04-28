@@ -1,7 +1,6 @@
 import { Box, Text, Flex, IconButton } from "@chakra-ui/react";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { api } from "../../config/api";
-import { FolderSync, RotateCcw, RotateCw } from "lucide-react";
+import { RotateCw } from "lucide-react";
 import { Tooltip } from "../../components/ui/tooltip";
 import { toaster } from "../../components/ui/toaster";
 import { ListaOmieService } from "../../service/lista-omie";
@@ -33,7 +32,12 @@ export const ListaOmieComponent = () => {
     <Box p="4">
       {data?.map((item) => {
         return (
-          <Flex key={item._id} justifyContent="space-between" alignItems="center" mb="2.5">
+          <Flex
+            key={item._id}
+            justifyContent="space-between"
+            alignItems="center"
+            mb="2.5"
+          >
             <Text fontSize="sm" color="gray.600">
               {item?.call} - {item?.url}
             </Text>
