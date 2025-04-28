@@ -22,12 +22,10 @@ export const ExportData = ({
       return newRow;
     });
 
-    // Criar a planilha
     const worksheet = XLSX.utils.json_to_sheet(rows);
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "exported");
 
-    // Gerar arquivo
     XLSX.writeFile(workbook, "exported.xlsx", {
       type: "buffer",
     });
