@@ -37,6 +37,7 @@ export const ListaOmieComponent = () => {
             justifyContent="space-between"
             alignItems="center"
             mb="2.5"
+            gap="6"
           >
             <Text fontSize="sm" color="gray.600">
               {item?.call} - {item?.url}
