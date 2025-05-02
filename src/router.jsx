@@ -17,6 +17,8 @@ import { Listas } from "./pages/listas";
 import { SistemaPage } from "./pages/sistema";
 import { TicketsPagosPage } from "./pages/ticketsPagos";
 import { EtapasPage } from "./pages/etapas";
+import { DocumentosFiscaisList } from "./pages/documentoFiscal";
+import { ImportDocumentosFiscaisPage } from "./pages/documentoFiscal/importacao";
 
 export const router = createBrowserRouter([
   {
@@ -30,6 +32,11 @@ export const router = createBrowserRouter([
       { path: "/prestadores/importacao", element: <ImportPrestadoresPage /> },
       { path: "/servicos/todos", element: <ServicosList /> },
       { path: "/servicos/importacao", element: <ImportServicosPage /> },
+      { path: "/documentos-fiscais", element: <DocumentosFiscaisList /> },
+      {
+        path: "/documentos-fiscais/importacao",
+        element: <ImportDocumentosFiscaisPage />,
+      },
       { path: "/usuarios", element: <UsuariosPage /> },
       { path: "/registros", element: <RegistrosPage /> },
       { path: "/listas", element: <Listas /> },
