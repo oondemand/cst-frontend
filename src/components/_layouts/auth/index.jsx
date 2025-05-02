@@ -13,6 +13,7 @@ import {
   ListChecks,
   CalendarSync,
   TicketCheckIcon,
+  NotepadText,
 } from "lucide-react";
 
 import { NavLink } from "./navLink";
@@ -42,6 +43,12 @@ const navigationItems = [
     title: "Serviços",
     href: "/servicos/todos",
     icon: ListChecks,
+  },
+  {
+    title: "Documentos Fiscais",
+    href: "/documentos-fiscais",
+    icon: NotepadText,
+    rules: ["admin", "tomador"],
   },
   {
     title: "Planejamento",
