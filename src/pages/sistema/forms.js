@@ -4,20 +4,7 @@ import { coerce, z } from "zod";
 import { parse, isValid, format } from "date-fns";
 import { SelectCategoriaField } from "../../components/buildForm/filds/selectCategoriaField";
 import { SelectContaCorrenteField } from "../../components/buildForm/filds/selectContaCorrenteField";
-
-const dateValidation = z
-  .string()
-  .transform((value) => {
-    if (!value) return undefined;
-    return format(parse(value, "dd/MM/yyyy", new Date()), "yyyy/MM/dd");
-  })
-  .refine(
-    (value) => (value ? isValid(parse(value, "yyyy/MM/dd", new Date())) : true),
-    {
-      message: "Data inválida ",
-    }
-  )
-  .optional();
+import { dateValidation } from "../../utils/zodHelpers";
 
 export const FORMS = [
   {
