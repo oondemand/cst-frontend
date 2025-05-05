@@ -1,10 +1,9 @@
-import { useState, createContext, useContext } from "react";
-import { TicketModal } from "../components/ticketModal";
-import { queryClient } from "../config/react-query";
+import { useState, createContext, useContext, useRef } from "react";
+import { IaChat } from "../components/iaChat";
 
-const TicketModalContext = createContext({});
+const IaChatContext = createContext({});
 
-export const TicketModalProvider = ({ children }) => {
+export const IaChatProvider = ({ children }) => {
   const [modalConfig, setModalConfig] = useState({
     visible: false,
     data: {},
@@ -16,21 +15,20 @@ export const TicketModalProvider = ({ children }) => {
 
   const onClose = () => {
     setModalConfig((prev) => ({ ...prev, visible: false }));
-    queryClient.refetchQueries(["listar-tickets"]);
   };
 
   return (
-    <TicketModalContext.Provider value={{ onOpen, onClose }}>
-      <TicketModal
-        data={modalConfig.data}
+    <IaChatContext.Provider value={{ onOpen, onClose }}>
+      <IaChat
         visible={modalConfig.visible}
-        handleClose={onClose}
+        onClose={onClose}
+        data={modalConfig.data}
       />
       {children}
-    </TicketModalContext.Provider>
+    </IaChatContext.Provider>
   );
 };
 
-export const useTicketModal = () => {
-  return useContext(TicketModalContext);
+export const useIaChat = () => {
+  return useContext(IaChatContext);
 };

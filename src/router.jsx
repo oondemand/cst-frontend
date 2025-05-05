@@ -19,6 +19,7 @@ import { TicketsPagosPage } from "./pages/ticketsPagos";
 import { EtapasPage } from "./pages/etapas";
 import { DocumentosFiscaisList } from "./pages/documentoFiscal";
 import { ImportDocumentosFiscaisPage } from "./pages/documentoFiscal/importacao";
+import { IaChatProvider } from "./hooks/useTicketModal";
 
 export const router = createBrowserRouter([
   {
@@ -26,7 +27,14 @@ export const router = createBrowserRouter([
     element: <AuthLayout />,
     children: [
       { path: "/", element: <Dashboard /> },
-      { path: "/servicos-tomados", element: <ServicosTomados /> },
+      {
+        path: "/servicos-tomados",
+        element: (
+          <IaChatProvider>
+            <ServicosTomados />
+          </IaChatProvider>
+        ),
+      },
       { path: "/planejamento", element: <PlanejamentoMensal /> },
       { path: "/prestadores", element: <PrestadoresList /> },
       { path: "/prestadores/importacao", element: <ImportPrestadoresPage /> },

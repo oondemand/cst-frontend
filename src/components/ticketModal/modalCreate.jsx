@@ -41,6 +41,7 @@ import { FilesForm } from "./form/files";
 import { ServicoForm } from "./form/servico";
 import { InformacoesAdicionaisForm } from "./form/informacoes-adicionais";
 import { DocumentoFiscalForm } from "./form/documentoFiscal";
+import { useIaChat } from "../../hooks/useTicketModal";
 
 export const CreateTicketModal = ({
   open,
@@ -49,6 +50,7 @@ export const CreateTicketModal = ({
   onlyReading,
 }) => {
   const [ticket, setTicket] = useState(defaultValue);
+  const { onOpen } = useIaChat();
 
   const { mutateAsync: createTicketMutation } = useMutation({
     mutationFn: TicketService.adicionarTicket,
@@ -114,8 +116,19 @@ export const CreateTicketModal = ({
           borderColor="gray.200"
         >
           <Flex gap="4" alignItems="center" mt="-4" py="2" px="4">
-            <Oondemand />
-            <Heading fontSize="sm">Criar novo ticket</Heading>
+            <Box
+              aria-label="Abrir IA"
+              cursor="pointer"
+              variant="unstyled"
+              onClick={() => {
+                onOpen(ticket);
+              }}
+            >
+              <Oondemand />
+            </Box>
+            <Heading fontSize="sm">
+              {defaultValue ? "Detalhes do ticket" : "Criar novo ticket"}
+            </Heading>
           </Flex>
         </DialogTitle>
         <DialogBody
