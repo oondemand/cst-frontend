@@ -37,3 +37,21 @@ apiAssistant.interceptors.request.use(async (req) => {
 
   return req;
 });
+
+export const apiIntegracaoGPT = axios.create({
+  baseURL: env.VITE_API_INTEGRACAO_GPT_URL,
+});
+
+apiIntegracaoGPT.interceptors.request.use(async (req) => {
+  const token = localStorage.getItem("token");
+
+  if (token) {
+    req.headers = {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+      ...req.headers,
+    };
+  }
+
+  return req;
+});
