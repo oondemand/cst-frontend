@@ -2,14 +2,15 @@ import React from "react";
 import { SelectAutoCompleteCell } from "../../components/dataGrid/cells/selectAutoComplete";
 
 import { DefaultEditableCell } from "../../components/dataGrid/cells/defaultEditable";
-import { EtapasDialog } from "./dialog";
+import { AssistenteConfigDialog } from "./dialog";
 import { TableActionsCell } from "../../components/dataGrid/cells/tableActionsCell";
-import { DeleteEtapaAction } from "../../components/dataGrid/actions/deleteEtapaButton";
+import { DeleteAssistenteConfigAction } from "../../components/dataGrid/actions/deleteAssistenteConfigButton";
 
 import { IconButton } from "@chakra-ui/react";
 import { Pencil } from "lucide-react";
+import { SelectAssistantCell } from "../../components/dataGrid/cells/selectAssistantCell";
 
-export const makeEtapasDynamicColumns = () => {
+export const makeAssistenteConfigDynamicColumns = () => {
   return [
     {
       accessorKey: "acoes",
@@ -17,14 +18,14 @@ export const makeEtapasDynamicColumns = () => {
       enableSorting: false,
       cell: (props) => (
         <TableActionsCell>
-          <DeleteEtapaAction id={props.row.original?._id} />
-          <EtapasDialog
+          <DeleteAssistenteConfigAction id={props.row.original?._id} />
+          <AssistenteConfigDialog
             trigger={
               <IconButton variant="surface" colorPalette="gray" size="2xs">
                 <Pencil />
               </IconButton>
             }
-            label="Etapa"
+            label="Assistente"
             defaultValues={{
               ...props.row.original,
             }}
@@ -33,28 +34,20 @@ export const makeEtapasDynamicColumns = () => {
       ),
     },
     {
-      accessorKey: "codigo",
-      header: "Codigo",
+      accessorKey: "modulo",
+      header: "Modulo",
       cell: DefaultEditableCell,
       enableColumnFilter: true,
       enableSorting: false,
-      meta: { filterKey: "codigo" },
+      meta: { filterKey: "modulo" },
     },
     {
-      accessorKey: "nome",
-      header: "Nome",
-      cell: DefaultEditableCell,
+      accessorKey: "assistente",
+      header: "Assistente",
+      cell: SelectAssistantCell,
       enableColumnFilter: true,
       enableSorting: false,
-      meta: { filterKey: "nome" },
-    },
-    {
-      accessorKey: "posicao",
-      header: "posição",
-      cell: DefaultEditableCell,
-      enableColumnFilter: true,
-      enableSorting: false,
-      meta: { filterKey: "posicao" },
+      meta: { filterKey: "assistente" },
     },
     {
       accessorKey: "status",
@@ -69,6 +62,7 @@ export const makeEtapasDynamicColumns = () => {
         />
       ),
       enableColumnFilter: true,
+      enableSorting: false,
       meta: {
         filterKey: "status",
         filterVariant: "select",

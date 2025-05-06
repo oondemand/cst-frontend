@@ -19,6 +19,7 @@ import { TicketsPagosPage } from "./pages/ticketsPagos";
 import { EtapasPage } from "./pages/etapas";
 import { DocumentosFiscaisList } from "./pages/documentoFiscal";
 import { ImportDocumentosFiscaisPage } from "./pages/documentoFiscal/importacao";
+import { AssistenteConfigPage } from "./pages/assistant";
 
 export const router = createBrowserRouter([
   {
@@ -47,6 +48,7 @@ export const router = createBrowserRouter([
       { path: "/doc", element: <Doc /> },
       { path: "/pagos", element: <TicketsPagosPage /> },
       { path: "/etapas", element: <EtapasPage /> },
+      { path: "/assistentes", element: <AssistenteConfigPage /> },
     ],
   },
 

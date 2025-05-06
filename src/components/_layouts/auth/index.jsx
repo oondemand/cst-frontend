@@ -90,6 +90,10 @@ const navigationItems = [
         href: "/etapas",
       },
       {
+        title: "Assistentes",
+        href: "/assistentes",
+      },
+      {
         title: "Doc",
         href: "/doc",
       },

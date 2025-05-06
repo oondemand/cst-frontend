@@ -22,6 +22,7 @@ export const SelectCell = ({ getValue, row, column, table, ...rest }) => {
   useEffect(() => {
     setValue(initialValue);
   }, [initialValue]);
+
   return (
     <NativeSelectRoot
       onBlur={onBlur}
