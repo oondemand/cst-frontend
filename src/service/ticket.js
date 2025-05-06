@@ -117,4 +117,5 @@ export const TicketService = {
   listarTicketsPagos,
   adicionarDocumentoFiscal,
   removerDocumentoFiscal,
+  carregarTicket,
 };

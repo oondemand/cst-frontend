@@ -20,13 +20,14 @@ import { AssistantService } from "../../service/assistant";
 import { useMutation } from "@tanstack/react-query";
 import { IntegrationGptService } from "../../service/gpt";
 import { toaster } from "../../components/ui/toaster";
-import { useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { AutoScroll } from "../autoScroll";
 import { TextCard } from "./card";
-import { queryClient } from "../../config/react-query";
+import { useQuery } from "@tanstack/react-query";
+import { TicketService } from "../../service/ticket";
 
 const schema = z.object({
-  message: z.string().min(3, "Mensagem é obrigatória"),
+  message: z.string().optional(),
   assistant: z.string({ message: "Assistente é obrigatório" }),
 });
 
@@ -35,18 +36,34 @@ export const IaChat = ({ visible, onClose, data }) => {
     register,
     handleSubmit,
     control,
+    getValues,
+    setValue,
     formState: { errors },
   } = useForm({
     resolver: zodResolver(schema),
   });
 
   const [iaChat, setIaChat] = useState([]);
+  const hasExecutedChatOnOpenTime = useRef(false);
+
+  const { data: assistants, error } = useQuery({
+    queryKey: ["list-assistants"],
+    queryFn: AssistantService.listAssistant,
+    staleTime: 1000 * 60 * 10, // 10 minutes
+  });
+
+  const { data: ticket } = useQuery({
+    queryKey: ["list-ticket"],
+    queryFn: async () => await TicketService.carregarTicket(data?._id),
+    staleTime: 1000 * 60 * 10, // 10 minutes
+    enabled: visible,
+  });
 
   const { mutateAsync: onChatSubmitMutation, isPending } = useMutation({
     mutationFn: async ({ body }) => IntegrationGptService.askQuestion({ body }),
     onSuccess: (data) => {
       toaster.create({
-        placement: "top-start",
+        placement: "top-left",
         title: "Mensagem enviada com sucesso!",
         type: "success",
       });
@@ -54,7 +71,7 @@ export const IaChat = ({ visible, onClose, data }) => {
   });
 
   const updateChatIa = ({ type, text, details = null }) => {
-    if (iaChat.length > 15) {
+    if (iaChat.length > 30) {
       return setIaChat((prev) => {
         const prevChat = [...prev];
         prevChat.shift();
@@ -71,27 +88,44 @@ export const IaChat = ({ visible, onClose, data }) => {
         id: values.assistant,
       });
 
-      const modelo = queryClient
-        .getQueryData(["list-assistants"])
-        .find((e) => e._id === values.assistant)?.modelo;
+      const modelo = assistants?.find(
+        (e) => e._id === values.assistant
+      )?.modelo;
 
       const response = await onChatSubmitMutation({
-        body: { ...values, prompts, modelo },
+        body: { question: values.message, data: ticket, prompts, modelo },
       });
 
       if (values.message) updateChatIa({ type: "user", text: values.message });
 
       if (response)
         updateChatIa({ type: "bot", text: response?.data?.data?.response });
+
+      setValue("message", "");
     } catch (error) {
       toaster.create({
-        placement: "top-start",
         title: "Ouve um erro na integração com assistente!",
         description: error?.message,
         type: "error",
       });
     }
   };
+
+  useEffect(() => {
+    if (visible && !hasExecutedChatOnOpenTime.current) {
+      console.log("RUNNING");
+      hasExecutedChatOnOpenTime.current = true;
+
+      // const assistant = getValues("assistant");
+      // console.log(assistant);
+
+      onSubmit({
+        message:
+          "Preciso que analise os documentos da empresa e me retorne os dados de forma organizada",
+        assistant: "6818f215816df1fcddd4d553",
+      });
+    }
+  }, [visible]);
 
   return (
     <Drawer.Root open={visible} onOpenChange={onClose} size="sm">
@@ -159,11 +193,6 @@ export const IaChat = ({ visible, onClose, data }) => {
                   )}
 
                   <Box w="full" position="absolute" bottom="2">
-                    {/* {errors.message && (
-                      <Text color="red.500" ml="0.5" fontSize="xs">
-                        {errors.message.message}
-                      </Text>
-                    )} */}
                     <Flex
                       w="full"
                       border="1px solid"

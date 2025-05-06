@@ -6,7 +6,9 @@ const listAssistant = async () => {
 };
 
 const getAssistant = async ({ id }) => {
-  const { data } = await apiAssistant.get(`/cst/assistentes/${id}/prompts`);
+  const { data } = await apiAssistant.get(
+    `/cst/assistentes/prompts?assistente=${id}`
+  );
   return data;
 };
 
