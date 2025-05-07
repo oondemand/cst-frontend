@@ -1,9 +1,9 @@
 import { api } from "../config/api";
 
-// const listarassistenteAtivas = async () => {
-//   const { data } = await api.get("/assistente/ativas");
-//   return data;
-// };
+const listarAssistenteAtivos = async () => {
+  const { data } = await api.get("/assistente/ativos");
+  return data;
+};
 
 const listarAssistenteConfig = async ({ filters }) => {
   const { data } = await api.get("/assistentes", { params: filters });
@@ -24,5 +24,5 @@ export const AssistantConfigService = {
   listarAssistenteConfig,
   alterarAssistenteConfig,
   adicionarAssistenteConfig,
-  // listarassistenteAtivas,
+  listarAssistenteAtivos,
 };

@@ -68,7 +68,8 @@ export const makeEtapasDynamicColumns = () => {
           ]}
         />
       ),
-      enableColumnFilter: true,
+      enableColumnFilter: false,
+      enableSorting: false,
       meta: {
         filterKey: "status",
         filterVariant: "select",

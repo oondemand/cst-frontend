@@ -17,9 +17,7 @@ export const createDynamicFormFields = () => {
       accessorKey: "assistente",
       label: "Assistente",
       render: SelectAssistantField,
-      validation: z.coerce
-        .string()
-        .min(3, { message: "Assistente precisa ter pelo menos 3 caracteres" }),
+      validation: z.string({ message: "Assistente é um campo obrigatório" }),
       colSpan: 1,
     },
   ];

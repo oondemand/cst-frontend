@@ -39,6 +39,7 @@ export const makeUsuarioDynamicColumns = () => {
       header: "Nome Completo",
       cell: DefaultEditableCell,
       enableColumnFilter: true,
+      enableSorting: false,
       meta: { filterKey: "nome" },
     },
     {
@@ -54,6 +55,7 @@ export const makeUsuarioDynamicColumns = () => {
         />
       ),
       enableColumnFilter: true,
+      enableSorting: false,
       meta: {
         filterKey: "tipo",
         filterVariant: "select",
@@ -68,6 +70,7 @@ export const makeUsuarioDynamicColumns = () => {
       header: "E-mail",
       cell: DefaultEditableCell,
       enableColumnFilter: true,
+      enableSorting: false,
       meta: { filterKey: "email" },
     },
     {
@@ -83,6 +86,7 @@ export const makeUsuarioDynamicColumns = () => {
         />
       ),
       enableColumnFilter: true,
+      enableSorting: false,
       meta: {
         filterKey: "status",
         filterVariant: "select",
