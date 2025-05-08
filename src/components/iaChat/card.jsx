@@ -53,6 +53,10 @@ export function TextCard({ text, type, details }) {
         flexDir="column"
         pt="1.5"
         position="relative"
+        data-state="open"
+        _open={{
+          animation: "fade-in 300ms ease-out",
+        }}
       >
         <Flex gap="4">
           <Text fontWeight="semibold" fontSize="xs" color="gray.500">

@@ -7,14 +7,25 @@ export const IaChatProvider = ({ children }) => {
   const [modalConfig, setModalConfig] = useState({
     visible: false,
     data: {},
+    assistantConfigId: null,
   });
 
-  const onOpen = (data) => {
-    setModalConfig((prev) => ({ ...prev, visible: true, data }));
+  const onOpen = (data, assistantConfigId) => {
+    setModalConfig((prev) => ({
+      ...prev,
+      visible: true,
+      data,
+      assistantConfigId,
+    }));
   };
 
   const onClose = () => {
-    setModalConfig((prev) => ({ ...prev, visible: false }));
+    setModalConfig((prev) => ({
+      ...prev,
+      data: {},
+      assistantConfigId: null,
+      visible: false,
+    }));
   };
 
   return (
@@ -23,6 +34,7 @@ export const IaChatProvider = ({ children }) => {
         visible={modalConfig.visible}
         onClose={onClose}
         data={modalConfig.data}
+        assistantConfigId={modalConfig.assistantConfigId}
       />
       {children}
     </IaChatContext.Provider>

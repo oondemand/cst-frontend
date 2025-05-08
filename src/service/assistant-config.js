@@ -1,7 +1,7 @@
 import { api } from "../config/api";
 
 const listarAssistenteAtivos = async () => {
-  const { data } = await api.get("/assistente/ativos");
+  const { data } = await api.get("/assistentes/ativos");
   return data;
 };
 

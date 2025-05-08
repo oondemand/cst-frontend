@@ -42,6 +42,8 @@ import { ServicoForm } from "./form/servico";
 import { InformacoesAdicionaisForm } from "./form/informacoes-adicionais";
 import { DocumentoFiscalForm } from "./form/documentoFiscal";
 import { useIaChat } from "../../hooks/useTicketModal";
+import { useQuery } from "@tanstack/react-query";
+import { AssistantConfigService } from "../../service/assistant-config";
 
 export const CreateTicketModal = ({
   open,
@@ -92,6 +94,44 @@ export const CreateTicketModal = ({
     }
   };
 
+  const { data } = useQuery({
+    queryKey: ["ticket", { ticketId: ticket?._id }],
+    queryFn: async () => await TicketService.carregarTicket(ticket?._id),
+    staleTime: 1000 * 60 * 10, // 10 minutes
+    enabled: open,
+  });
+
+  const {
+    data: assistantConfig,
+    isLoading,
+    isFetching,
+  } = useQuery({
+    queryKey: ["listar-assistente-config"],
+    queryFn: async () => await AssistantConfigService.listarAssistenteAtivos(),
+    staleTime: 1000 * 60 * 10, // 10 minutes
+    enabled: open,
+  });
+
+  const loadAssistantByEtapa = () => {
+    let assistant = assistantConfig?.find((e) => {
+      return e?.modulo.includes(data?.etapa);
+    });
+
+    if (!assistant) {
+      assistant = assistantConfig?.find((e) => {
+        return e?.modulo === "ticket";
+      });
+    }
+
+    console.log("ASSISTANT", assistant);
+
+    return assistant?.assistente;
+  };
+
+  const handleOpenIaChat = () => {
+    onOpen(data, loadAssistantByEtapa());
+  };
+
   return (
     <DialogRoot
       size="cover"
@@ -120,9 +160,7 @@ export const CreateTicketModal = ({
               aria-label="Abrir IA"
               cursor="pointer"
               variant="unstyled"
-              onClick={() => {
-                onOpen(ticket);
-              }}
+              onClick={handleOpenIaChat}
             >
               <Oondemand />
             </Box>

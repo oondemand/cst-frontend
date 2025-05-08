@@ -24,27 +24,21 @@ import { useEffect, useState, useRef } from "react";
 import { AutoScroll } from "../autoScroll";
 import { TextCard } from "./card";
 import { useQuery } from "@tanstack/react-query";
-import { TicketService } from "../../service/ticket";
 
-const schema = z.object({
-  message: z.string().optional(),
-  assistant: z.string({ message: "Assistente é obrigatório" }),
-});
+const schema = z.object({ message: z.string().optional() });
 
-export const IaChat = ({ visible, onClose, data }) => {
+export const IaChat = ({ visible, onClose, data, assistantConfigId }) => {
   const {
     register,
     handleSubmit,
-    control,
-    getValues,
     setValue,
+    reset,
     formState: { errors },
   } = useForm({
     resolver: zodResolver(schema),
   });
 
   const [iaChat, setIaChat] = useState([]);
-  const hasExecutedChatOnOpenTime = useRef(false);
 
   const { data: assistants, error } = useQuery({
     queryKey: ["list-assistants"],
@@ -52,22 +46,12 @@ export const IaChat = ({ visible, onClose, data }) => {
     staleTime: 1000 * 60 * 10, // 10 minutes
   });
 
-  const { data: ticket } = useQuery({
-    queryKey: ["list-ticket"],
-    queryFn: async () => await TicketService.carregarTicket(data?._id),
-    staleTime: 1000 * 60 * 10, // 10 minutes
-    enabled: visible,
-  });
+  const selectedAssistant = assistants?.find(
+    (e) => e._id === assistantConfigId
+  );
 
   const { mutateAsync: onChatSubmitMutation, isPending } = useMutation({
     mutationFn: async ({ body }) => IntegrationGptService.askQuestion({ body }),
-    onSuccess: (data) => {
-      toaster.create({
-        placement: "top-left",
-        title: "Mensagem enviada com sucesso!",
-        type: "success",
-      });
-    },
   });
 
   const updateChatIa = ({ type, text, details = null }) => {
@@ -85,18 +69,19 @@ export const IaChat = ({ visible, onClose, data }) => {
   const onSubmit = async (values) => {
     try {
       const prompts = await AssistantService.getAssistant({
-        id: values.assistant,
+        id: assistantConfigId,
       });
-
-      const modelo = assistants?.find(
-        (e) => e._id === values.assistant
-      )?.modelo;
 
       const response = await onChatSubmitMutation({
-        body: { question: values.message, data: ticket, prompts, modelo },
+        body: {
+          question: values.message,
+          data,
+          prompts,
+          modelo: selectedAssistant?.modelo,
+        },
       });
 
-      if (values.message) updateChatIa({ type: "user", text: values.message });
+      if (values?.message) updateChatIa({ type: "user", text: values.message });
 
       if (response)
         updateChatIa({ type: "bot", text: response?.data?.data?.response });
@@ -112,23 +97,25 @@ export const IaChat = ({ visible, onClose, data }) => {
   };
 
   useEffect(() => {
-    if (visible && !hasExecutedChatOnOpenTime.current) {
-      console.log("RUNNING");
-      hasExecutedChatOnOpenTime.current = true;
-
-      // const assistant = getValues("assistant");
-      // console.log(assistant);
-
-      onSubmit({
-        message:
-          "Preciso que analise os documentos da empresa e me retorne os dados de forma organizada",
-        assistant: "6818f215816df1fcddd4d553",
-      });
+    if (visible && iaChat.length === 0) {
+      if (assistantConfigId) {
+        onSubmit({
+          assistant: assistantConfigId,
+        });
+      }
     }
-  }, [visible]);
+  }, [visible, assistantConfigId]);
 
   return (
-    <Drawer.Root open={visible} onOpenChange={onClose} size="sm">
+    <Drawer.Root
+      open={visible}
+      onOpenChange={(e) => {
+        onClose();
+        reset();
+        setIaChat([]);
+      }}
+      size="sm"
+    >
       <Portal>
         <Drawer.Backdrop />
         <Drawer.Positioner py="2.5" px="2">
@@ -138,8 +125,11 @@ export const IaChat = ({ visible, onClose, data }) => {
                 <Flex pr="16" gap="4">
                   <Oondemand />
                 </Flex>
-                <Drawer.Title mt="1" fontSize="sm">
+                <Drawer.Title mt="1" fontSize="sm" display="flex" gap="2">
                   Assistente inteligente
+                  <Text color="gray.400" fontWeight="medium">
+                    {selectedAssistant?.nome}
+                  </Text>
                 </Drawer.Title>
                 <Drawer.Description fontSize="xs">
                   Agora você pode contar com assistentes inteligentes para
@@ -149,32 +139,26 @@ export const IaChat = ({ visible, onClose, data }) => {
             </Drawer.Header>
             <Drawer.Body mt="-2">
               <Flex flexDirection="column" h="full" position="relative">
+                {!assistantConfigId && (
+                  <Text
+                    p="2"
+                    border="1px dashed"
+                    borderColor="red.200"
+                    rounded="md"
+                    fontSize="xs"
+                    color="red.400"
+                    data-state="open"
+                    _open={{
+                      animation: "fade-in 300ms ease-out",
+                    }}
+                  >
+                    Precisando de um Assistente Inteligente para te ajudar nessa
+                    análise? Entre em contato com o suporte!
+                  </Text>
+                )}
                 <form onSubmit={handleSubmit(onSubmit)}>
-                  <Box>
-                    <Controller
-                      control={control}
-                      name="assistant"
-                      render={({ field }) => (
-                        <SelectAssistant
-                          w="xs"
-                          name={field.name}
-                          value={[field.value]}
-                          onValueChange={({ value }) => {
-                            field.onChange(value[0]);
-                          }}
-                          onInteractOutside={() => field.onBlur()}
-                        />
-                      )}
-                    />
-                    {errors.assistant && (
-                      <Text color="red.500" ml="0.5" fontSize="xs">
-                        {errors.assistant.message}
-                      </Text>
-                    )}
-                  </Box>
-
                   {iaChat.length > 0 && (
-                    <AutoScroll mt="8" maxH="480px" pr="1" py="2" h="full">
+                    <AutoScroll maxH="550px" pr="1" py="2" h="full">
                       {iaChat.map((chat, i) => (
                         <TextCard
                           key={`${chat.text}-${i}`}
@@ -187,8 +171,16 @@ export const IaChat = ({ visible, onClose, data }) => {
                   )}
 
                   {isPending && (
-                    <Flex p="2" align="center">
-                      <Spinner color="gray.400" />
+                    <Flex
+                      align="center"
+                      data-state="open"
+                      _open={{
+                        animation: "fade-in 300ms ease-out",
+                      }}
+                    >
+                      <Text fontSize="sm" fontWeight="medium" color="gray.400">
+                        Pensando...
+                      </Text>
                     </Flex>
                   )}
 
@@ -200,13 +192,14 @@ export const IaChat = ({ visible, onClose, data }) => {
                       rounded="md"
                     >
                       <Input
+                        disabled={isPending || !selectedAssistant}
                         variant="unstyled"
                         flex="1"
                         placeholder="Insira sua mensagem"
                         {...register("message")}
                       />
                       <Button
-                        disabled={isPending}
+                        disabled={isPending || !selectedAssistant}
                         color="gray.600"
                         type="submit"
                         variant="unstyled"

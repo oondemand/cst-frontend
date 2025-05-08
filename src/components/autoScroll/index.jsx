@@ -21,6 +21,10 @@ export function AutoScroll({ children, ...props }) {
       gap="2"
       overflow="auto"
       className="custom-scrollbar"
+      data-state="open"
+      _open={{
+        animation: "fade-in 300ms ease-out",
+      }}
       {...props}
     >
       {children}

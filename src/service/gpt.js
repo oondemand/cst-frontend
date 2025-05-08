@@ -7,11 +7,9 @@ const askQuestion = ({ body }) => {
     formData.append(key, JSON.stringify(body[key]));
   }
 
-  return apiIntegracaoGPT.post(`/integracao/cst/question`, formData, {
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
-  });
+  console.log("LOG", body);
+
+  return apiIntegracaoGPT.post(`/integracao/cst/question`, body);
 };
 
 export const IntegrationGptService = {
