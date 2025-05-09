@@ -33,7 +33,7 @@ export const makeDocumentoFiscalDynamicColumns = () => {
                 <Pencil />
               </IconButton>
             }
-            label="Serviço"
+            label="Documento Fiscal"
             defaultValues={{
               ...props.row.original,
               prestador: {
@@ -45,7 +45,12 @@ export const makeDocumentoFiscalDynamicColumns = () => {
                 .padStart(2, "0")}/${props.row.original.competencia?.ano}`,
             }}
           />
-          <ArquivoDetailsDialog arquivo={props.row.original?.arquivo} />
+          {props.row.original?.arquivo && (
+            <ArquivoDetailsDialog
+              arquivo={props.row.original?.arquivo}
+              prestadorId={props.row.original?.prestador?._id}
+            />
+          )}
         </TableActionsCell>
       ),
     },
@@ -152,13 +157,6 @@ export const makeDocumentoFiscalDynamicColumns = () => {
       cell: DefaultEditableCell,
       enableColumnFilter: true,
       meta: { filterKey: "observacaoInterna" },
-    },
-    {
-      accessorKey: "arquivo",
-      header: "Arquivo",
-      enableSorting: false,
-      cell: DocumentosFiscaisFilesDetailsCell,
-      enableColumnFilter: false,
     },
     {
       accessorKey: "statusValidacao",
