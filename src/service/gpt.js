@@ -7,8 +7,6 @@ const askQuestion = ({ body }) => {
     formData.append(key, JSON.stringify(body[key]));
   }
 
-  console.log("LOG", body);
-
   return apiIntegracaoGPT.post(`/integracao/cst/question`, body);
 };
 

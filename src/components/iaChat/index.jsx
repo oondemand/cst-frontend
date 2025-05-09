@@ -38,6 +38,8 @@ export const IaChat = ({ visible, onClose, data, assistantConfigId }) => {
     resolver: zodResolver(schema),
   });
 
+  console.log("data importante", data);
+
   const [iaChat, setIaChat] = useState([]);
 
   const { data: assistants, error } = useQuery({
