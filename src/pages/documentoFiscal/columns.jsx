@@ -45,7 +45,7 @@ export const makeDocumentoFiscalDynamicColumns = () => {
                 .padStart(2, "0")}/${props.row.original.competencia?.ano}`,
             }}
           />
-          {/* <ArquivoDetailsDialog /> */}
+          <ArquivoDetailsDialog arquivo={props.row.original?.arquivo} />
         </TableActionsCell>
       ),
     },
