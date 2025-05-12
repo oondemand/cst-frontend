@@ -34,7 +34,7 @@ const _TicketCard = ({ ticket }) => {
   };
 
   const valorTotal = ticket.servicos.reduce((acc, curr) => {
-    acc = acc + curr.valor;
+    acc = acc + (curr?.valor ?? 0);
     return acc;
   }, 0);
 

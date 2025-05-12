@@ -8,6 +8,7 @@ import {
   Flex,
   Checkbox,
   Textarea,
+  createListCollection,
 } from "@chakra-ui/react";
 
 import { currency } from "../../../../utils/currency";
@@ -24,24 +25,66 @@ import { queryClient } from "../../../../config/react-query";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { ListaOmieService } from "../../../../service/lista-omie";
+
+import {
+  SelectContent,
+  SelectItem,
+  SelectLabel,
+  SelectRoot,
+  SelectTrigger,
+  SelectValueText,
+} from "../../../../components/ui/select";
 
 const reprovacaoSchema = z.object({
-  motivo: z.object(
-    { value: z.string(), label: z.string() },
-    { required_error: "Selecione um motivo" }
-  ),
+  motivoRecusa: z.string({ message: "Selecione um motivo." }),
   observacao: z.string().optional(),
   observacaoPrestador: z.string().optional(),
 });
 
-const MOTIVOS_REPROVACAO = [
-  { value: "documento_invalido", label: "Documento inválido" },
-  { value: "servico_nao_prestado", label: "Serviço não prestado" },
-  { value: "valor_incorreto", label: "Valor incorreto" },
-  { value: "outros", label: "Outros" },
-];
+export const ReprovarForm = ({ documentoFiscalId }) => {
+  const { data } = useQuery({
+    queryKey: ["list-motivo-recusa"],
+    queryFn: async () =>
+      ListaOmieService.getListByCode({ cod: "motivo-recusa" }),
+  });
 
-export const ReprovarForm = ({}) => {
+  const motivoRecusaList = createListCollection({
+    items:
+      data?.valores?.map((item) => ({
+        value: item?.valor,
+        label: item?.valor,
+      })) ?? [],
+  });
+
+  const { mutateAsync: reprovarDocumento } = useMutation({
+    mutationFn: async ({ motivoRecusa, observacao, observacaoPrestador }) =>
+      await DocumentosFiscaisService.atualizarDocumentoFiscal({
+        body: {
+          motivoRecusa,
+          observacaoInterna: observacao,
+          observacaoPrestador,
+          statusValidacao: "recusado",
+        },
+        id: documentoFiscalId,
+      }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["listar-documentos-fiscais"],
+      });
+      toaster.create({
+        title: "Documento fiscal reprovado com sucesso!",
+        type: "success",
+      });
+    },
+    onError: () => {
+      toaster.create({
+        title: "Ouve um erro ao reprovar o documento fiscal!",
+        type: "error",
+      });
+    },
+  });
+
   const {
     handleSubmit,
     control,
@@ -51,24 +94,14 @@ export const ReprovarForm = ({}) => {
   } = useForm({
     resolver: zodResolver(reprovacaoSchema),
     defaultValues: {
-      motivo: null,
       observacao: "",
+      motivoRecusa: null,
       observacaoPrestador: "",
     },
   });
 
-  console.log("errors", errors);
-
   const handleReprovarDocumento = async (data) => {
-    console.log("on fire", data);
-    // await onReprovarDocumento({
-    //   body: {
-    //     documentoFiscalId,
-    //     motivo: data.motivo.value,
-    //     observacao: data.observacao,
-    //     observacaoPrestador: data.observacaoPrestador,
-    //   },
-    // });
+    await reprovarDocumento(data);
   };
 
   return (
@@ -77,8 +110,40 @@ export const ReprovarForm = ({}) => {
         <Box w="full">
           <form onSubmit={handleSubmit(handleReprovarDocumento)}>
             <Box>
-              {/* <Text>teste</Text> */}
-
+              <Box>
+                <Controller
+                  control={control}
+                  name="motivoRecusa"
+                  render={({ field }) => (
+                    <SelectRoot
+                      size="xs"
+                      value={[field.value]}
+                      onValueChange={({ value }) => field.onChange(value[0])}
+                      collection={motivoRecusaList}
+                    >
+                      <SelectLabel mb="-1" fontWeight="normal" color="gray.500">
+                        Mostrar
+                      </SelectLabel>
+                      <SelectTrigger>
+                        <SelectValueText placeholder="Selecionar motivo..." />
+                      </SelectTrigger>
+                      <SelectContent zIndex={9999}>
+                        {motivoRecusaList.items.map((item) => (
+                          <SelectItem item={item} key={item.value}>
+                            {item.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </SelectRoot>
+                  )}
+                />
+                {errors.motivoRecusa && (
+                  <Text fontSize="xs" color="red.500">
+                    {errors.motivoRecusa.message}
+                  </Text>
+                )}
+              </Box>
+              <Box p="2" />
               <Box>
                 <Text fontSize="sm" color="gray.600">
                   Observação
@@ -91,9 +156,7 @@ export const ReprovarForm = ({}) => {
                   rows={3}
                 />
               </Box>
-
               <Box p="2" />
-
               <Box>
                 <Text fontSize="sm" color="gray.600">
                   Observação para o prestador
@@ -106,9 +169,7 @@ export const ReprovarForm = ({}) => {
                   rows={3}
                 />
               </Box>
-
               <Box p="2" />
-
               <Button
                 type="submit"
                 variant="surface"

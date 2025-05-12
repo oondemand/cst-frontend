@@ -41,7 +41,7 @@ import {
 } from "lucide-react";
 import { useConfirmation } from "../../../hooks/useConfirmation";
 import { Tooltip } from "../../../components/ui/tooltip";
-import { ServicoForm } from "./form/servico";
+import { AprovarForm } from "./form/aprovar";
 import { ReprovarForm } from "./form/reprovar";
 
 export const ArquivoDetailsDialog = ({ documentoFiscal }) => {
@@ -94,7 +94,6 @@ export const ArquivoDetailsDialog = ({ documentoFiscal }) => {
           open={open}
           onOpenChange={(e) => {
             setOpen(e.open);
-            setServicos([]);
           }}
         >
           <DialogContent
@@ -107,21 +106,30 @@ export const ArquivoDetailsDialog = ({ documentoFiscal }) => {
             position="relative"
           >
             <DialogHeader mt="-4" py="2" px="4">
-              <Flex gap="4">
+              <Flex gap="4" alignItems="baseline">
                 <DialogTitle>Analisar Documento Fiscal</DialogTitle>
+                <Text fontWeight="medium" color="gray.500">
+                  {documentoFiscal?.tipoDocumentoFiscal?.toUpperCase()}{" "}
+                  {documentoFiscal?.competencia?.mes
+                    ?.toString()
+                    ?.padStart(2, "0")}
+                  {documentoFiscal?.competencia?.ano
+                    ? `/${documentoFiscal?.competencia?.ano}`
+                    : ""}{" "}
+                  - {documentoFiscal?.prestador?.nome} -{" "}
+                  {documentoFiscal?.prestador?.documento}
+                </Text>
               </Flex>
             </DialogHeader>
             <DialogBody overflowY="auto" className="dialog-custom-scrollbar">
               <Flex w="full">
-                {pdfUrl && (
-                  <Box w="50%" ml="-4" shadow="none" boxShadow="none">
-                    {pdfUrl && (
-                      <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js">
-                        <Viewer fileUrl={pdfUrl} />
-                      </Worker>
-                    )}
-                  </Box>
-                )}
+                <Box w="50%" ml="-4" shadow="none" boxShadow="none">
+                  {pdfUrl && (
+                    <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js">
+                      <Viewer fileUrl={pdfUrl} />
+                    </Worker>
+                  )}
+                </Box>
 
                 <Flex
                   h="full"
@@ -132,12 +140,14 @@ export const ArquivoDetailsDialog = ({ documentoFiscal }) => {
                   borderColor="gray.100"
                   rounded="2xl"
                   p="4"
+                  pb="6"
                 >
-                  <ServicoForm
+                  <AprovarForm
                     prestadorId={documentoFiscal?.prestador?._id}
-                    documentoFiscalId={documentoFiscal?._id}
+                    documentoFiscal={documentoFiscal}
+                    handleCloseModal={() => setOpen(false)}
                   />
-                  <ReprovarForm />
+                  <ReprovarForm documentoFiscalId={documentoFiscal?._id} />
                 </Flex>
               </Flex>
             </DialogBody>
