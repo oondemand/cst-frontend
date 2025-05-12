@@ -77,6 +77,14 @@ export const importarDocumentosFiscais = async ({ files }) => {
   return response;
 };
 
+const aprovarDocumentoFiscal = async ({ body }) => {
+  const { data } = await api.post(
+    `/documentos-fiscais/aprovar-documento`,
+    body
+  );
+  return data;
+};
+
 export const DocumentosFiscaisService = {
   listarDocumentosFiscais,
   criarDocumentoFiscal,
@@ -87,4 +95,5 @@ export const DocumentosFiscaisService = {
   anexarArquivo,
   deleteFile,
   importarDocumentosFiscais,
+  aprovarDocumentoFiscal,
 };

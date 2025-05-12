@@ -45,12 +45,10 @@ export const makeDocumentoFiscalDynamicColumns = () => {
                 .padStart(2, "0")}/${props.row.original.competencia?.ano}`,
             }}
           />
-          {props.row.original?.arquivo && (
-            <ArquivoDetailsDialog
-              arquivo={props.row.original?.arquivo}
-              prestadorId={props.row.original?.prestador?._id}
-            />
-          )}
+          {props.row.original?.arquivo &&
+            props.row.original?.statusValidacao === "pendente" && (
+              <ArquivoDetailsDialog documentoFiscal={props.row.original} />
+            )}
         </TableActionsCell>
       ),
     },

@@ -42,15 +42,16 @@ import {
 import { useConfirmation } from "../../../hooks/useConfirmation";
 import { Tooltip } from "../../../components/ui/tooltip";
 import { ServicoForm } from "./form/servico";
+import { ReprovarForm } from "./form/reprovar";
 
-export const ArquivoDetailsDialog = ({ arquivo, prestadorId }) => {
+export const ArquivoDetailsDialog = ({ documentoFiscal }) => {
   const [open, setOpen] = useState(false);
   const [pdfUrl, setPdfUrl] = useState(null);
-  const [servicos, setServicos] = useState([]);
 
   const { data: response } = useQuery({
-    queryKey: ["file/documento-fiscal", arquivo?._id],
-    queryFn: async () => await TicketService.getFile({ id: arquivo?._id }),
+    queryKey: ["file/documento-fiscal", documentoFiscal?.arquivo?._id],
+    queryFn: async () =>
+      await TicketService.getFile({ id: documentoFiscal?.arquivo?._id }),
     enabled: open,
     staleTime: 1000 * 60 * 10, // 10 minutos
   });
@@ -93,6 +94,7 @@ export const ArquivoDetailsDialog = ({ arquivo, prestadorId }) => {
           open={open}
           onOpenChange={(e) => {
             setOpen(e.open);
+            setServicos([]);
           }}
         >
           <DialogContent
@@ -110,7 +112,7 @@ export const ArquivoDetailsDialog = ({ arquivo, prestadorId }) => {
               </Flex>
             </DialogHeader>
             <DialogBody overflowY="auto" className="dialog-custom-scrollbar">
-              <Flex gap="2" {...(!pdfUrl && { h: "full" })}>
+              <Flex w="full">
                 {pdfUrl && (
                   <Box w="50%" ml="-4" shadow="none" boxShadow="none">
                     {pdfUrl && (
@@ -120,45 +122,23 @@ export const ArquivoDetailsDialog = ({ arquivo, prestadorId }) => {
                     )}
                   </Box>
                 )}
-                <Box
-                  position={pdfUrl ? "absolute" : "relative"}
-                  ml={pdfUrl ? "48%" : "0"}
-                  h={pdfUrl ? "90%" : "full"}
-                  overflow="auto"
-                  scrollbar="hidden"
-                  w="45%"
+
+                <Flex
+                  h="full"
+                  flex="1"
+                  flexDir="column"
+                  gap="6"
+                  border="1px solid"
+                  borderColor="gray.100"
+                  rounded="2xl"
+                  p="4"
                 >
-                  <Flex
-                    h="full"
-                    flexDir="column"
-                    justifyContent="space-between"
-                    gap="2"
-                  >
-                    <ServicoForm
-                      prestadorId={prestadorId}
-                      servicos={servicos}
-                      setServicos={setServicos}
-                    />
-                    <Flex gap="2">
-                      <Button
-                        variant="surface"
-                        shadow="xs"
-                        colorPalette="green"
-                        size="xs"
-                      >
-                        <Check /> Aprovar
-                      </Button>
-                      <Button
-                        variant="surface"
-                        shadow="xs"
-                        colorPalette="red"
-                        size="xs"
-                      >
-                        <X /> Reprovar
-                      </Button>
-                    </Flex>
-                  </Flex>
-                </Box>
+                  <ServicoForm
+                    prestadorId={documentoFiscal?.prestador?._id}
+                    documentoFiscalId={documentoFiscal?._id}
+                  />
+                  <ReprovarForm />
+                </Flex>
               </Flex>
             </DialogBody>
             <DialogCloseTrigger asChild>

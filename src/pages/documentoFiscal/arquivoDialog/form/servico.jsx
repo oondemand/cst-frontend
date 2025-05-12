@@ -6,34 +6,29 @@ import {
   Button,
   Table,
   Flex,
+  Checkbox,
 } from "@chakra-ui/react";
 
 import { currency } from "../../../../utils/currency";
-import { useState } from "react";
-import { CircleX } from "lucide-react";
+import { CircleX, Check } from "lucide-react";
 import { ServicoService } from "../../../../service/servico";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import { toaster } from "../../../../components/ui/toaster";
 import { useConfirmation } from "../../../../hooks/useConfirmation";
 import { Select } from "chakra-react-select";
 import { chakraStyles } from "../../../../components/ticketModal/form/select-chakra-styles";
 import { formatDateToDDMMYYYY } from "../../../../utils/formatting";
+import { DocumentosFiscaisService } from "../../../../service/documentos-fiscais";
+import { queryClient } from "../../../../config/react-query";
+import { useForm, Controller } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 
-const formatarLabelServico = (servico) => {
-  return {
-    label: `${
-      servico?.tipoDocumentoFiscal ?? ""
-    } COMP. ${servico?.competencia?.mes.toString().padStart(2, "0")}/${
-      servico?.competencia?.ano
-    }   REGIST. ${formatDateToDDMMYYYY(
-      servico?.dataRegistro,
-      "dd/MM/yyyy"
-    )} ${currency.format(servico?.valor ?? 0)}`,
-    value: servico,
-  };
-};
+const servicoSchema = z.object({
+  servicos: z.array(z.object({ _id: z.string() }).transform((e) => e._id)),
+});
 
-export const ServicoForm = ({ prestadorId, servicos, setServicos }) => {
+export const ServicoForm = ({ prestadorId, documentoFiscalId }) => {
   const { data } = useQuery({
     queryKey: ["listar-servicos-prestador", { prestadorId }],
     queryFn: async () =>
@@ -43,56 +38,72 @@ export const ServicoForm = ({ prestadorId, servicos, setServicos }) => {
       }),
   });
 
-  const options = data
-    ?.filter((servico) => !servicos.some((s) => s._id === servico._id))
-    .map(formatarLabelServico);
+  const { mutateAsync: onAprovarDocumento, isPending } = useMutation({
+    mutationFn: async ({ body }) =>
+      await DocumentosFiscaisService.aprovarDocumentoFiscal({ body }),
+    onSuccess: () => {
+      toaster.create({
+        title: "Documento fiscal aprovado com sucesso",
+        type: "success",
+      });
 
-  const handleDeleteServico = async (servicoId) => {
-    setServicos((prevServicos) =>
-      prevServicos.filter((servico) => servico._id !== servicoId)
-    );
-  };
+      queryClient.invalidateQueries({
+        queryKey: ["file/documento-fiscal", arquivo?._id],
+      });
+      setOpen(false);
+      reset();
+    },
+    onError: (error) => {
+      toaster.create({
+        title: "Erro ao aprovar documento fiscal",
+        description: error?.message,
+        type: "error",
+      });
+    },
+  });
 
-  const handleAddServico = (selectedOption) => {
-    if (!selectedOption) return;
-    const servico = selectedOption.value;
-    setServicos((prevServicos) => [...prevServicos, servico]);
+  const { handleSubmit, control, reset } = useForm({
+    resolver: zodResolver(servicoSchema),
+    defaultValues: {
+      servicos: [],
+    },
+  });
+
+  const handleAprovarDocumento = async (data) => {
+    console.log("[SERVICOS]:", data.servicos);
+    // await onAprovarDocumento({
+    //   body: {
+    //     documentoFiscalId,
+    //     servicos: data.servicos,
+    //     prestadorId,
+    //   },
+    // });
   };
 
   return (
     <Box>
-      <Box
-        mt="2"
-        w="full"
-        h="1"
-        borderBottom="2px solid"
-        borderColor="gray.100"
-      />
-      <Box px="1" mt="8">
+      <Box px="1" mt="2">
         <Flex gap="4">
           <Text color="gray.600" fontSize="sm">
-            Relacionar serviço
+            Relacionar serviços
           </Text>
         </Flex>
-        <Select
-          options={options}
-          onChange={(option) => handleAddServico(option)}
-          value=""
-          chakraStyles={chakraStyles}
-        />
       </Box>
-      {servicos && servicos?.length > 0 && (
+      {data && data?.length > 0 && (
         <Box
-          mt="6"
+          mt="4"
           border="1px solid"
           borderColor="gray.100"
-          rounded="2xl"
+          rounded="sm"
           p="4"
         >
           <Table.Root variant="simple" size="xs" justifyItems="right">
             <Table.Header>
               <Table.Row>
                 <Table.ColumnHeader />
+                <Table.ColumnHeader color="gray.500" fontSize="sm">
+                  Tipo
+                </Table.ColumnHeader>
                 <Table.ColumnHeader color="gray.500" fontSize="sm">
                   Competência
                 </Table.ColumnHeader>
@@ -102,12 +113,40 @@ export const ServicoForm = ({ prestadorId, servicos, setServicos }) => {
                 <Table.ColumnHeader color="gray.500" fontSize="sm">
                   Valor
                 </Table.ColumnHeader>
-                <Table.ColumnHeader width="20px" />
               </Table.Row>
             </Table.Header>
             <Table.Body>
-              {servicos?.map((servico) => (
+              {data?.map((servico) => (
                 <Table.Row key={servico._id}>
+                  <Table.Cell py="1">
+                    <Controller
+                      name="servicos"
+                      control={control}
+                      render={({ field: { value, onChange } }) => (
+                        <Checkbox.Root
+                          variant="subtle"
+                          checked={value.some((s) => s._id === servico._id)}
+                          onChange={(event) => {
+                            if (event.target.checked) {
+                              return onChange([...value, servico]);
+                            }
+
+                            return onChange(
+                              value.filter((item) => item._id !== servico._id)
+                            );
+                          }}
+                          cursor="pointer"
+                          _disabled={{ cursor: "not-allowed" }}
+                          size="sm"
+                        >
+                          <Checkbox.HiddenInput />
+                          <Checkbox.Control>
+                            <Checkbox.Indicator />
+                          </Checkbox.Control>
+                        </Checkbox.Root>
+                      )}
+                    />
+                  </Table.Cell>
                   <Table.Cell>
                     <Text
                       fontSize="xs"
@@ -136,22 +175,23 @@ export const ServicoForm = ({ prestadorId, servicos, setServicos }) => {
                       {currency.format(servico?.valor ?? 0)}
                     </Text>
                   </Table.Cell>
-                  <Table.Cell>
-                    <Button
-                      size="xs"
-                      variant="ghost"
-                      onClick={() => handleDeleteServico(servico._id)}
-                      _hover={{ bg: "transparent" }}
-                    >
-                      <CircleX size={15} color="red" />
-                    </Button>
-                  </Table.Cell>
                 </Table.Row>
               ))}
             </Table.Body>
           </Table.Root>
         </Box>
       )}
+      <Box p="2" />
+      <Button
+        disabled={isPending}
+        onClick={handleSubmit(handleAprovarDocumento)}
+        variant="surface"
+        shadow="xs"
+        colorPalette="green"
+        size="xs"
+      >
+        <Check /> Aprovar
+      </Button>
     </Box>
   );
 };
