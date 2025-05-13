@@ -53,7 +53,7 @@ export const AprovarForm = ({
       });
 
       queryClient.invalidateQueries({
-        queryKey: ["file/documento-fiscal"],
+        queryKey: ["listar-documentos-fiscais"],
       });
 
       handleCloseModal();

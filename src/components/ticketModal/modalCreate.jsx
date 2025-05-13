@@ -44,6 +44,7 @@ import { DocumentoFiscalForm } from "./form/documentoFiscal";
 import { useIaChat } from "../../hooks/useTicketModal";
 import { useQuery } from "@tanstack/react-query";
 import { AssistantConfigService } from "../../service/assistant-config";
+import { DocumentosCadastraisService } from "../../service/documentos-cadastrais";
 
 export const CreateTicketModal = ({
   open,
@@ -97,7 +98,21 @@ export const CreateTicketModal = ({
   const { data } = useQuery({
     queryKey: ["ticket", { ticketId: ticket?._id }],
     queryFn: async () => await TicketService.carregarTicket(ticket?._id),
-    staleTime: 1000 * 60 * 10, // 10 minutes
+    staleTime: 1000 * 60 * 1, // 1 minute
+    enabled: open,
+  });
+
+  const { data: documentosCadastrais } = useQuery({
+    queryKey: [
+      "documentos-cadastrais",
+      { prestadorId: ticket?.prestador?._id },
+    ],
+    queryFn: async () =>
+      await DocumentosCadastraisService.listarDocumentosCadastraisPorPrestador({
+        prestadorId: ticket?.prestador?._id,
+        dataRegistro: "",
+      }),
+    staleTime: 1000 * 60 * 1, // 1 minute
     enabled: open,
   });
 
@@ -108,7 +123,7 @@ export const CreateTicketModal = ({
   } = useQuery({
     queryKey: ["listar-assistente-config"],
     queryFn: async () => await AssistantConfigService.listarAssistenteAtivos(),
-    staleTime: 1000 * 60 * 10, // 10 minutes
+    staleTime: 1000 * 60 * 1, // 1 minute
     enabled: open,
   });
 
@@ -123,13 +138,11 @@ export const CreateTicketModal = ({
       });
     }
 
-    console.log("ASSISTANT", assistant);
-
     return assistant?.assistente;
   };
 
   const handleOpenIaChat = () => {
-    onOpen(data, loadAssistantByEtapa());
+    onOpen({ ...data, documentosCadastrais }, loadAssistantByEtapa());
   };
 
   return (

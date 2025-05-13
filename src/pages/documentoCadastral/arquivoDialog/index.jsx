@@ -52,7 +52,7 @@ export const ArquivoDetailsDialog = ({ documentoCadastral }) => {
     queryFn: async () =>
       await TicketService.getFile({ id: documentoCadastral?.arquivo?._id }),
     enabled: open,
-    staleTime: 1000 * 60 * 10, // 10 minutos
+    staleTime: 1000 * 60 * 1, // 1 minute
   });
 
   useEffect(() => {
