@@ -2,7 +2,7 @@ import React, { useMemo } from "react";
 
 import { Flex, Spinner, Box, Button, Text } from "@chakra-ui/react";
 import { useQuery, keepPreviousData, useMutation } from "@tanstack/react-query";
-import { DocumentosFiscaisService } from "../../service/documentos-fiscais";
+import { DocumentosCadastraisService } from "../../service/documentos-cadastrais";
 import { DebouncedInput } from "../../components/DebouncedInput";
 import { DataGrid } from "../../components/dataGrid";
 import { useFilters } from "../../hooks/useFilters";
@@ -10,7 +10,7 @@ import { sortByToState, stateToSortBy } from "../../utils/sorting";
 import { useColumnVisibility } from "../../hooks/useColumnVisibility";
 import { useColumnSizing } from "../../hooks/useColumnSizing";
 
-import { makeDocumentoFiscalDynamicColumns } from "./columns";
+import { makeDocumentoCadastralDynamicColumns } from "./columns";
 
 import { api } from "../../config/api";
 import { toaster } from "../../components/ui/toaster";
@@ -18,7 +18,7 @@ import { queryClient } from "../../config/react-query";
 import { useListas } from "../../hooks/useListas";
 
 import { VisibilityControlDialog } from "../../components/vibilityControlDialog";
-import { DocumentosFiscaisDialog } from "./dialog";
+import { DocumentoCadastralDialog } from "./dialog";
 import { ExportData } from "../../components/dataGrid/exportData";
 
 import { formatDateToDDMMYYYY } from "../../utils/formatting";
@@ -26,15 +26,15 @@ import { formatDateToDDMMYYYY } from "../../utils/formatting";
 import { useNavigate } from "react-router-dom";
 import { Container } from "../../components/container";
 
-export const DocumentosFiscaisList = () => {
+export const DocumentoscadastraisList = () => {
   const navigate = useNavigate();
 
   const { filters, resetFilters, setFilters } = useFilters({
-    key: "DOCUMENTOS_FISCAIS",
+    key: "DOCUMENTOS_CADASTRAIS",
   });
 
   const { columnVisibility, setColumnVisibility } = useColumnVisibility({
-    key: "DOCUMENTOS_FISCAIS",
+    key: "DOCUMENTOS_CADASTRAIS",
   });
 
   const {
@@ -43,13 +43,13 @@ export const DocumentosFiscaisList = () => {
     setColumnSizing,
     setColumnSizingInfo,
   } = useColumnSizing({
-    key: "DOCUMENTOS_FISCAIS",
+    key: "DOCUMENTOS_CADASTRAIS",
   });
 
   const { data, error, isLoading, isFetching } = useQuery({
-    queryKey: ["listar-documentos-fiscais", { filters }],
+    queryKey: ["listar-documentos-cadastrais", { filters }],
     queryFn: async () =>
-      await DocumentosFiscaisService.listarDocumentosFiscais({ filters }),
+      await DocumentosCadastraisService.listarDocumentosCadastrais({ filters }),
     placeholderData: keepPreviousData,
   });
 
@@ -59,7 +59,7 @@ export const DocumentosFiscaisList = () => {
   };
 
   const sortingState = sortByToState(filters.sortBy);
-  const columns = useMemo(() => makeDocumentoFiscalDynamicColumns({}), []);
+  const columns = useMemo(() => makeDocumentoCadastralDynamicColumns({}), []);
   const modeloDeExportacao = [
     {
       accessorKey: "prestador.nome",
@@ -80,9 +80,12 @@ export const DocumentosFiscaisList = () => {
 
   const { mutateAsync: updateDocumentoFiscalMutation } = useMutation({
     mutationFn: async ({ id, data }) =>
-      await api.patch(`documentos-fiscais/${id}`, data),
+      await api.patch(`documentos-cadastrais/${id}`, data),
     onSuccess() {
-      queryClient.invalidateQueries(["listar-documentos-fiscais", { filters }]);
+      queryClient.invalidateQueries([
+        "listar-documentos-cadastrais",
+        { filters },
+      ]);
       toaster.create({
         title: "Documento fiscal atualizado com sucesso",
         type: "success",
@@ -97,9 +100,9 @@ export const DocumentosFiscaisList = () => {
     },
   });
 
-  const getAllDocumentosFiscaisWithFilters = async (pageSize) => {
-    const { documentosFiscais } =
-      await DocumentosFiscaisService.listarDocumentosFiscais({
+  const getAllDocumentoscadastraisWithFilters = async (pageSize) => {
+    const { documentosCadastrais } =
+      await DocumentosCadastraisService.listarDocumentosCadastrais({
         filters: {
           ...filters,
           pageSize: pageSize ? pageSize : data?.pagination?.totalItems,
@@ -107,7 +110,7 @@ export const DocumentosFiscaisList = () => {
         },
       });
 
-    return documentosFiscais;
+    return documentosCadastrais;
   };
 
   return (
@@ -124,7 +127,7 @@ export const DocumentosFiscaisList = () => {
       >
         <Box>
           <Text fontSize="lg" color="gray.700" fontWeight="semibold">
-            Documentos fiscais
+            Documentos cadastrais
           </Text>
           <Box mt="4" bg="white" py="6" px="4" rounded="lg" shadow="xs">
             <Flex
@@ -160,25 +163,25 @@ export const DocumentosFiscaisList = () => {
                 {(isLoading || isFetching) && <Spinner size="md" />}
                 {!isLoading && !isFetching && "Limpar filtros"}
               </Button>
-              <DocumentosFiscaisDialog />
+              <DocumentoCadastralDialog />
               <Button
                 size="sm"
                 variant="subtle"
                 fontWeight="semibold"
                 color="brand.500"
-                onClick={() => navigate("/documentos-fiscais/importacao")}
+                onClick={() => navigate("/documentos-cadastrais/importacao")}
                 _hover={{ backgroundColor: "gray.50" }}
               >
-                Importar Documentos fiscais
+                Importar Documentos cadastrais
               </Button>
               <ExportData
                 label="Exportar modelo"
                 columns={modeloDeExportacao}
-                dataToExport={() => getAllDocumentosFiscaisWithFilters(1)}
+                dataToExport={() => getAllDocumentoscadastraisWithFilters(1)}
               />
               <ExportData
                 columns={modeloDeExportacao}
-                dataToExport={getAllDocumentosFiscaisWithFilters}
+                dataToExport={getAllDocumentoscadastraisWithFilters}
               />
               <VisibilityControlDialog
                 fields={columns.map((e) => ({
@@ -196,7 +199,7 @@ export const DocumentosFiscaisList = () => {
               sorting={sortingState}
               columns={columns}
               pagination={paginationState}
-              data={data?.documentosFiscais || []}
+              data={data?.documentosCadastrais || []}
               columnVisibility={columnVisibility}
               setColumnVisibility={setColumnVisibility}
               columnSizing={columnSizing}

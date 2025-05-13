@@ -14,6 +14,8 @@ import {
   CalendarSync,
   TicketCheckIcon,
   NotepadText,
+  NotepadTextDashed,
+  Notebook,
 } from "lucide-react";
 
 import { NavLink } from "./navLink";
@@ -48,6 +50,12 @@ const navigationItems = [
     title: "Documentos Fiscais",
     href: "/documentos-fiscais",
     icon: NotepadText,
+    rules: ["admin", "tomador"],
+  },
+  {
+    title: "Documentos Cadastrais",
+    href: "/documentos-cadastrais",
+    icon: Notebook,
     rules: ["admin", "tomador"],
   },
   {
