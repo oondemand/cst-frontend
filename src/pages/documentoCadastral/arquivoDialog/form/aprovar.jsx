@@ -23,45 +23,64 @@ import { queryClient } from "../../../../config/react-query";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { VisibilityControlDialog } from "../../../../components/vibilityControlDialog";
+import { createDynamicFormFields } from "../../../prestadores/formFields";
+import { useMemo } from "react";
+import { useVisibleInputForm } from "../../../../hooks/useVisibleInputForms";
+import { PrestadorService } from "../../../../service/prestador";
+import { BuildForm } from "../../../../components/buildForm";
+import { DocumentosCadastraisService } from "../../../../service/documentos-cadastrais";
 
 const servicoSchema = z.object({
   servicos: z.array(z.object({ _id: z.string() }).transform((e) => e._id)),
-  // .min(1, { message: "Selecione pelo menos um serviço" }),
 });
 
-export const AprovarForm = ({
-  prestadorId,
-  documentoFiscal,
-  handleCloseModal,
-}) => {
+export const AprovarForm = ({ prestadorId, documentoCadastral }) => {
+  const { inputsVisibility, setInputsVisibility } = useVisibleInputForm({
+    key: "PRESTADORES_DOCUMENTO_CADASTAL_MODAL_FORM",
+  });
+
   const { data } = useQuery({
-    queryKey: ["listar-servicos-prestador", { prestadorId }],
+    queryKey: ["listar-prestador", { prestadorId }],
     queryFn: async () =>
-      await ServicoService.listarServicosPorPrestador({
-        prestadorId,
-        dataRegistro: "",
+      await PrestadorService.obterPrestador({
+        id: prestadorId,
       }),
   });
 
-  const { mutateAsync: onAprovarDocumento, isPending } = useMutation({
-    mutationFn: async ({ body }) =>
-      await DocumentosFiscaisService.aprovarDocumentoFiscal({ body }),
-    onSuccess: () => {
+  console.log("[DATA]:", data);
+
+  const { mutateAsync: updatePrestadorMutation } = useMutation({
+    mutationFn: async ({ id, body }) =>
+      await PrestadorService.atualizarPrestador({ id, body }),
+    onSuccess: (data) => {
       toaster.create({
-        title: "Documento fiscal aprovado com sucesso",
+        title: "Prestador atualizado com sucesso",
         type: "success",
       });
-
-      queryClient.invalidateQueries({
-        queryKey: ["file/documento-fiscal"],
-      });
-
-      handleCloseModal();
     },
-    onError: (error) => {
+  });
+
+  const { mutateAsync: onAprovarDocumento, isPending } = useMutation({
+    mutationFn: async () =>
+      await DocumentosCadastraisService.atualizarDocumentoCadastral({
+        body: {
+          statusValidacao: "aprovado",
+        },
+        id: documentoCadastral?._id,
+      }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["listar-documentos-cadastrais"],
+      });
       toaster.create({
-        title: "Erro ao aprovar documento fiscal",
-        description: error?.message,
+        title: "Documento cadastral aprovado com sucesso!",
+        type: "success",
+      });
+    },
+    onError: () => {
+      toaster.create({
+        title: "Ouve um erro ao aprovar o documento cadastral!",
         type: "error",
       });
     },
@@ -80,128 +99,60 @@ export const AprovarForm = ({
   });
 
   const handleAprovarDocumento = async (data) => {
-    console.log("[DATA]:", documentoFiscal?._id);
+    await onAprovarDocumento();
+  };
 
-    await onAprovarDocumento({
-      body: {
-        documentoFiscalId: documentoFiscal?._id,
-        servicos: data.servicos,
-        prestadorId,
-      },
-    });
+  const fields = useMemo(() => createDynamicFormFields(), []);
+
+  const onSubmitPrestador = async (values) => {
+    const {
+      endereco: { pais, ...rest },
+    } = values;
+
+    const body = {
+      ...values,
+      email: values?.email === "" ? null : values?.email,
+      endereco: { ...rest, ...(pais.cod ? { pais } : {}) },
+    };
+
+    return await updatePrestadorMutation({ id: prestadorId, body });
   };
 
   return (
     <form onSubmit={handleSubmit(handleAprovarDocumento)}>
       <Box>
-        <Box px="1" mt="2">
-          <Flex gap="4">
+        <Box mt="2">
+          <Flex gap="4" alignItems="center" justifyContent="space-between">
             <Text color="gray.600" fontSize="sm">
-              Relacionar serviços
+              Prestador
             </Text>
+            <VisibilityControlDialog
+              fields={fields}
+              setVisibilityState={setInputsVisibility}
+              visibilityState={inputsVisibility}
+              title="Ocultar inputs"
+            />
           </Flex>
         </Box>
-        {data && data?.length > 0 && (
-          <Box>
-            <Box
-              mt="4"
-              border="1px solid"
-              borderColor="gray.100"
-              rounded="sm"
-              p="4"
-            >
-              <Table.Root variant="simple" size="xs" justifyItems="right">
-                <Table.Header>
-                  <Table.Row>
-                    <Table.ColumnHeader />
-                    <Table.ColumnHeader color="gray.500" fontSize="sm">
-                      Tipo
-                    </Table.ColumnHeader>
-                    <Table.ColumnHeader color="gray.500" fontSize="sm">
-                      Competência
-                    </Table.ColumnHeader>
-                    <Table.ColumnHeader color="gray.500" fontSize="sm">
-                      Descrição
-                    </Table.ColumnHeader>
-                    <Table.ColumnHeader color="gray.500" fontSize="sm">
-                      Valor
-                    </Table.ColumnHeader>
-                  </Table.Row>
-                </Table.Header>
-                <Table.Body>
-                  {data?.map((servico) => (
-                    <Table.Row key={servico._id}>
-                      <Table.Cell py="1">
-                        <Controller
-                          name="servicos"
-                          control={control}
-                          render={({ field: { value, onChange } }) => (
-                            <Checkbox.Root
-                              variant="subtle"
-                              checked={value.some((s) => s._id === servico._id)}
-                              onChange={(event) => {
-                                if (event.target.checked) {
-                                  return onChange([...value, servico]);
-                                }
-
-                                return onChange(
-                                  value.filter(
-                                    (item) => item._id !== servico._id
-                                  )
-                                );
-                              }}
-                              cursor="pointer"
-                              _disabled={{ cursor: "not-allowed" }}
-                              size="sm"
-                            >
-                              <Checkbox.HiddenInput />
-                              <Checkbox.Control>
-                                <Checkbox.Indicator />
-                              </Checkbox.Control>
-                            </Checkbox.Root>
-                          )}
-                        />
-                      </Table.Cell>
-                      <Table.Cell>
-                        <Text
-                          fontSize="xs"
-                          color="gray.400"
-                          mr="6"
-                          px="1"
-                          borderColor="gray.200"
-                          rounded="xs"
-                        >
-                          {servico?.tipoDocumentoFiscal?.toUpperCase()}
-                        </Text>
-                      </Table.Cell>
-                      <Table.Cell>
-                        <Text fontSize="xs" color="gray.400">
-                          {servico?.competencia?.mes
-                            .toString()
-                            .padStart(2, "0")}
-                          /{servico?.competencia?.ano}
-                        </Text>
-                      </Table.Cell>
-                      <Table.Cell>
-                        <Text truncate fontSize="xs" color="gray.400">
-                          {servico?.descricao}
-                        </Text>
-                      </Table.Cell>
-                      <Table.Cell>
-                        <Text fontSize="xs" fontWeight="medium">
-                          {currency.format(servico?.valor ?? 0)}
-                        </Text>
-                      </Table.Cell>
-                    </Table.Row>
-                  ))}
-                </Table.Body>
-              </Table.Root>
-            </Box>
-            {errors.servicos && (
-              <Text fontSize="xs" color="red.500">
-                {errors.servicos.message}
-              </Text>
-            )}
+        {data && (
+          <Box mt="6">
+            <BuildForm
+              fields={fields}
+              data={{
+                ...data,
+                pessoaFisica: {
+                  ...data?.pessoaFisica,
+                  dataNascimento: formatDateToDDMMYYYY(
+                    data?.pessoaFisica?.dataNascimento
+                  ),
+                },
+              }}
+              shouldUseFormValues={true}
+              visibleState={inputsVisibility}
+              onSubmit={onSubmitPrestador}
+              gridColumns={2}
+              gap={4}
+            />
           </Box>
         )}
         <Box p="2" />

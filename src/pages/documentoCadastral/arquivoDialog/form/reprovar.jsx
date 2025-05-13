@@ -20,7 +20,7 @@ import { useConfirmation } from "../../../../hooks/useConfirmation";
 import { Select } from "chakra-react-select";
 import { chakraStyles } from "../../../../components/ticketModal/form/select-chakra-styles";
 import { formatDateToDDMMYYYY } from "../../../../utils/formatting";
-import { DocumentosFiscaisService } from "../../../../service/documentos-fiscais";
+import { DocumentosCadastraisService } from "../../../../service/documentos-cadastrais";
 import { queryClient } from "../../../../config/react-query";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -42,7 +42,7 @@ const reprovacaoSchema = z.object({
   observacaoPrestador: z.string().optional(),
 });
 
-export const ReprovarForm = ({ documentoFiscalId }) => {
+export const ReprovarForm = ({ documentoCadastralId }) => {
   const { data } = useQuery({
     queryKey: ["list-motivo-recusa"],
     queryFn: async () =>
@@ -59,27 +59,27 @@ export const ReprovarForm = ({ documentoFiscalId }) => {
 
   const { mutateAsync: reprovarDocumento } = useMutation({
     mutationFn: async ({ motivoRecusa, observacao, observacaoPrestador }) =>
-      await DocumentosFiscaisService.atualizarDocumentoFiscal({
+      await DocumentosCadastraisService.atualizarDocumentoCadastral({
         body: {
           motivoRecusa,
           observacaoInterna: observacao,
           observacaoPrestador,
           statusValidacao: "recusado",
         },
-        id: documentoFiscalId,
+        id: documentoCadastralId,
       }),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["listar-documentos-fiscais"],
+        queryKey: ["listar-documentos-cadastrais"],
       });
       toaster.create({
-        title: "Documento fiscal reprovado com sucesso!",
+        title: "Documento cadastral reprovado com sucesso!",
         type: "success",
       });
     },
     onError: () => {
       toaster.create({
-        title: "Ouve um erro ao reprovar o documento fiscal!",
+        title: "Ouve um erro ao reprovar o documento cadastral!",
         type: "error",
       });
     },

@@ -42,10 +42,10 @@ export const makeDocumentoCadastralDynamicColumns = () => {
               },
             }}
           />
-          {/* {props.row.original?.arquivo &&
+          {props.row.original?.arquivo &&
             props.row.original?.statusValidacao === "pendente" && (
-              <ArquivoDetailsDialog documentoFiscal={props.row.original} />
-            )} */}
+              <ArquivoDetailsDialog documentoCadastral={props.row.original} />
+            )}
         </TableActionsCell>
       ),
     },

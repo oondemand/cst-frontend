@@ -2,7 +2,11 @@ import { api } from "../config/api";
 
 export const listarPrestadores = async ({ filters }) => {
   const { data } = await api.get("/prestadores", { params: filters });
+  return data;
+};
 
+export const obterPrestador = async ({ id }) => {
+  const { data } = await api.get(`/prestadores/${id}`);
   return data;
 };
 
@@ -43,6 +47,7 @@ export const enviarConvite = async ({ prestador }) => {
 
 export const PrestadorService = {
   listarPrestadores,
+  obterPrestador,
   criarPrestador,
   atualizarPrestador,
   importarPrestadores,

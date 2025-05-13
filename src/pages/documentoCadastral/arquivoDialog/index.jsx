@@ -10,7 +10,6 @@ import { BuildForm } from "../../../components/buildForm/index";
 import { VisibilityControlDialog } from "../../../components/vibilityControlDialog";
 import { useVisibleInputForm } from "../../../hooks/useVisibleInputForms";
 import { toaster } from "../../../components/ui/toaster";
-import { DocumentosFiscaisService } from "../../../service/documentos-fiscais";
 import { TicketService } from "../../../service/ticket";
 
 import { Viewer, Worker } from "@react-pdf-viewer/core";
@@ -44,14 +43,14 @@ import { Tooltip } from "../../../components/ui/tooltip";
 import { AprovarForm } from "./form/aprovar";
 import { ReprovarForm } from "./form/reprovar";
 
-export const ArquivoDetailsDialog = ({ documentoFiscal }) => {
+export const ArquivoDetailsDialog = ({ documentoCadastral }) => {
   const [open, setOpen] = useState(false);
   const [pdfUrl, setPdfUrl] = useState(null);
 
   const { data: response } = useQuery({
-    queryKey: ["file/documento-fiscal", documentoFiscal?.arquivo?._id],
+    queryKey: ["file/documento-cadastral", documentoCadastral?.arquivo?._id],
     queryFn: async () =>
-      await TicketService.getFile({ id: documentoFiscal?.arquivo?._id }),
+      await TicketService.getFile({ id: documentoCadastral?.arquivo?._id }),
     enabled: open,
     staleTime: 1000 * 60 * 10, // 10 minutos
   });
@@ -72,7 +71,7 @@ export const ArquivoDetailsDialog = ({ documentoFiscal }) => {
     <Box>
       <Box onClick={() => setOpen(true)}>
         <Tooltip
-          content="Analisar documento fiscal"
+          content="Analisar documento cadastral"
           positioning={{ placement: "top" }}
           openDelay={1000}
           closeDelay={50}
@@ -107,18 +106,7 @@ export const ArquivoDetailsDialog = ({ documentoFiscal }) => {
           >
             <DialogHeader mt="-4" py="2" px="4">
               <Flex gap="4" alignItems="baseline">
-                <DialogTitle>Analisar Documento Fiscal</DialogTitle>
-                <Text fontWeight="medium" color="gray.500">
-                  {documentoFiscal?.tipoDocumentoFiscal?.toUpperCase()}{" "}
-                  {documentoFiscal?.competencia?.mes
-                    ?.toString()
-                    ?.padStart(2, "0")}
-                  {documentoFiscal?.competencia?.ano
-                    ? `/${documentoFiscal?.competencia?.ano}`
-                    : ""}{" "}
-                  - {documentoFiscal?.prestador?.nome} -{" "}
-                  {documentoFiscal?.prestador?.documento}
-                </Text>
+                <DialogTitle>Analisar Documento Cadastral</DialogTitle>
               </Flex>
             </DialogHeader>
             <DialogBody overflowY="auto" className="dialog-custom-scrollbar">
@@ -143,11 +131,12 @@ export const ArquivoDetailsDialog = ({ documentoFiscal }) => {
                   pb="6"
                 >
                   <AprovarForm
-                    prestadorId={documentoFiscal?.prestador?._id}
-                    documentoFiscal={documentoFiscal}
-                    handleCloseModal={() => setOpen(false)}
+                    prestadorId={documentoCadastral?.prestador?._id}
+                    documentoCadastral={documentoCadastral}
                   />
-                  <ReprovarForm documentoFiscalId={documentoFiscal?._id} />
+                  <ReprovarForm
+                    documentoCadastralId={documentoCadastral?._id}
+                  />
                 </Flex>
               </Flex>
             </DialogBody>
