@@ -59,7 +59,7 @@ export const SelectPrestadorCell = ({
   const handleUpdate = async () => {
     try {
       await table.options.meta?.updateData({
-        prestadorId: row.original._id,
+        id: row.original._id,
         data: { [column.columnDef.accessorKey]: value.value },
       });
     } catch (error) {
