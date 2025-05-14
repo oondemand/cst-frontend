@@ -12,13 +12,11 @@ const obterPrestador = async ({ id }) => {
 
 const criarPrestador = async ({ body }) => {
   const { data } = await api.post("/prestadores", body);
-
   return data;
 };
 
 const atualizarPrestador = async ({ id, body }) => {
   const { data } = await api.patch(`/prestadores/${id}`, body);
-
   return data;
 };
 

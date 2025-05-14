@@ -2,7 +2,7 @@ import React, { useMemo } from "react";
 
 import { Flex, Spinner, Box, Button, Text } from "@chakra-ui/react";
 import { useQuery, keepPreviousData, useMutation } from "@tanstack/react-query";
-import { importarPrestadores, PrestadorService } from "../../service/prestador";
+import { PrestadorService } from "../../service/prestador";
 import { DebouncedInput } from "../../components/DebouncedInput";
 import { DataGrid } from "../../components/dataGrid";
 import { useFilters } from "../../hooks/useFilters";
@@ -84,7 +84,8 @@ export const PrestadoresList = () => {
   });
 
   const { mutateAsync: importPrestadoresMutation } = useMutation({
-    mutationFn: async ({ files }) => await importarPrestadores({ files }),
+    mutationFn: async ({ files }) =>
+      await PrestadorService.importarPrestadores({ files }),
     onSuccess() {
       queryClient.refetchQueries(["listar-prestadores", { filters }]);
       toaster.create({
