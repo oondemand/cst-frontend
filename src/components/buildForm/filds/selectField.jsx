@@ -21,7 +21,6 @@ export const SelectField = ({ options, ...props }) => {
                 value={
                   options?.find((item) => item?.value == field?.value) ?? ""
                 }
-                // inputValue={field.value}
                 name={field.name}
                 onBlur={field.onBlur}
                 onChange={(e) => {

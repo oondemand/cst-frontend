@@ -1,6 +1,6 @@
 import { IconButton } from "@chakra-ui/react";
 import { Upload } from "lucide-react";
-import { QueryClient, useMutation } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { toaster } from "../../ui/toaster";
 import { Tooltip } from "../../ui/tooltip";
 import { TicketService } from "../../../service/ticket";

@@ -1,21 +1,14 @@
 import React from "react";
 
 import { SelectListaCell } from "../../components/dataGrid/cells/selectLista";
-import { DateCell } from "../../components/dataGrid/cells/dateCell";
-import { CompetenciaCell } from "../../components/dataGrid/cells/competenciaCell";
-import { CurrencyCell } from "../../components/dataGrid/cells/currencyCell";
-import { DisabledCurrencyCell } from "../../components/dataGrid/cells/disabledCurrencyCell";
-import { DisabledDefaultCell } from "../../components/dataGrid/cells/disabledDefaultCell";
 import { SelectPrestadorCell } from "../../components/dataGrid/cells/selectPrestador";
 import { DocumentoCadastralDialog } from "./dialog";
-import { formatDateToDDMMYYYY } from "../../utils/formatting";
 import { IconButton } from "@chakra-ui/react";
 import { Pencil } from "lucide-react";
 import { TableActionsCell } from "../../components/dataGrid/cells/tableActionsCell";
 import { DeleteDocumentoCadastralAction } from "../../components/dataGrid/actions/deleteDocumentoCadastralButton";
 import { SelectAutoCompleteCell } from "../../components/dataGrid/cells/selectAutoComplete";
 import { DefaultEditableCell } from "../../components/dataGrid/cells/defaultEditable";
-import { DocumentosFiscaisFilesDetailsCell } from "../../components/dataGrid/cells/documentosFiscaisFilesDetailsCell";
 import { ArquivoDetailsDialog } from "./arquivoDialog";
 
 export const makeDocumentoCadastralDynamicColumns = () => {

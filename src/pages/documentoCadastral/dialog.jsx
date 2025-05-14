@@ -1,4 +1,4 @@
-import { Box, Button, Flex, Text, IconButton } from "@chakra-ui/react";
+import { Box, Button, Flex, Text } from "@chakra-ui/react";
 import { CloseButton } from "../../components/ui/close-button";
 
 import { useMemo, useState, useEffect } from "react";
@@ -192,7 +192,7 @@ export const DocumentoCadastralDialog = ({
         saveAs(blob, data?.nomeOriginal);
       }
     } catch (error) {
-      console.log("Error", error);
+      console.log("error");
     }
   };
 

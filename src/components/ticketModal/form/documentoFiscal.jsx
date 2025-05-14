@@ -15,12 +15,9 @@ import { DocumentosFiscaisService } from "../../../service/documentos-fiscais";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { toaster } from "../../ui/toaster";
 import { useConfirmation } from "../../../hooks/useConfirmation";
-import { Tooltip } from "../../ui/tooltip";
-import { ServicoTooltipCard } from "./servicoTooltipCard";
 import { TicketService } from "../../../service/ticket";
 import { Select } from "chakra-react-select";
 import { chakraStyles } from "./select-chakra-styles";
-import { formatDateToDDMMYYYY } from "../../../utils/formatting";
 
 export const DocumentoFiscalForm = ({ ticket, onlyReading }) => {
   const [documentosFiscais, setDocumentosFiscais] = useState(
@@ -117,7 +114,7 @@ export const DocumentoFiscalForm = ({ ticket, onlyReading }) => {
         saveAs(blob, data?.nomeOriginal);
       }
     } catch (error) {
-      console.log("Error", error);
+      console.log("error");
     }
   };
 
@@ -178,13 +175,6 @@ export const DocumentoFiscalForm = ({ ticket, onlyReading }) => {
                   >
                     Competência
                   </Table.ColumnHeader>
-                  {/* <Table.ColumnHeader
-                    width="25%"
-                    color="gray.500"
-                    fontSize="sm"
-                  >
-                    Valor
-                  </Table.ColumnHeader> */}
                   <Table.ColumnHeader
                     width="25%"
                     color="gray.500"
@@ -205,22 +195,6 @@ export const DocumentoFiscalForm = ({ ticket, onlyReading }) => {
               <Table.Body>
                 {documentosFiscais?.map((servico) => {
                   return (
-                    // <Tooltip
-                    //   key={servico._id}
-                    //   content="Teste"
-                    //   positioning={{ placement: "top" }}
-                    //   openDelay={1000}
-                    //   closeDelay={50}
-                    //   contentProps={{
-                    //     css: {
-                    //       "--tooltip-bg": "transparent",
-                    //       width: "700px !important",
-                    //       minWidth: "700px !important",
-                    //       color: "gray.600",
-                    //       shadow: "none",
-                    //     },
-                    //   }}
-                    // >
                     <Table.Row>
                       <Table.Cell>
                         <Text
@@ -242,12 +216,6 @@ export const DocumentoFiscalForm = ({ ticket, onlyReading }) => {
                           /{servico?.competencia?.ano}
                         </Text>
                       </Table.Cell>
-
-                      {/* <Table.Cell>
-                          <Text fontSize="xs" color="gray.400">
-                            {currency.format(servico?.valores?.totalServico)}
-                          </Text>
-                        </Table.Cell> */}
 
                       <Table.Cell>
                         <Text fontSize="xs" color="gray.400">
@@ -291,7 +259,6 @@ export const DocumentoFiscalForm = ({ ticket, onlyReading }) => {
                         </Flex>
                       </Table.Cell>
                     </Table.Row>
-                    // </Tooltip>
                   );
                 })}
               </Table.Body>

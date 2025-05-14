@@ -1,33 +1,6 @@
-import {
-  Flex,
-  IconButton,
-  Text,
-  Button,
-  Box,
-  Clipboard,
-} from "@chakra-ui/react";
-
-import {
-  DialogBody,
-  DialogCloseTrigger,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogRoot,
-  DialogTitle,
-  DialogTrigger,
-} from "../../components/ui/dialog";
-
+import { Flex, IconButton, Text, Clipboard } from "@chakra-ui/react";
 import Markdown from "react-markdown";
-
 import { Prose } from "../../components/ui/prose";
-
-import { useState } from "react";
-
-import { JsonView, allExpanded } from "react-json-view-lite";
-import "react-json-view-lite/dist/index.css";
-
-const customTheme = {};
 
 const ClipboardIconButton = () => {
   return (
@@ -39,9 +12,7 @@ const ClipboardIconButton = () => {
   );
 };
 
-export function TextCard({ text, type, details }) {
-  // const [open, setOpen] = useState();
-
+export function TextCard({ text, type }) {
   return (
     <>
       <Flex
@@ -62,17 +33,6 @@ export function TextCard({ text, type, details }) {
           <Text fontWeight="semibold" fontSize="xs" color="gray.500">
             {type === "user" ? "Usuário" : "Resposta"}
           </Text>
-          {/* {type === "bot" && details && (
-            <Button
-              rounded="full"
-              size="2xs"
-              onClick={() => setOpen(true)}
-              variant="outline"
-              colorPalette="black"
-            >
-              Inspecionar detalhes
-            </Button>
-          )} */}
         </Flex>
         <Prose fontSize="xs" lineHeight="1">
           <Markdown>{text}</Markdown>
@@ -81,35 +41,6 @@ export function TextCard({ text, type, details }) {
           <ClipboardIconButton />
         </Clipboard.Root>
       </Flex>
-
-      {/* {open && (
-        <DialogRoot
-          lazyMount
-          placement="center"
-          size="cover"
-          open={open}
-          onOpenChange={(e) => setOpen(e.open)}
-        >
-          <DialogContent maxH="90%">
-            <DialogHeader>
-              <DialogTitle>Detalhes da requisição</DialogTitle>
-            </DialogHeader>
-            <DialogBody w="full" h="full" overflow="auto" scrollbarWidth="thin">
-              <JsonView
-                container={{ backgroundColor: "red" }}
-                data={{
-                  prompt: details?.prompt,
-                  variaveis: details?.body,
-                  resposta: details?.response,
-                }}
-                shouldExpandNode={allExpanded}
-                style={customTheme}
-              />
-            </DialogBody>
-            <DialogCloseTrigger />
-          </DialogContent>
-        </DialogRoot>
-      )} */}
     </>
   );
 }

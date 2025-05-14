@@ -1,5 +1,5 @@
 import { Box, Flex, Heading, Text } from "@chakra-ui/react";
-import { memo, useMemo } from "react";
+import { useMemo } from "react";
 import { currency } from "../../utils/currency";
 
 export const ServicesCard = ({ servicos = [] }) => {
@@ -37,5 +37,3 @@ export const ServicesCard = ({ servicos = [] }) => {
     </Flex>
   );
 };
-
-// export const ServicesCard = memo(_ServicesCard);

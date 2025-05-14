@@ -10,7 +10,7 @@ import {
 import { useStateWithStorage } from "../../hooks/useStateStorage";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { ListaService } from "../../service/listas";
-import { DeleteIcon, Trash2 } from "lucide-react";
+import { Trash2 } from "lucide-react";
 import { toaster } from "../../components/ui/toaster";
 import { api } from "../../config/api";
 import { queryClient } from "../../config/react-query";

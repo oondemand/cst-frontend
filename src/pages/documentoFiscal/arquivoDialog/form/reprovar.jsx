@@ -1,25 +1,15 @@
 import {
   Box,
   Text,
-  Grid,
-  GridItem,
   Button,
-  Table,
   Flex,
-  Checkbox,
   Textarea,
   createListCollection,
 } from "@chakra-ui/react";
 
-import { currency } from "../../../../utils/currency";
-import { CircleX, Check } from "lucide-react";
-import { ServicoService } from "../../../../service/servico";
+import { CircleX } from "lucide-react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { toaster } from "../../../../components/ui/toaster";
-import { useConfirmation } from "../../../../hooks/useConfirmation";
-import { Select } from "chakra-react-select";
-import { chakraStyles } from "../../../../components/ticketModal/form/select-chakra-styles";
-import { formatDateToDDMMYYYY } from "../../../../utils/formatting";
 import { DocumentosFiscaisService } from "../../../../service/documentos-fiscais";
 import { queryClient } from "../../../../config/react-query";
 import { useForm, Controller } from "react-hook-form";

@@ -143,9 +143,8 @@ export const EtapasPage = () => {
             setColumnSizing={setColumnSizing}
             setColumnSizingInfo={setColumnSizingInfo}
             onUpdateData={async (values) => {
-              console.log("VAL", values);
               await updateEtapasMutation({
-                id: values.prestadorId,
+                id: values.id,
                 data: values.data,
               });
             }}

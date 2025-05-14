@@ -42,7 +42,6 @@ export const SelectListaField = ({ cod, ...props }) => {
                       item?.value?.toLowerCase() == field?.value?.toLowerCase()
                   ) ?? ""
                 }
-                // inputValue={field.value}
                 name={field.name}
                 onBlur={field.onBlur}
                 onChange={(e) => {

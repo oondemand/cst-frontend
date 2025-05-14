@@ -1,16 +1,7 @@
-import { preprocessEmptyToUndefined } from "../../utils/zodHelpers";
 import { SelectPrestadorField } from "../../components/buildForm/filds/selectPrestadorField";
 import { z } from "zod";
-import { CompetenciaField } from "../../components/buildForm/filds/competenciaField";
 import { SelectListaField } from "../../components/buildForm/filds/selectListaField";
-import { DateField } from "../../components/buildForm/filds/dateField";
-import { CurrencyField } from "../../components/buildForm/filds/currencyField";
 import { DefaultField } from "../../components/buildForm/filds/default";
-import {
-  dateValidation,
-  currencyValidation,
-  requiredCurrencyValidation,
-} from "../../utils/zodHelpers";
 
 export const createDynamicFormFields = () => {
   return [

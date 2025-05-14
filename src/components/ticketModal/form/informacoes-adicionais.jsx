@@ -1,41 +1,18 @@
 import { Box, Text, Flex, Grid, GridItem } from "@chakra-ui/react";
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { BuildForm } from "../../buildForm/index";
 import { useVisibleInputForm } from "../../../hooks/useVisibleInputForms";
-import { useMemo } from "react";
-import { useMutation } from "@tanstack/react-query";
 import { api } from "../../../config/api";
-import { PrestadorService } from "../../../service/prestador";
-import { AsyncSelectAutocomplete } from "../../asyncSelectAutoComplete";
 
 import { VisibilityControlDialog } from "../../vibilityControlDialog";
-import { formatDateToDDMMYYYY } from "../../../utils/formatting";
-import { toaster } from "../../ui/toaster";
 
-import { DefaultField } from "../../buildForm/filds/default";
 import { z } from "zod";
 import { SelectCategoriaField } from "../../buildForm/filds/selectCategoriaField";
 import { SelectContaCorrenteField } from "../../buildForm/filds/selectContaCorrenteField";
 
 export const fetchOptions = async (inputValue) => {
   return await api.get(`/prestadores?searchTerm=${inputValue}`);
-};
-
-const obterPrestadores = async (inputValue) => {
-  const {
-    data: { prestadores },
-  } = await fetchOptions(inputValue);
-
-  return prestadores.map((item) => {
-    return {
-      ...item,
-      value: item._id,
-      label: `${item.nome} ${`${
-        item.documento ? `DOC. ${item.documento}` : ""
-      }`}`,
-    };
-  });
 };
 
 export const InformacoesAdicionaisForm = ({

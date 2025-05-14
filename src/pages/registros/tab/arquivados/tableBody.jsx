@@ -2,7 +2,6 @@ import { Table, Popover, Portal } from "@chakra-ui/react";
 import { memo } from "react";
 
 import { flexRender } from "@tanstack/react-table";
-import { Tooltip } from "../../../../components/ui/tooltip";
 import { ServicosCard } from "./servicosCard";
 
 const TableBody = ({ rows, columns, data }) => {
@@ -10,21 +9,6 @@ const TableBody = ({ rows, columns, data }) => {
     <Table.Body>
       {rows.map((row) => (
         <Popover.Root positioning={{ placement: "right-end" }}>
-          {/* <Tooltip
-          content={<ServicosCard servicos={row.original?.servicos} />}
-          positioning={{ placement: "top" }}
-          interactive
-          openDelay={700}
-          closeDelay={500}
-          contentProps={{
-            css: {
-              "--tooltip-bg": "white",
-              width: "1400px !important",
-              minWidth: "1400px !important",
-              color: "gray.600",
-            },
-          }}
-        > */}
           <Table.Row key={row.id}>
             {row.getVisibleCells().map((cell) => (
               <Table.Cell
@@ -39,7 +23,6 @@ const TableBody = ({ rows, columns, data }) => {
               </Table.Cell>
             ))}
           </Table.Row>
-          {/* </Tooltip> */}
           <Portal>
             <Popover.Positioner>
               <Popover.Content width="auto">

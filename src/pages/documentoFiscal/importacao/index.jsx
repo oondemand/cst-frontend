@@ -65,7 +65,7 @@ export const ImportDocumentosFiscaisPage = () => {
       const blob = new Blob([byteArray], { type });
       saveAs(blob, name);
     } catch (error) {
-      console.log("Error", error);
+      console.log("error");
     }
   };
 
@@ -163,17 +163,6 @@ export const ImportDocumentosFiscaisPage = () => {
                                   : "..."}
                               </Text>
                             </Box>
-
-                            {/* <Box>
-                              <Text fontSize="sm" color="gray.600">
-                                Total de Serviços criados
-                              </Text>
-                              <Text fontSize="2xl" fontWeight="bold">
-                                {data
-                                  ? importacao.detalhes?.novosDocumentosFiscais
-                                  : "..."}
-                              </Text>
-                            </Box> */}
 
                             <Box>
                               <Text fontSize="sm" color="gray.600">

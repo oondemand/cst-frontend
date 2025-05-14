@@ -1,16 +1,9 @@
-import { Box, Button, Flex, Text, IconButton, Spinner } from "@chakra-ui/react";
+import { Box, Flex, Text, IconButton } from "@chakra-ui/react";
 import { CloseButton } from "../../../components/ui/close-button";
 
-import { useMemo, useState, useEffect } from "react";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { queryClient } from "../../../config/react-query";
+import { useState, useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
 
-import { createDynamicFormFields } from "../formFields";
-import { BuildForm } from "../../../components/buildForm/index";
-import { VisibilityControlDialog } from "../../../components/vibilityControlDialog";
-import { useVisibleInputForm } from "../../../hooks/useVisibleInputForms";
-import { toaster } from "../../../components/ui/toaster";
-import { DocumentosFiscaisService } from "../../../service/documentos-fiscais";
 import { TicketService } from "../../../service/ticket";
 
 import { Viewer, Worker } from "@react-pdf-viewer/core";
@@ -23,23 +16,9 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogFooter,
 } from "../../../components/ui/dialog";
 
-import {
-  FileUploadRoot,
-  FileUploadTrigger,
-} from "../../../components/ui/file-upload";
-import {
-  Paperclip,
-  CircleX,
-  Download,
-  FilePenLine,
-  Check,
-  Circle,
-  X,
-} from "lucide-react";
-import { useConfirmation } from "../../../hooks/useConfirmation";
+import { FilePenLine } from "lucide-react";
 import { Tooltip } from "../../../components/ui/tooltip";
 import { AprovarForm } from "./form/aprovar";
 import { ReprovarForm } from "./form/reprovar";

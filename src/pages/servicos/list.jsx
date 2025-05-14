@@ -15,7 +15,6 @@ import { makeServicoDynamicColumns } from "./columns";
 import { api } from "../../config/api";
 import { toaster } from "../../components/ui/toaster";
 import { queryClient } from "../../config/react-query";
-import { useListas } from "../../hooks/useListas";
 
 import { VisibilityControlDialog } from "../../components/vibilityControlDialog";
 import { ServicosDialog } from "./dialog";
@@ -203,7 +202,7 @@ export const ServicosList = () => {
               setColumnSizingInfo={setColumnSizingInfo}
               onUpdateData={async (values) => {
                 await updateServicoMutation({
-                  id: values.prestadorId,
+                  id: values.id,
                   data: values.data,
                 });
               }}

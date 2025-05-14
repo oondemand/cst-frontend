@@ -9,7 +9,7 @@ import {
   DialogTitle,
 } from "../ui/dialog";
 
-import { Button, Flex, Heading, Box } from "@chakra-ui/react";
+import { Button, Heading } from "@chakra-ui/react";
 import { CircleAlert } from "lucide-react";
 
 export const ConfirmationModal = ({

@@ -9,7 +9,7 @@ import { ServicesCard } from "./servicesCard";
 import { AnexosCard } from "./arquivosCard";
 import { currency } from "../../utils/currency";
 
-import { CreateTicketModal } from "../ticketModal/modalCreate";
+import { TicketModal } from "../ticketModal";
 import { format } from "date-fns";
 
 const BADGE_MAP = {
@@ -96,19 +96,6 @@ const _TicketCard = ({ ticket }) => {
                   </Text>
                 </Box>
               </Tooltip>
-              {/* {ticket?.contaPagarOmie && (
-                <Button
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                  }}
-                  cursor="pointer"
-                  unstyled
-                  color="green.500"
-                >
-                  <RotateCw strokeWidth={2.75} size={14} />
-                </Button>
-              )} */}
             </Flex>
 
             {(ticket?.contaPagarOmie || ticket?.status === "concluido") && (
@@ -212,7 +199,7 @@ const _TicketCard = ({ ticket }) => {
       </Box>
 
       {open && (
-        <CreateTicketModal
+        <TicketModal
           defaultValue={ticket}
           open={open}
           setOpen={setOpen}

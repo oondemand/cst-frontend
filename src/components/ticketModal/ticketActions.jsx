@@ -1,5 +1,5 @@
 import { Flex, Button, useDialogContext } from "@chakra-ui/react";
-import { Check, File, Trash, X } from "lucide-react";
+import { Check, Trash, X } from "lucide-react";
 
 import { toaster } from "../ui/toaster";
 import { TicketService } from "../../service/ticket";

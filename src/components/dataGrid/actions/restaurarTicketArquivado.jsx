@@ -1,9 +1,8 @@
 import { IconButton } from "@chakra-ui/react";
-import { ArchiveRestore, LockKeyholeOpen, Send } from "lucide-react";
+import { ArchiveRestore } from "lucide-react";
 import { useMutation } from "@tanstack/react-query";
 import { toaster } from "../../ui/toaster";
 import { Tooltip } from "../../ui/tooltip";
-import { LoginService } from "../../../service/auth";
 import { TicketService } from "../../../service/ticket";
 import { queryClient } from "../../../config/react-query";
 import { useConfirmation } from "../../../hooks/useConfirmation";

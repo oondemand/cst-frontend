@@ -1,4 +1,4 @@
-import { Button, IconButton } from "@chakra-ui/react";
+import { IconButton } from "@chakra-ui/react";
 import { Trash } from "lucide-react";
 import { useMutation } from "@tanstack/react-query";
 import { toaster } from "../../ui/toaster";

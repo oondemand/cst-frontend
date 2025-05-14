@@ -57,7 +57,7 @@ export const FilesDetailsCell = (props) => {
         saveAs(blob, data?.nomeOriginal);
       }
     } catch (error) {
-      console.log("Error", error);
+      console.log("error");
     }
   };
 
@@ -90,8 +90,6 @@ export const FilesDetailsCell = (props) => {
               <Popover.Title>Anexos</Popover.Title>
               <Flex flexDirection="column" minH="8" justifyContent="center">
                 {props.row.original?.arquivos?.map((item) => {
-                  console.log(item);
-
                   return (
                     <Flex
                       gap="8"

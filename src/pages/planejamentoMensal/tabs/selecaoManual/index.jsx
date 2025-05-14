@@ -1,8 +1,6 @@
 import { useFilters } from "../../../../hooks/useFilters";
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
-import { ServicoService } from "../../../../service/servico";
 import { sortByToState, stateToSortBy } from "../../../../utils/sorting";
-import { useMemo } from "react";
 import { makeServicoDynamicColumns } from "./columns";
 import { Flex, Box, Text, Button, Spinner } from "@chakra-ui/react";
 import { DataGrid } from "../../../../components/dataGrid";

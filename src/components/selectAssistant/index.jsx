@@ -28,8 +28,6 @@ export function SelectAssistant({ label, ...props }) {
       }) ?? [],
   });
 
-  console.log(error);
-
   return (
     <Box>
       <SelectRoot

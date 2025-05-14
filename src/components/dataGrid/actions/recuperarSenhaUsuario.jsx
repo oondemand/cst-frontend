@@ -1,8 +1,7 @@
 import { IconButton } from "@chakra-ui/react";
-import { LockKeyholeOpen, Send } from "lucide-react";
+import { LockKeyholeOpen } from "lucide-react";
 import { useMutation } from "@tanstack/react-query";
 import { toaster } from "../../ui/toaster";
-import { UsuarioService } from "../../../service/usuario";
 import { Tooltip } from "../../ui/tooltip";
 import { LoginService } from "../../../service/auth";
 
@@ -18,8 +17,6 @@ export const RecuperarSenhaUsuarioAction = ({ usuario }) => {
       });
     },
     onError: (error) => {
-      console.log(error);
-
       toaster.create({
         title: "Ouve um erro ao enviar convite!",
         description: "Um erro inesperado aconteceu ao enviar convite!",

@@ -144,9 +144,8 @@ export const AssistenteConfigPage = () => {
             setColumnSizing={setColumnSizing}
             setColumnSizingInfo={setColumnSizingInfo}
             onUpdateData={async (values) => {
-              console.log("VAL", values);
               await updateAssistenteConfigMutation({
-                id: values.prestadorId,
+                id: values.id,
                 data: values.data,
               });
             }}

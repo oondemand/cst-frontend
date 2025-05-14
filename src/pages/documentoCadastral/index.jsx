@@ -15,16 +15,11 @@ import { makeDocumentoCadastralDynamicColumns } from "./columns";
 import { api } from "../../config/api";
 import { toaster } from "../../components/ui/toaster";
 import { queryClient } from "../../config/react-query";
-import { useListas } from "../../hooks/useListas";
 
 import { VisibilityControlDialog } from "../../components/vibilityControlDialog";
 import { DocumentoCadastralDialog } from "./dialog";
 import { ExportData } from "../../components/dataGrid/exportData";
-
-import { formatDateToDDMMYYYY } from "../../utils/formatting";
-// import { ImportDataDialog } from "../../components/dataGrid/importDataDialog";
 import { useNavigate } from "react-router-dom";
-import { Container } from "../../components/container";
 
 export const DocumentoscadastraisList = () => {
   const navigate = useNavigate();
@@ -208,7 +203,7 @@ export const DocumentoscadastraisList = () => {
               setColumnSizingInfo={setColumnSizingInfo}
               onUpdateData={async (values) => {
                 await updateDocumentoFiscalMutation({
-                  id: values.prestadorId,
+                  id: values.id,
                   data: values.data,
                 });
               }}

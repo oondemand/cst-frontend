@@ -15,7 +15,6 @@ import { makeDocumentoFiscalDynamicColumns } from "./columns";
 import { api } from "../../config/api";
 import { toaster } from "../../components/ui/toaster";
 import { queryClient } from "../../config/react-query";
-import { useListas } from "../../hooks/useListas";
 
 import { VisibilityControlDialog } from "../../components/vibilityControlDialog";
 import { DocumentosFiscaisDialog } from "./dialog";
@@ -205,7 +204,7 @@ export const DocumentosFiscaisList = () => {
               setColumnSizingInfo={setColumnSizingInfo}
               onUpdateData={async (values) => {
                 await updateDocumentoFiscalMutation({
-                  id: values.prestadorId,
+                  id: values.id,
                   data: values.data,
                 });
               }}

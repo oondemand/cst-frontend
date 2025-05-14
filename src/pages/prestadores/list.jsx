@@ -21,7 +21,6 @@ import { PrestadoresDialog } from "./dialog";
 import { ExportData } from "../../components/dataGrid/exportData";
 
 import { formatDateToDDMMYYYY } from "../../utils/formatting";
-import { ImportDataDialog } from "../../components/dataGrid/importDataDialog";
 import { useNavigate } from "react-router-dom";
 
 export const PrestadoresList = () => {
@@ -136,33 +135,6 @@ export const PrestadoresList = () => {
           <Text fontSize="lg" color="gray.700" fontWeight="semibold">
             Prestadores
           </Text>
-          {/* <Flex gap="2" alignItems="center">
-            <DebouncedInput
-            value={filters.searchTerm}
-            debounce={700}
-            onChange={(value) =>
-              setFilters((prev) => ({
-                ...prev,
-                searchTerm: value,
-                pageIndex: 0,
-                }))
-                }
-                size="sm"
-                iconSize={18}
-                startOffset="2px"
-              color="gray.700"
-            />
-            <Button
-              size="sm"
-              variant="subtle"
-              color="brand.500"
-              fontWeight="semibold"
-              onClick={resetFilters}
-            >
-              Limpar filtros
-            </Button>
-            {(isLoading || isFetching) && <Spinner size="md" />}
-          </Flex> */}
           <Box mt="4" bg="white" py="6" px="4" rounded="lg" shadow="xs">
             <Flex
               w="full"
@@ -242,7 +214,7 @@ export const PrestadoresList = () => {
               setColumnSizingInfo={setColumnSizingInfo}
               onUpdateData={async (values) => {
                 await updatePrestadorMutation({
-                  id: values.prestadorId,
+                  id: values.id,
                   data: values.data,
                 });
               }}

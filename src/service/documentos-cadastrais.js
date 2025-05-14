@@ -58,7 +58,7 @@ const anexarArquivo = async ({ file, id }) => {
   return response;
 };
 
-export const importarDocumentosCadastrais = async ({ files }) => {
+const importarDocumentosCadastrais = async ({ files }) => {
   const formData = new FormData();
   for (const file of files) {
     formData.append("file", file);

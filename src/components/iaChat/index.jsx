@@ -6,21 +6,18 @@ import {
   Box,
   Flex,
   Input,
-  Group,
   Text,
-  Spinner,
 } from "@chakra-ui/react";
 import { Oondemand } from "../svg/oondemand";
 import { SendHorizonalIcon } from "lucide-react";
-import { SelectAssistant } from "../selectAssistant";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { AssistantService } from "../../service/assistant";
 import { useMutation } from "@tanstack/react-query";
 import { IntegrationGptService } from "../../service/gpt";
 import { toaster } from "../../components/ui/toaster";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { AutoScroll } from "../autoScroll";
 import { TextCard } from "./card";
 import { useQuery } from "@tanstack/react-query";

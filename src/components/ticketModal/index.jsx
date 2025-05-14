@@ -1,14 +1,4 @@
-import {
-  Box,
-  Text,
-  Flex,
-  Heading,
-  Button,
-  Textarea,
-  Grid,
-  GridItem,
-  Input,
-} from "@chakra-ui/react";
+import { Box, Flex, Heading, Textarea, Input } from "@chakra-ui/react";
 import React, { useState } from "react";
 
 import {
@@ -23,35 +13,24 @@ import { queryClient } from "../../config/react-query";
 
 import { Oondemand } from "../svg/oondemand";
 import { PrestadorForm } from "./form/prestador";
-import { AsyncSelectAutocomplete } from "../asyncSelectAutoComplete";
 
-import { api } from "../../config/api";
-import { FloatingLabelInput } from "../input/floatingLabel";
 import { useMutation } from "@tanstack/react-query";
 import { TicketService } from "../../service/ticket";
 
 import { toaster } from "../ui/toaster";
 
-import { PrestadorService } from "../../service/prestador";
-import { PlusSquare } from "lucide-react";
-import { ServicoService } from "../../service/servico";
 import { TicketStatus } from "./ticketStatus";
 import { TicketActions } from "./ticketActions";
 import { FilesForm } from "./form/files";
 import { ServicoForm } from "./form/servico";
 import { InformacoesAdicionaisForm } from "./form/informacoes-adicionais";
 import { DocumentoFiscalForm } from "./form/documentoFiscal";
-import { useIaChat } from "../../hooks/useTicketModal";
+import { useIaChat } from "../../hooks/useIaChat";
 import { useQuery } from "@tanstack/react-query";
 import { AssistantConfigService } from "../../service/assistant-config";
 import { DocumentosCadastraisService } from "../../service/documentos-cadastrais";
 
-export const CreateTicketModal = ({
-  open,
-  setOpen,
-  defaultValue,
-  onlyReading,
-}) => {
+export const TicketModal = ({ open, setOpen, defaultValue, onlyReading }) => {
   const [ticket, setTicket] = useState(defaultValue);
   const { onOpen } = useIaChat();
 

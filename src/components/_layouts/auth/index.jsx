@@ -1,5 +1,4 @@
 import { Box, Button, Flex, Text, Icon } from "@chakra-ui/react";
-import { Footer } from "./footer";
 import { Outlet } from "react-router-dom";
 import { useAuth } from "../../../hooks/useAuth";
 import { Navigate } from "react-router-dom";

@@ -1,4 +1,4 @@
-import { Box, Text, Heading, Grid } from "@chakra-ui/react";
+import { Box, Text, Grid } from "@chakra-ui/react";
 import { currency } from "../../utils/currency";
 
 export const ServicosDetailsCard = ({ servicos }) => {

@@ -16,7 +16,7 @@ export const CompetenciaCell = ({ getValue, row, column, table, ...rest }) => {
       try {
         const competencia = value.split("/");
         await table.options.meta?.updateData({
-          prestadorId: row.original._id,
+          id: row.original._id,
           data: {
             [column.columnDef.accessorKey + ".mes"]: competencia[0],
             [column.columnDef.accessorKey + ".ano"]: competencia[1],

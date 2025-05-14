@@ -11,7 +11,6 @@ import { useColumnSizing } from "../../hooks/useColumnSizing";
 
 import { makeUsuarioDynamicColumns } from "./columns";
 
-import { api } from "../../config/api";
 import { toaster } from "../../components/ui/toaster";
 import { queryClient } from "../../config/react-query";
 
@@ -146,7 +145,7 @@ export const UsuariosPage = () => {
               setColumnSizingInfo={setColumnSizingInfo}
               onUpdateData={async (values) => {
                 await updateUsuariosMutation({
-                  id: values.prestadorId,
+                  id: values.id,
                   data: values.data,
                 });
               }}

@@ -1,9 +1,5 @@
 import React from "react";
-
-import { TableActionsCell } from "../../../../components/dataGrid/cells/tableActionsCell";
-
 import { DefaultCell } from "../../../../components/dataGrid/cells/default";
-// import { RestaurarTicketAction } from "../../../../components/dataGrid/actions/restaurarTicketArquivado";
 import { format } from "date-fns";
 
 export const makeTicketsArquivadosDynamicColumns = () => {

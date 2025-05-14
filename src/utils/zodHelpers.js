@@ -1,17 +1,11 @@
 import { z } from "zod";
 import { parse, isValid, format } from "date-fns";
 
-/**
- * Função que transforma "" em undefined
- */
 export const preprocessEmptyToUndefined = (schema) =>
   z.preprocess((val) => {
     return val === "" ? undefined : val;
   }, schema);
 
-/**
- * Função valida data e transforma no formato aceitado pelo mongodb
- */
 export const dateValidation = z
   .string()
   .refine(

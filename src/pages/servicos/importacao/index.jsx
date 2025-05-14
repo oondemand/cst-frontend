@@ -62,7 +62,7 @@ export const ImportServicosPage = () => {
       const blob = new Blob([byteArray], { type });
       saveAs(blob, name);
     } catch (error) {
-      console.log("Error", error);
+      console.log("error");
     }
   };
 

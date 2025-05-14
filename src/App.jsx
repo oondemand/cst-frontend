@@ -8,7 +8,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { ConfirmationProvider } from "./hooks/useConfirmation";
 import { AuthProvider } from "./hooks/useAuth";
 import { Toaster } from "./components/ui/toaster";
-import { IaChatProvider } from "./hooks/useTicketModal";
+import { IaChatProvider } from "./hooks/useIaChat";
 
 function App() {
   return (

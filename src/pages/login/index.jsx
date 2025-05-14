@@ -27,7 +27,6 @@ export const LoginPage = () => {
               Central de Serviços
             </Text>
 
-            {/* <img src="/logo_rakuten.png" alt="RAKUTEN" /> */}
             <Text fontSize="2xl" fontWeight="700" color="white">
               oondemand
             </Text>

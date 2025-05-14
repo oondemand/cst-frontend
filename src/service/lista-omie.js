@@ -10,7 +10,7 @@ const getListas = async () => {
   return data;
 };
 
-export const update = async ({ id }) => {
+const update = async ({ id }) => {
   return await api.put(`/lista-omie/sync-omie/${id}`);
 };
 

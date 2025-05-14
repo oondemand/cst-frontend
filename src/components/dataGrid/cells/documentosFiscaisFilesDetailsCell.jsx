@@ -54,7 +54,7 @@ export const DocumentosFiscaisFilesDetailsCell = (props) => {
         saveAs(blob, data?.nomeOriginal);
       }
     } catch (error) {
-      console.log("Error", error);
+      console.log("error");
     }
   };
 

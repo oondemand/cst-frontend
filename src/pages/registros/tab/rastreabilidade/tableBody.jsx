@@ -7,7 +7,7 @@ import { flexRender } from "@tanstack/react-table";
 
 const customTheme = {};
 
-const TableBody = ({ rows, columns, data }) => {
+const TableBody = ({ rows }) => {
   return (
     <Table.Body>
       {rows.map((row) => (

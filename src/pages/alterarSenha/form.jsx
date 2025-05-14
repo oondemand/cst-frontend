@@ -67,8 +67,7 @@ export const LoginForm = () => {
       return navigate("/");
     },
     onError(error) {
-      console.log("[ERROR]:", error);
-
+      console.log(error);
       toaster.create({
         title: "Erro a ao fazer login",
         type: "error",

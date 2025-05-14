@@ -9,7 +9,7 @@ export const DefaultEditableCell = ({ getValue, row, column, table }) => {
     if (value !== initialValue) {
       try {
         await table.options.meta?.updateData({
-          prestadorId: row.original._id,
+          id: row.original._id,
           data: { [column.columnDef.accessorKey]: value },
         });
       } catch (error) {
