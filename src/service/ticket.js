@@ -30,14 +30,6 @@ const reprovarTicket = async ({ id }) => {
   return response.data;
 };
 
-const salvarTicket = async (ticket) => {
-  if (ticket._id) {
-    return alterarTicket(ticket._id, ticket);
-  } else {
-    return adicionarTicket(ticket);
-  }
-};
-
 const uploadFiles = async ({ ticketId, files }) => {
   const formData = new FormData();
   for (const file of files) {
@@ -57,11 +49,6 @@ const deleteFile = async ({ id, ticketId }) => {
 
 const getFile = async ({ id }) => {
   return await api.get(`/tickets/arquivo/${id}`);
-};
-
-const listarArquivosDoTicket = async (filtro) => {
-  const { data } = await api.get(`/tickets/${filtro}/arquivos`);
-  return data;
 };
 
 const adicionarServico = async ({ ticketId, servicoId }) => {
