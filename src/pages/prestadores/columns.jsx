@@ -277,21 +277,5 @@ export const makePrestadorDynamicColumns = () => {
         ],
       },
     },
-    {
-      accessorKey: "createdAt",
-      header: "Criado em",
-      cell: DateCell,
-      enableColumnFilter: true,
-      enableSorting: false,
-      meta: { filterKey: "createdAt" },
-    },
-    {
-      accessorKey: "updatedAt",
-      header: "Atualizado em",
-      cell: DateCell,
-      enableColumnFilter: true,
-      enableSorting: false,
-      meta: { filterKey: "updatedAt" },
-    },
   ];
 };
