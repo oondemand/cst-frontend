@@ -21,6 +21,7 @@ export const DataGrid = ({
   exportDataFn,
   importDataFn,
   title,
+  onUpdateData,
 }) => {
   const table = useReactTable({
     ...tableProps,
