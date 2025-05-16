@@ -95,6 +95,7 @@ export const DataGrid = ({
               fontWeight="semibold"
               color="brand.500"
               _hover={{ backgroundColor: "gray.50" }}
+              onClick={importDataFn}
             >
               Importar planilha
             </Button>

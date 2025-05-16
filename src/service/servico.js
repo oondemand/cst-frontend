@@ -38,7 +38,7 @@ const importarServicos = async ({ files }) => {
     formData.append("file", file);
   }
 
-  const response = await api.post("acoes-etapas/importar-servicos", formData, {
+  const response = await api.post("servicos/importar", formData, {
     headers: {
       "Content-Type": "multipart/form-data",
     },
