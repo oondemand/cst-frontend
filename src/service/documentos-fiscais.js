@@ -64,15 +64,11 @@ const importarDocumentosFiscais = async ({ files }) => {
     formData.append("file", file);
   }
 
-  const response = await api.post(
-    "/acoes-etapas/importar-documentos-fiscais",
-    formData,
-    {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    }
-  );
+  const response = await api.post("/documentos-fiscais/importar", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
 
   return response;
 };

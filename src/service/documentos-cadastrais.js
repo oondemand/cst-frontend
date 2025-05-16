@@ -64,15 +64,11 @@ const importarDocumentosCadastrais = async ({ files }) => {
     formData.append("file", file);
   }
 
-  const response = await api.post(
-    "/acoes-etapas/importar-documentos-cadastrais",
-    formData,
-    {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    }
-  );
+  const response = await api.post("/documentos-cadastrais/importar", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
 
   return response;
 };

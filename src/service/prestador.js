@@ -26,15 +26,11 @@ const importarPrestadores = async ({ files }) => {
     formData.append("file", file);
   }
 
-  const response = await api.post(
-    "/acoes-etapas/importar-prestadores",
-    formData,
-    {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    }
-  );
+  const response = await api.post("/prestadores/importar", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
 
   return response;
 };
