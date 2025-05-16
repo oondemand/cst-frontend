@@ -1,54 +1,24 @@
 import React, { useMemo } from "react";
-
-import { Flex, Spinner, Box, Button, Text } from "@chakra-ui/react";
+import { Flex, Box, Text } from "@chakra-ui/react";
 import { useQuery, keepPreviousData, useMutation } from "@tanstack/react-query";
-import { DebouncedInput } from "../../components/DebouncedInput";
 import { DataGrid } from "../../components/dataGrid";
-import { useFilters } from "../../hooks/useFilters";
-import { sortByToState, stateToSortBy } from "../../utils/sorting";
-import { useColumnVisibility } from "../../hooks/useColumnVisibility";
-import { useColumnSizing } from "../../hooks/useColumnSizing";
-
 import { makeUsuarioDynamicColumns } from "./columns";
-
 import { toaster } from "../../components/ui/toaster";
 import { queryClient } from "../../config/react-query";
-
-import { VisibilityControlDialog } from "../../components/vibilityControlDialog";
 import { UsuarioService } from "../../service/usuario";
 import { UsuariosDialog } from "./dialog";
+import { useDataGrid } from "../../hooks/useDataGrid";
 
 export const UsuariosPage = () => {
-  const { filters, resetFilters, setFilters } = useFilters({
-    key: "USUARIOS",
-  });
+  const columns = useMemo(() => makeUsuarioDynamicColumns({}), []);
 
-  const { columnVisibility, setColumnVisibility } = useColumnVisibility({
-    key: "USUARIOS",
-  });
+  const { filters, table } = useDataGrid({ columns, key: "USUARIOS" });
 
-  const {
-    columnSizing,
-    columnSizingInfo,
-    setColumnSizing,
-    setColumnSizingInfo,
-  } = useColumnSizing({
-    key: "USUARIOS",
-  });
-
-  const { data, error, isLoading, isFetching } = useQuery({
+  const { data, isLoading, isFetching } = useQuery({
     queryKey: ["listar-usuarios", { filters }],
     queryFn: async () => await UsuarioService.listarUsuarios({ filters }),
     placeholderData: keepPreviousData,
   });
-
-  const paginationState = {
-    pageIndex: filters.pageIndex ?? 0,
-    pageSize: filters.pageSize ?? 10,
-  };
-
-  const sortingState = sortByToState(filters.sortBy);
-  const columns = useMemo(() => makeUsuarioDynamicColumns({}), []);
 
   const { mutateAsync: updateUsuariosMutation } = useMutation({
     mutationFn: async ({ id, data }) =>
@@ -85,84 +55,17 @@ export const UsuariosPage = () => {
             Usuarios
           </Text>
           <Box mt="4" bg="white" py="6" px="4" rounded="lg" shadow="xs">
-            <Flex
-              w="full"
-              alignItems="center"
-              justifyContent="flex-start"
-              pb="2"
-              gap="4"
-            >
-              <DebouncedInput
-                value={filters.searchTerm}
-                debounce={700}
-                onChange={(value) => {
-                  setFilters((prev) => ({
-                    ...prev,
-                    searchTerm: value,
-                    pageIndex: 0,
-                  }));
-                }}
-                size="sm"
-                iconSize={18}
-                startOffset="2px"
-                color="gray.700"
-              />
-              <Button
-                size="sm"
-                variant="subtle"
-                color="brand.500"
-                fontWeight="semibold"
-                onClick={resetFilters}
-                minW="32"
-              >
-                {(isLoading || isFetching) && <Spinner size="md" />}
-                {!isLoading && !isFetching && "Limpar filtros"}
-              </Button>
-              <UsuariosDialog />
-
-              <VisibilityControlDialog
-                fields={columns.map((e) => ({
-                  label: e.header,
-                  accessorKey: e.accessorKey.replaceAll(".", "_"),
-                }))}
-                title="Ocultar colunas"
-                setVisibilityState={setColumnVisibility}
-                visibilityState={columnVisibility}
-              />
-            </Flex>
-
             <DataGrid
-              filters={filters}
-              sorting={sortingState}
-              columns={columns}
-              pagination={paginationState}
+              form={UsuariosDialog}
+              table={table}
               data={data?.usuarios || []}
-              columnVisibility={columnVisibility}
-              setColumnVisibility={setColumnVisibility}
-              columnSizing={columnSizing}
-              columnSizingInfo={columnSizingInfo}
-              setColumnSizing={setColumnSizing}
-              setColumnSizingInfo={setColumnSizingInfo}
+              rowCount={data?.pagination?.totalItems}
+              isDataLoading={isLoading || isFetching}
               onUpdateData={async (values) => {
                 await updateUsuariosMutation({
                   id: values.id,
                   data: values.data,
                 });
-              }}
-              onFilterChange={(value) => {
-                setFilters((prev) => ({ ...prev, ...value, pageIndex: 0 }));
-              }}
-              paginationOptions={{
-                onPaginationChange: (pagination) => {
-                  setFilters(pagination);
-                },
-                rowCount: data?.pagination?.totalItems,
-              }}
-              onSortingChange={(updaterOrValue) => {
-                return setFilters((prev) => ({
-                  ...prev,
-                  sortBy: stateToSortBy(updaterOrValue(sortingState)),
-                }));
               }}
             />
           </Box>

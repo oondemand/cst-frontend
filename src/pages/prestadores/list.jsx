@@ -3,7 +3,7 @@ import React, { useMemo } from "react";
 import { Flex, Box, Text } from "@chakra-ui/react";
 import { useQuery, keepPreviousData, useMutation } from "@tanstack/react-query";
 import { PrestadorService } from "../../service/prestador";
-import { DataGrid } from "../../components/dataGrid/datagrid";
+import { DataGrid } from "../../components/dataGrid";
 import { makePrestadorDynamicColumns } from "./columns";
 
 import { api } from "../../config/api";
