@@ -2,7 +2,7 @@ import { Box, Button, Flex, Text } from "@chakra-ui/react";
 import { CloseButton } from "../../components/ui/close-button";
 
 import { useMemo, useState, useEffect } from "react";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { queryClient } from "../../config/react-query";
 
 import { createDynamicFormFields } from "./formFields";
@@ -28,6 +28,10 @@ import {
 } from "../../components/ui/file-upload";
 import { Paperclip, CircleX, Download } from "lucide-react";
 import { useConfirmation } from "../../hooks/useConfirmation";
+
+import { useIaChat } from "../../hooks/useIaChat";
+import { AssistantConfigService } from "../../service/assistant-config";
+import { Oondemand } from "../../components/svg/oondemand";
 
 const DefaultTrigger = (props) => {
   return (
@@ -211,6 +215,23 @@ export const DocumentoCadastralDialog = ({
     setData(defaultValues);
   }, [defaultValues]);
 
+  const { onOpen } = useIaChat();
+
+  const { data: assistantConfig } = useQuery({
+    queryKey: ["listar-assistente-config"],
+    queryFn: async () => await AssistantConfigService.listarAssistenteAtivos(),
+    staleTime: 1000 * 60 * 1, // 1 minute
+    enabled: open,
+  });
+
+  const loadAssistant = () => {
+    let assistant = assistantConfig?.find((e) => {
+      return e?.modulo.includes("documento-cadastral");
+    });
+
+    return assistant?.assistente;
+  };
+
   return (
     <Box>
       <Box onClick={() => setOpen(true)} asChild>
@@ -234,8 +255,22 @@ export const DocumentoCadastralDialog = ({
             px="2"
             rounded="lg"
           >
-            <DialogHeader mt="-4" py="2" px="4">
-              <Flex gap="4">
+            <DialogHeader
+              mt="-4"
+              py="3"
+              px="4"
+              borderBottom="1px solid"
+              borderColor="gray.200"
+              mb="6"
+            >
+              <Flex gap="4" alignItems="center">
+                <Box
+                  cursor="pointer"
+                  variant="unstyled"
+                  onClick={() => onOpen(data, loadAssistant())}
+                >
+                  <Oondemand />
+                </Box>
                 <DialogTitle>{label}</DialogTitle>
                 <VisibilityControlDialog
                   fields={fields}

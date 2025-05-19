@@ -23,6 +23,10 @@ import { Tooltip } from "../../../components/ui/tooltip";
 import { AprovarForm } from "./form/aprovar";
 import { ReprovarForm } from "./form/reprovar";
 
+import { useIaChat } from "../../../hooks/useIaChat";
+import { AssistantConfigService } from "../../../service/assistant-config";
+import { Oondemand } from "../../../components/svg/oondemand";
+
 export const ArquivoDetailsDialog = ({ documentoCadastral }) => {
   const [open, setOpen] = useState(false);
   const [pdfUrl, setPdfUrl] = useState(null);
@@ -46,6 +50,23 @@ export const ArquivoDetailsDialog = ({ documentoCadastral }) => {
       return () => URL.revokeObjectURL(url);
     }
   }, [response]);
+
+  const { data: assistantConfig } = useQuery({
+    queryKey: ["listar-assistente-config"],
+    queryFn: async () => await AssistantConfigService.listarAssistenteAtivos(),
+    staleTime: 1000 * 60 * 1, // 1 minute
+    enabled: open,
+  });
+
+  const { onOpen } = useIaChat();
+
+  const loadAssistant = () => {
+    let assistant = assistantConfig?.find((e) => {
+      return e?.modulo.includes("analisar-documento-cadastral");
+    });
+
+    return assistant?.assistente;
+  };
 
   return (
     <Box>
@@ -84,8 +105,30 @@ export const ArquivoDetailsDialog = ({ documentoCadastral }) => {
             rounded="lg"
             position="relative"
           >
-            <DialogHeader mt="-4" py="2" px="4">
-              <Flex gap="4" alignItems="baseline">
+            <DialogHeader
+              mt="-4"
+              py="3"
+              px="4"
+              borderBottom="1px solid"
+              borderColor="gray.200"
+              mb="6"
+            >
+              <Flex gap="4" alignItems="center">
+                <Box
+                  cursor="pointer"
+                  variant="unstyled"
+                  onClick={() => {
+                    documentoCadastral?.arquivo &&
+                      delete documentoCadastral.arquivo;
+
+                    onOpen(
+                      { ...documentoCadastral, arquivo: response?.data },
+                      loadAssistant()
+                    );
+                  }}
+                >
+                  <Oondemand />
+                </Box>
                 <DialogTitle>Analisar Documento Cadastral</DialogTitle>
               </Flex>
             </DialogHeader>

@@ -60,52 +60,6 @@ export const AssistenteConfigPage = () => {
           Assistentes
         </Text>
         <Box mt="4" bg="white" py="6" px="4" rounded="lg" shadow="xs">
-          <Flex
-            w="full"
-            alignItems="center"
-            justifyContent="flex-start"
-            pb="2"
-            gap="4"
-          >
-            <DebouncedInput
-              value={filters.searchTerm}
-              debounce={700}
-              onChange={(value) => {
-                setFilters((prev) => ({
-                  ...prev,
-                  searchTerm: value,
-                  pageIndex: 0,
-                }));
-              }}
-              size="sm"
-              iconSize={18}
-              startOffset="2px"
-              color="gray.700"
-            />
-            <Button
-              size="sm"
-              variant="subtle"
-              color="brand.500"
-              fontWeight="semibold"
-              onClick={resetFilters}
-              minW="32"
-            >
-              {(isLoading || isFetching) && <Spinner size="md" />}
-              {!isLoading && !isFetching && "Limpar filtros"}
-            </Button>
-            <AssistenteConfigDialog />
-
-            <VisibilityControlDialog
-              fields={columns.map((e) => ({
-                label: e.header,
-                accessorKey: e.accessorKey.replaceAll(".", "_"),
-              }))}
-              title="Ocultar colunas"
-              setVisibilityState={setColumnVisibility}
-              visibilityState={columnVisibility}
-            />
-          </Flex>
-
           <DataGrid
             table={table}
             form={AssistenteConfigDialog}

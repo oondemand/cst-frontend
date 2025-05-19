@@ -2,7 +2,7 @@ import { Box, Button, Flex } from "@chakra-ui/react";
 import { CloseButton } from "../../components/ui/close-button";
 
 import { useEffect, useMemo, useState } from "react";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { queryClient } from "../../config/react-query";
 
 import { createDynamicFormFields } from "./formFields";
@@ -22,6 +22,10 @@ import {
   DialogHeader,
   DialogTitle,
 } from "../../components/ui/dialog";
+
+import { useIaChat } from "../../hooks/useIaChat";
+import { AssistantConfigService } from "../../service/assistant-config";
+import { Oondemand } from "../../components/svg/oondemand";
 
 const DefaultTrigger = (props) => {
   return (
@@ -45,6 +49,7 @@ export const PrestadoresDialog = ({
 }) => {
   const [data, setData] = useState(defaultValues);
   const [open, setOpen] = useState(false);
+  const { onOpen } = useIaChat();
   const { inputsVisibility, setInputsVisibility } = useVisibleInputForm({
     key: "PRESTADORES",
   });
@@ -109,6 +114,21 @@ export const PrestadoresDialog = ({
     },
   });
 
+  const { data: assistantConfig } = useQuery({
+    queryKey: ["listar-assistente-config"],
+    queryFn: async () => await AssistantConfigService.listarAssistenteAtivos(),
+    staleTime: 1000 * 60 * 1, // 1 minute
+    enabled: open,
+  });
+
+  const loadAssistant = () => {
+    let assistant = assistantConfig?.find((e) => {
+      return e?.modulo.includes("prestador");
+    });
+
+    return assistant?.assistente;
+  };
+
   const onSubmit = async (values) => {
     const {
       endereco: { pais, ...rest },
@@ -156,9 +176,23 @@ export const PrestadoresDialog = ({
             px="2"
             rounded="lg"
           >
-            <DialogHeader mt="-4" py="2" px="4">
+            <DialogHeader
+              mt="-4"
+              py="3"
+              px="4"
+              borderBottom="1px solid"
+              borderColor="gray.200"
+              mb="6"
+            >
               <DialogTitle>
-                <Flex gap="4">
+                <Flex gap="4" alignItems="center">
+                  <Box
+                    cursor="pointer"
+                    variant="unstyled"
+                    onClick={() => onOpen(data, loadAssistant())}
+                  >
+                    <Oondemand />
+                  </Box>
                   {label}
                   <VisibilityControlDialog
                     fields={fields}
