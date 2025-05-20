@@ -1,16 +1,15 @@
 import React, { useMemo } from "react";
 import { Flex, Box, Text } from "@chakra-ui/react";
-import { useQuery, keepPreviousData, useMutation } from "@tanstack/react-query";
+import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import { ServicoService } from "../../service/servico";
 import { DataGrid } from "../../components/dataGrid";
 import { makeServicoDynamicColumns } from "./columns";
-import { api } from "../../config/api";
-import { toaster } from "../../components/ui/toaster";
 import { queryClient } from "../../config/react-query";
 import { ServicosDialog } from "./dialog";
 import { formatDateToDDMMYYYY } from "../../utils/formatting";
 import { useNavigate } from "react-router-dom";
 import { useDataGrid } from "../../hooks/useDataGrid";
+import { useUpdateServico } from "../../hooks/api/servico/useUpdateServico";
 
 export const ServicosList = () => {
   const navigate = useNavigate();
@@ -35,27 +34,15 @@ export const ServicosList = () => {
     exportModel: modeloDeExportacao,
   });
 
-  const { data, error, isLoading, isFetching } = useQuery({
+  const { data, isLoading, isFetching } = useQuery({
     queryKey: ["listar-servicos", { filters }],
     queryFn: async () => await ServicoService.listarServicos({ filters }),
     placeholderData: keepPreviousData,
   });
 
-  const { mutateAsync: updateServicoMutation } = useMutation({
-    mutationFn: async ({ id, data }) => await api.patch(`servicos/${id}`, data),
-    onSuccess() {
-      queryClient.refetchQueries(["listar-servicos", { filters }]);
-      toaster.create({
-        title: "Serviço atualizado com sucesso",
-        type: "success",
-      });
-    },
-    onError: (error) => {
-      toaster.create({
-        title: "Ouve um erro ao atualizar o serviço",
-        type: "error",
-      });
-    },
+  const updateServico = useUpdateServico({
+    onSuccess: () =>
+      queryClient.refetchQueries(["listar-servicos", { filters }]),
   });
 
   const getAllServicosWithFilters = async (pageSize) => {
@@ -103,7 +90,7 @@ export const ServicosList = () => {
               rowCount={data?.pagination?.totalItems}
               isDataLoading={isLoading || isFetching}
               onUpdateData={async (values) => {
-                await updateServicoMutation({
+                await updateServico.mutateAsync({
                   id: values.id,
                   data: values.data,
                 });

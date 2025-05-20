@@ -13,6 +13,7 @@ import { toaster } from "../../components/ui/toaster";
 import { queryClient } from "../../config/react-query";
 import { DocumentoCadastralDialog } from "./dialog";
 import { useNavigate } from "react-router-dom";
+import { useUpdateDocumentoCadastral } from "../../hooks/api/documento-cadastral/useUpdateDocumentoCadastral";
 
 export const DocumentoscadastraisList = () => {
   const navigate = useNavigate();
@@ -49,26 +50,12 @@ export const DocumentoscadastraisList = () => {
     placeholderData: keepPreviousData,
   });
 
-  const { mutateAsync: updateDocumentoFiscalMutation } = useMutation({
-    mutationFn: async ({ id, data }) =>
-      await api.patch(`documentos-cadastrais/${id}`, data),
-    onSuccess() {
+  const updateDocumentoCadastral = useUpdateDocumentoCadastral({
+    onSuccess: () =>
       queryClient.invalidateQueries([
         "listar-documentos-cadastrais",
         { filters },
-      ]);
-      toaster.create({
-        title: "Documento fiscal atualizado com sucesso",
-        type: "success",
-      });
-    },
-    onError: (error) => {
-      toaster.create({
-        title: "Ouve um erro ao atualizar o documento fiscal",
-        description: error?.response?.data?.message ?? "",
-        type: "error",
-      });
-    },
+      ]),
   });
 
   const getAllDocumentoscadastraisWithFilters = async (pageSize) => {
@@ -110,7 +97,7 @@ export const DocumentoscadastraisList = () => {
               rowCount={data?.pagination?.totalItems}
               isDataLoading={isFetching || isLoading}
               onUpdateData={async (values) => {
-                await updateDocumentoFiscalMutation({
+                await updateDocumentoCadastral.mutateAsync({
                   id: values.id,
                   data: values.data,
                 });

@@ -1,45 +1,29 @@
 import React, { useMemo } from "react";
 
 import { Flex, Box, Text } from "@chakra-ui/react";
-import { useQuery, keepPreviousData, useMutation } from "@tanstack/react-query";
+import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import { DataGrid } from "../../components/dataGrid";
 import { useDataGrid } from "../../hooks/useDataGrid";
-
 import { makeEtapasDynamicColumns } from "./columns";
-
-import { toaster } from "../../components/ui/toaster";
-import { queryClient } from "../../config/react-query";
-
 import { EtapaService } from "../../service/etapa";
 import { EtapasDialog } from "./dialog";
+import { useUpdateEtapa } from "../../hooks/api/etapas/useUpdateEtapa";
+import { queryClient } from "../../config/react-query";
 
 export const EtapasPage = () => {
   const columns = useMemo(() => makeEtapasDynamicColumns({}), []);
 
   const { filters, table } = useDataGrid({ columns, key: "ETAPAS" });
 
-  const { data, error, isLoading, isFetching } = useQuery({
+  const { data, isLoading, isFetching } = useQuery({
     queryKey: ["listar-etapas", { filters }],
     queryFn: async () => await EtapaService.listarEtapas({ filters }),
     placeholderData: keepPreviousData,
   });
 
-  const { mutateAsync: updateEtapasMutation } = useMutation({
-    mutationFn: async ({ id, data }) =>
-      await EtapaService.alterarEtapa({ body: data, id }),
-    onSuccess() {
-      queryClient.refetchQueries(["listar-etapas", { filters }]);
-      toaster.create({
-        title: "Etapa atualizado com sucesso",
-        type: "success",
-      });
-    },
-    onError: (error) => {
-      toaster.create({
-        title: "Ouve um erro ao atualizar o etapa",
-        type: "error",
-      });
-    },
+  const updateEtapa = useUpdateEtapa({
+    onSuccess: () =>
+      queryClient.invalidateQueries(["listar-etapas", { filters }]),
   });
 
   return (
@@ -65,7 +49,7 @@ export const EtapasPage = () => {
             rowCount={data?.pagination?.totalItems}
             isDataLoading={isLoading || isFetching}
             onUpdateData={async (values) => {
-              await updateEtapasMutation({
+              await updateEtapa.mutateAsync({
                 id: values.id,
                 data: values.data,
               });

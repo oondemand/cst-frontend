@@ -1,15 +1,14 @@
 import React, { useMemo } from "react";
 import { Flex, Box, Text } from "@chakra-ui/react";
-import { useQuery, keepPreviousData, useMutation } from "@tanstack/react-query";
+import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import { DocumentosFiscaisService } from "../../service/documentos-fiscais";
 import { DataGrid } from "../../components/dataGrid";
 import { makeDocumentoFiscalDynamicColumns } from "./columns";
-import { api } from "../../config/api";
-import { toaster } from "../../components/ui/toaster";
 import { queryClient } from "../../config/react-query";
 import { DocumentosFiscaisDialog } from "./dialog";
 import { useNavigate } from "react-router-dom";
 import { useDataGrid } from "../../hooks/useDataGrid";
+import { useUpdateDocumentoFiscal } from "../../hooks/api/documento-fiscal/useUpdateDocumentoFiscal";
 
 export const DocumentosFiscaisList = () => {
   const navigate = useNavigate();
@@ -46,23 +45,9 @@ export const DocumentosFiscaisList = () => {
     placeholderData: keepPreviousData,
   });
 
-  const { mutateAsync: updateDocumentoFiscalMutation } = useMutation({
-    mutationFn: async ({ id, data }) =>
-      await api.patch(`documentos-fiscais/${id}`, data),
-    onSuccess() {
-      queryClient.invalidateQueries(["listar-documentos-fiscais", { filters }]);
-      toaster.create({
-        title: "Documento fiscal atualizado com sucesso",
-        type: "success",
-      });
-    },
-    onError: (error) => {
-      toaster.create({
-        title: "Ouve um erro ao atualizar o documento fiscal",
-        description: error?.response?.data?.message ?? "",
-        type: "error",
-      });
-    },
+  const updateDocumentoFiscal = useUpdateDocumentoFiscal({
+    onSuccess: () =>
+      queryClient.invalidateQueries(["listar-documentos-fiscais", { filters }]),
   });
 
   const getAllDocumentosFiscaisWithFilters = async (pageSize) => {
@@ -104,7 +89,7 @@ export const DocumentosFiscaisList = () => {
               isDataLoading={isLoading || isFetching}
               rowCount={data?.pagination?.totalItems}
               onUpdateData={async (values) => {
-                await updateDocumentoFiscalMutation({
+                await updateDocumentoFiscal.mutateAsync({
                   id: values.id,
                   data: values.data,
                 });

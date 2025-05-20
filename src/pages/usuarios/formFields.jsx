@@ -18,7 +18,7 @@ export const createDynamicFormFields = () => {
       label: "Tipo",
       render: SelectField,
       validation: z.string({ message: "Tipo é um campo obrigatório" }),
-      colSpan: 1,
+      colSpan: 2,
       options: [
         { value: "central", label: "Central" },
         { value: "admin", label: "Administrador" },
@@ -38,7 +38,7 @@ export const createDynamicFormFields = () => {
       label: "Status",
       render: SelectField,
       validation: z.string({ message: "Tipo é um campo obrigatório" }),
-      colSpan: 1,
+      colSpan: 2,
       options: [
         { value: "ativo", label: "Ativo" },
         { value: "inativo", label: "Inativo" },
@@ -52,7 +52,7 @@ export const createDynamicFormFields = () => {
       validation: z
         .string()
         .min(6, { message: "A senha precisa ter no mínimo 6 dígitos" }),
-      colSpan: 1,
+      colSpan: 2,
     },
   ];
 };

@@ -1,20 +1,15 @@
 import React, { useMemo } from "react";
-
 import { Flex, Box, Text } from "@chakra-ui/react";
-import { useQuery, keepPreviousData, useMutation } from "@tanstack/react-query";
+import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import { PrestadorService } from "../../service/prestador";
 import { DataGrid } from "../../components/dataGrid";
 import { makePrestadorDynamicColumns } from "./columns";
-
-import { api } from "../../config/api";
-import { toaster } from "../../components/ui/toaster";
 import { queryClient } from "../../config/react-query";
-
 import { PrestadoresDialog } from "./dialog";
-
 import { formatDateToDDMMYYYY } from "../../utils/formatting";
 import { useNavigate } from "react-router-dom";
 import { useDataGrid } from "../../hooks/useDataGrid";
+import { useUpdatePrestador } from "../../hooks/api/prestador/useUpdatePrestador";
 
 export const PrestadoresList = () => {
   const navigate = useNavigate();
@@ -27,21 +22,9 @@ export const PrestadoresList = () => {
     placeholderData: keepPreviousData,
   });
 
-  const { mutateAsync: updatePrestadorMutation } = useMutation({
-    mutationFn: async ({ id, data }) =>
-      await api.patch(`prestadores/${id}`, data),
-    onSuccess() {
+  const updatePrestador = useUpdatePrestador({
+    onSuccess: () => {
       queryClient.refetchQueries(["listar-prestadores", { filters }]);
-      toaster.create({
-        title: "Prestador atualizado com sucesso",
-        type: "success",
-      });
-    },
-    onError: (error) => {
-      toaster.create({
-        title: "Ouve um erro ao atualizar o prestador",
-        type: "error",
-      });
     },
   });
 
@@ -89,7 +72,7 @@ export const PrestadoresList = () => {
               rowCount={data?.pagination?.totalItems}
               isDataLoading={isLoading || isFetching}
               onUpdateData={async (values) => {
-                await updatePrestadorMutation({
+                await updatePrestador.mutateAsync({
                   id: values.id,
                   data: values.data,
                 });

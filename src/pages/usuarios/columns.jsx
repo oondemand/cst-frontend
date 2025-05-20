@@ -20,11 +20,6 @@ export const makeUsuarioDynamicColumns = () => {
         <TableActionsCell>
           <DeleteUsuarioAction id={props.row.original?._id} />
           <UsuariosDialog
-            trigger={
-              <IconButton variant="surface" colorPalette="gray" size="2xs">
-                <Pencil />
-              </IconButton>
-            }
             label="Usuario"
             defaultValues={{
               ...props.row.original,

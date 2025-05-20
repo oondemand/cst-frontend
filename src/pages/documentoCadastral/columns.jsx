@@ -21,11 +21,6 @@ export const makeDocumentoCadastralDynamicColumns = () => {
         <TableActionsCell>
           <DeleteDocumentoCadastralAction id={props.row.original?._id} />
           <DocumentoCadastralDialog
-            trigger={
-              <IconButton variant="surface" colorPalette="gray" size="2xs">
-                <Pencil />
-              </IconButton>
-            }
             label="Documento Cadastral"
             defaultValues={{
               ...props.row.original,

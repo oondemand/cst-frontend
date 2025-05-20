@@ -6,8 +6,6 @@ import { AssistenteConfigDialog } from "./dialog";
 import { TableActionsCell } from "../../components/dataGrid/cells/tableActionsCell";
 import { DeleteAssistenteConfigAction } from "../../components/dataGrid/actions/deleteAssistenteConfigButton";
 
-import { IconButton } from "@chakra-ui/react";
-import { Pencil } from "lucide-react";
 import { SelectAssistantCell } from "../../components/dataGrid/cells/selectAssistantCell";
 
 export const makeAssistenteConfigDynamicColumns = () => {
@@ -20,11 +18,6 @@ export const makeAssistenteConfigDynamicColumns = () => {
         <TableActionsCell>
           <DeleteAssistenteConfigAction id={props.row.original?._id} />
           <AssistenteConfigDialog
-            trigger={
-              <IconButton variant="surface" colorPalette="gray" size="2xs">
-                <Pencil />
-              </IconButton>
-            }
             label="Assistente"
             defaultValues={{
               ...props.row.original,

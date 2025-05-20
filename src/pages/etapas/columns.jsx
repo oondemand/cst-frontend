@@ -6,9 +6,6 @@ import { EtapasDialog } from "./dialog";
 import { TableActionsCell } from "../../components/dataGrid/cells/tableActionsCell";
 import { DeleteEtapaAction } from "../../components/dataGrid/actions/deleteEtapaButton";
 
-import { IconButton } from "@chakra-ui/react";
-import { Pencil } from "lucide-react";
-
 export const makeEtapasDynamicColumns = () => {
   return [
     {
@@ -19,11 +16,6 @@ export const makeEtapasDynamicColumns = () => {
         <TableActionsCell>
           <DeleteEtapaAction id={props.row.original?._id} />
           <EtapasDialog
-            trigger={
-              <IconButton variant="surface" colorPalette="gray" size="2xs">
-                <Pencil />
-              </IconButton>
-            }
             label="Etapa"
             defaultValues={{
               ...props.row.original,

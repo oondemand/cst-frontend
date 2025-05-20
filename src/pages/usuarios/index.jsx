@@ -1,13 +1,13 @@
 import React, { useMemo } from "react";
 import { Flex, Box, Text } from "@chakra-ui/react";
-import { useQuery, keepPreviousData, useMutation } from "@tanstack/react-query";
+import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import { DataGrid } from "../../components/dataGrid";
 import { makeUsuarioDynamicColumns } from "./columns";
-import { toaster } from "../../components/ui/toaster";
-import { queryClient } from "../../config/react-query";
 import { UsuarioService } from "../../service/usuario";
 import { UsuariosDialog } from "./dialog";
 import { useDataGrid } from "../../hooks/useDataGrid";
+import { useUpdateUsuario } from "../../hooks/api/usuarios/useUpdateUsuario";
+import { queryClient } from "../../config/react-query";
 
 export const UsuariosPage = () => {
   const columns = useMemo(() => makeUsuarioDynamicColumns({}), []);
@@ -20,22 +20,9 @@ export const UsuariosPage = () => {
     placeholderData: keepPreviousData,
   });
 
-  const { mutateAsync: updateUsuariosMutation } = useMutation({
-    mutationFn: async ({ id, data }) =>
-      await UsuarioService.alterarUsuario({ body: data, id }),
-    onSuccess() {
-      queryClient.refetchQueries(["listar-usuarios", { filters }]);
-      toaster.create({
-        title: "Usuario atualizado com sucesso",
-        type: "success",
-      });
-    },
-    onError: (error) => {
-      toaster.create({
-        title: "Ouve um erro ao atualizar o usuario",
-        type: "error",
-      });
-    },
+  const updateUsuario = useUpdateUsuario({
+    onSuccess: () =>
+      queryClient.invalidateQueries(["listar-usuarios", { filters }]),
   });
 
   return (
@@ -62,7 +49,7 @@ export const UsuariosPage = () => {
               rowCount={data?.pagination?.totalItems}
               isDataLoading={isLoading || isFetching}
               onUpdateData={async (values) => {
-                await updateUsuariosMutation({
+                await updateUsuario.mutateAsync({
                   id: values.id,
                   data: values.data,
                 });

@@ -1,14 +1,10 @@
 import { Box, Flex, Text, IconButton } from "@chakra-ui/react";
 import { CloseButton } from "../../../components/ui/close-button";
-
 import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
-
 import { TicketService } from "../../../service/ticket";
-
 import { Viewer, Worker } from "@react-pdf-viewer/core";
 import "@react-pdf-viewer/core/lib/styles/index.css";
-
 import {
   DialogRoot,
   DialogBody,
@@ -17,15 +13,13 @@ import {
   DialogHeader,
   DialogTitle,
 } from "../../../components/ui/dialog";
-
 import { FilePenLine } from "lucide-react";
 import { Tooltip } from "../../../components/ui/tooltip";
 import { AprovarForm } from "./form/aprovar";
 import { ReprovarForm } from "./form/reprovar";
-
 import { useIaChat } from "../../../hooks/useIaChat";
-import { AssistantConfigService } from "../../../service/assistant-config";
 import { Oondemand } from "../../../components/svg/oondemand";
+import { useLoadAssistant } from "../../../hooks/api/useLoadAssistant";
 
 export const ArquivoDetailsDialog = ({ documentoFiscal }) => {
   const [open, setOpen] = useState(false);
@@ -51,22 +45,8 @@ export const ArquivoDetailsDialog = ({ documentoFiscal }) => {
     }
   }, [response]);
 
-  const { data: assistantConfig } = useQuery({
-    queryKey: ["listar-assistente-config"],
-    queryFn: async () => await AssistantConfigService.listarAssistenteAtivos(),
-    staleTime: 1000 * 60 * 1, // 1 minute
-    enabled: open,
-  });
-
   const { onOpen } = useIaChat();
-
-  const loadAssistant = () => {
-    let assistant = assistantConfig?.find((e) => {
-      return e?.modulo.includes("analisar-documento-fiscal");
-    });
-
-    return assistant?.assistente;
-  };
+  const { assistant } = useLoadAssistant("analisar-documento-fiscal");
 
   return (
     <Box>
@@ -120,7 +100,7 @@ export const ArquivoDetailsDialog = ({ documentoFiscal }) => {
                   onClick={() =>
                     onOpen(
                       { ...documentoFiscal, arquivo: response?.data },
-                      loadAssistant()
+                      assistant
                     )
                   }
                 >

@@ -1,133 +1,57 @@
-import { Box, Button, Flex } from "@chakra-ui/react";
-import { CloseButton } from "../../components/ui/close-button";
-
-import { useEffect, useMemo, useState } from "react";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { Box } from "@chakra-ui/react";
+import { useMemo, useState } from "react";
 import { queryClient } from "../../config/react-query";
-
 import { createDynamicFormFields } from "./formFields";
-import { BuildForm } from "../../components/buildForm/index";
-import { VisibilityControlDialog } from "../../components/vibilityControlDialog";
-import { useVisibleInputForm } from "../../hooks/useVisibleInputForms";
-import { toaster } from "../../components/ui/toaster";
-import { PrestadorService } from "../../service/prestador";
-
 import { formatDateToDDMMYYYY } from "../../utils/formatting";
-
-import {
-  DialogRoot,
-  DialogBody,
-  DialogCloseTrigger,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "../../components/ui/dialog";
-
+import { useUpdatePrestador } from "../../hooks/api/prestador/useUpdatePrestador";
+import { useCreatePrestador } from "../../hooks/api/prestador/useCreatePrestador";
+import { useLoadAssistant } from "../../hooks/api/useLoadAssistant";
 import { useIaChat } from "../../hooks/useIaChat";
-import { AssistantConfigService } from "../../service/assistant-config";
-import { Oondemand } from "../../components/svg/oondemand";
-
-const DefaultTrigger = (props) => {
-  return (
-    <Button
-      {...props}
-      size="sm"
-      variant="subtle"
-      fontWeight="semibold"
-      color="brand.500"
-      _hover={{ backgroundColor: "gray.50" }}
-    >
-      Criar um prestador
-    </Button>
-  );
-};
+import { FormDialog } from "../../components/formDialog";
+import {
+  DefaultTrigger,
+  IconTrigger,
+} from "../../components/formDialog/form-trigger";
 
 export const PrestadoresDialog = ({
   defaultValues = null,
-  trigger,
   label = "Criar prestador",
 }) => {
   const [data, setData] = useState(defaultValues);
   const [open, setOpen] = useState(false);
   const { onOpen } = useIaChat();
-  const { inputsVisibility, setInputsVisibility } = useVisibleInputForm({
-    key: "PRESTADORES",
+  const { assistant } = useLoadAssistant("prestador");
+  const fields = useMemo(() => createDynamicFormFields(), []);
+
+  const formatPrestador = (prestador) => ({
+    ...prestador,
+    pessoaFisica: {
+      ...prestador?.pessoaFisica,
+      dataNascimento: formatDateToDDMMYYYY(
+        prestador?.pessoaFisica?.dataNascimento
+      ),
+    },
   });
 
-  const { mutateAsync: updatePrestadorMutation } = useMutation({
-    mutationFn: async ({ id, body }) =>
-      await PrestadorService.atualizarPrestador({ body, id }),
-    onSuccess(data) {
+  const updatePrestador = useUpdatePrestador({
+    onSuccess: (data) => {
       if (open) {
-        setData((prev) => ({
-          ...data?.prestador,
-          pessoaFisica: {
-            ...data?.prestador.pessoaFisica,
-            dataNascimento: formatDateToDDMMYYYY(
-              data?.prestador.pessoaFisica?.dataNascimento
-            ),
-          },
-        }));
+        setData((prev) =>
+          data?.prestador ? formatPrestador(data.prestador) : prev
+        );
       }
-
-      toaster.create({
-        title: "Prestador atualizado com sucesso",
-        type: "success",
-      });
-    },
-    onError: (error) => {
-      toaster.create({
-        title: "Ouve um erro ao atualizar o prestador",
-        type: "error",
-      });
     },
   });
 
-  const { mutateAsync: createPrestadorMutation } = useMutation({
-    mutationFn: async ({ body }) =>
-      await PrestadorService.criarPrestador({ body }),
-
-    onSuccess(data) {
+  const createPrestador = useCreatePrestador({
+    onSuccess: (data) => {
       if (open) {
-        setData((prev) => ({
-          ...data?.prestador,
-          pessoaFisica: {
-            ...data?.prestador.pessoaFisica,
-            dataNascimento: formatDateToDDMMYYYY(
-              data?.prestador.pessoaFisica?.dataNascimento
-            ),
-          },
-        }));
+        setData((prev) =>
+          data?.prestador ? formatPrestador(data.prestador) : prev
+        );
       }
-
-      queryClient.invalidateQueries(["listar-prestadores"]);
-      toaster.create({
-        title: "Prestador criado com sucesso",
-        type: "success",
-      });
-    },
-    onError: (error) => {
-      toaster.create({
-        title: "Ouve um erro ao criar um prestador",
-        type: "error",
-      });
     },
   });
-
-  const { data: assistantConfig } = useQuery({
-    queryKey: ["listar-assistente-config"],
-    queryFn: async () => await AssistantConfigService.listarAssistenteAtivos(),
-    staleTime: 1000 * 60 * 1, // 1 minute
-    enabled: open,
-  });
-
-  const loadAssistant = () => {
-    let assistant = assistantConfig?.find((e) => {
-      return e?.modulo.includes("prestador");
-    });
-
-    return assistant?.assistente;
-  };
 
   const onSubmit = async (values) => {
     const {
@@ -140,85 +64,33 @@ export const PrestadoresDialog = ({
       endereco: { ...rest, ...(pais.cod ? { pais } : {}) },
     };
 
-    if (!data) {
-      return await createPrestadorMutation({ body });
-    }
-
-    return await updatePrestadorMutation({ id: data._id, body });
+    if (!data) return await createPrestador.mutateAsync({ body });
+    return await updatePrestador.mutateAsync({ body, id: data._id });
   };
-
-  const fields = useMemo(() => createDynamicFormFields(), []);
-
-  useEffect(() => {
-    setData(defaultValues);
-  }, [defaultValues]);
 
   return (
     <Box>
       <Box onClick={() => setOpen(true)} asChild>
-        {trigger ? trigger : <DefaultTrigger />}
+        {defaultValues ? (
+          <IconTrigger />
+        ) : (
+          <DefaultTrigger title="Criar um prestador" />
+        )}
       </Box>
-      {open && (
-        <DialogRoot
-          size="cover"
-          open={open}
-          onOpenChange={(e) => {
-            queryClient.invalidateQueries(["listar-prestadores"]);
-            setOpen(e.open);
-            setData(defaultValues);
-          }}
-        >
-          <DialogContent
-            overflow="hidden"
-            w="1250px"
-            h="80%"
-            pt="6"
-            px="2"
-            rounded="lg"
-          >
-            <DialogHeader
-              mt="-4"
-              py="3"
-              px="4"
-              borderBottom="1px solid"
-              borderColor="gray.200"
-              mb="6"
-            >
-              <DialogTitle>
-                <Flex gap="4" alignItems="center">
-                  <Box
-                    cursor="pointer"
-                    variant="unstyled"
-                    onClick={() => onOpen(data, loadAssistant())}
-                  >
-                    <Oondemand />
-                  </Box>
-                  {label}
-                  <VisibilityControlDialog
-                    fields={fields}
-                    setVisibilityState={setInputsVisibility}
-                    visibilityState={inputsVisibility}
-                    title="Ocultar campos"
-                  />
-                </Flex>
-              </DialogTitle>
-            </DialogHeader>
-            <DialogBody overflowY="auto" className="dialog-custom-scrollbar">
-              <BuildForm
-                visibleState={inputsVisibility}
-                fields={fields}
-                gridColumns={4}
-                gap={6}
-                data={data}
-                onSubmit={onSubmit}
-              />
-            </DialogBody>
-            <DialogCloseTrigger asChild>
-              <CloseButton size="sm" />
-            </DialogCloseTrigger>
-          </DialogContent>
-        </DialogRoot>
-      )}
+      <FormDialog
+        data={data}
+        fields={fields}
+        label={label}
+        onOpenAssistantDialog={() => onOpen(data, assistant)}
+        onSubmit={onSubmit}
+        onOpenChange={() => {
+          queryClient.invalidateQueries(["listar-prestadores"]);
+          setOpen(false);
+          setData();
+        }}
+        open={open}
+        key="PRESTADORES"
+      />
     </Box>
   );
 };

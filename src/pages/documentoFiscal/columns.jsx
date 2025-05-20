@@ -24,11 +24,6 @@ export const makeDocumentoFiscalDynamicColumns = () => {
         <TableActionsCell>
           <DeleteDocumentoFiscalAction id={props.row.original?._id} />
           <DocumentosFiscaisDialog
-            trigger={
-              <IconButton variant="surface" colorPalette="gray" size="2xs">
-                <Pencil />
-              </IconButton>
-            }
             label="Documento Fiscal"
             defaultValues={{
               ...props.row.original,

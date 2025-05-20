@@ -12,8 +12,6 @@ import { SelectEstadoCell } from "../../components/dataGrid/cells/selectEstadoCe
 import { DeletePrestadorAction } from "../../components/dataGrid/actions/deletePrestadorButton";
 import { TableActionsCell } from "../../components/dataGrid/cells/tableActionsCell";
 import { PrestadoresDialog } from "./dialog";
-import { IconButton } from "@chakra-ui/react";
-import { Pencil } from "lucide-react";
 import { formatDateToDDMMYYYY } from "../../utils/formatting";
 import { EnviarConvitePrestadorAction } from "../../components/dataGrid/actions/enviarConvite";
 
@@ -27,11 +25,6 @@ export const makePrestadorDynamicColumns = () => {
         <TableActionsCell>
           <DeletePrestadorAction id={props.row.original?._id} />
           <PrestadoresDialog
-            trigger={
-              <IconButton variant="surface" colorPalette="gray" size="2xs">
-                <Pencil />
-              </IconButton>
-            }
             label="Prestador"
             defaultValues={{
               ...props.row.original,

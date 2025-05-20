@@ -1,47 +1,28 @@
 import React, { useMemo } from "react";
-
-import { Flex, Spinner, Box, Button, Text } from "@chakra-ui/react";
-import { useQuery, keepPreviousData, useMutation } from "@tanstack/react-query";
-import { DebouncedInput } from "../../components/DebouncedInput";
+import { Flex, Box, Text } from "@chakra-ui/react";
+import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import { DataGrid } from "../../components/dataGrid";
 import { useDataGrid } from "../../hooks/useDataGrid";
-
 import { makeAssistenteConfigDynamicColumns } from "./columns";
-
-import { toaster } from "../../components/ui/toaster";
 import { queryClient } from "../../config/react-query";
-
-import { VisibilityControlDialog } from "../../components/vibilityControlDialog";
 import { AssistenteConfigDialog } from "./dialog";
 import { AssistantConfigService } from "../../service/assistant-config";
+import { useUpdateAssistantConfig } from "../../hooks/api/assistant-config/useUpdateAssistantConfig";
 
 export const AssistenteConfigPage = () => {
   const columns = useMemo(() => makeAssistenteConfigDynamicColumns({}), []);
   const { filters, table } = useDataGrid({ columns, key: "ASSISTENTE_CONFIG" });
 
-  const { data, error, isLoading, isFetching } = useQuery({
+  const { data, isLoading, isFetching } = useQuery({
     queryKey: ["listar-assistente-config", { filters }],
     queryFn: async () =>
       await AssistantConfigService.listarAssistenteConfig({ filters }),
     placeholderData: keepPreviousData,
   });
 
-  const { mutateAsync: updateAssistenteConfigMutation } = useMutation({
-    mutationFn: async ({ id, data }) =>
-      await AssistantConfigService.alterarAssistenteConfig({ body: data, id }),
-    onSuccess() {
-      queryClient.refetchQueries(["listar-assistente-config", { filters }]);
-      toaster.create({
-        title: "Assistente atualizado com sucesso",
-        type: "success",
-      });
-    },
-    onError: (error) => {
-      toaster.create({
-        title: "Ouve um erro ao atualizar o assistente",
-        type: "error",
-      });
-    },
+  const updateAssistantConfig = useUpdateAssistantConfig({
+    onSuccess: () =>
+      queryClient.refetchQueries(["listar-assistente-config", { filters }]),
   });
 
   return (
@@ -67,7 +48,7 @@ export const AssistenteConfigPage = () => {
             rowCount={data?.pagination?.totalItems}
             isDataLoading={isLoading || isFetching}
             onUpdateData={async (values) => {
-              await updateAssistenteConfigMutation({
+              await updateAssistantConfig.mutateAsync({
                 id: values.id,
                 data: values.data,
               });
