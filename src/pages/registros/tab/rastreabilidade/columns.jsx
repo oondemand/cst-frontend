@@ -30,13 +30,13 @@ export const makeTicketsArquivadosDynamicColumns = () => {
       meta: { filterKey: "usuario.nome" },
     },
     {
-      accessorKey: "tipoRegistroAlterado",
+      accessorKey: "entidade",
       header: "Tipo de registro",
       cell: DefaultCell,
       enableSorting: false,
       enableColumnFilter: true,
       meta: {
-        filterKey: "tipoRegistroAlterado",
+        filterKey: "entidade",
         filterVariant: "select",
         filterOptions: [
           { value: "usuario", label: "Usuario" },
@@ -46,7 +46,7 @@ export const makeTicketsArquivadosDynamicColumns = () => {
     },
     {
       accessorKey: "idRegistroAlterado",
-      header: "Id",
+      header: "Id registro alterado",
       cell: DefaultCell,
       enableSorting: false,
       enableColumnFilter: true,
