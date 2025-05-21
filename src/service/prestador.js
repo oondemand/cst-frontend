@@ -1,5 +1,4 @@
 import { api } from "../config/api";
-import { ORIGENS } from "../constants/origens";
 
 const listarPrestadores = async ({ filters }) => {
   const { data } = await api.get("/prestadores", { params: filters });
@@ -13,7 +12,7 @@ const obterPrestador = async ({ id }) => {
 
 const criarPrestador = async ({ body, origem }) => {
   const { data } = await api.post("/prestadores", body, {
-    headers: { "x-origem": origem || ORIGENS.FORM },
+    headers: { "x-origem": origem },
   });
 
   return data;
@@ -26,7 +25,13 @@ const atualizarPrestador = async ({ id, body, origem }) => {
   return data;
 };
 
-const importarPrestadores = async ({ files, origem }) => {
+const excluirPrestador = async ({ id, origem }) => {
+  return await api.delete(`prestadores/${id}`, {
+    headers: { "x-origem": origem },
+  });
+};
+
+const importarPrestadores = async ({ files }) => {
   const formData = new FormData();
   for (const file of files) {
     formData.append("file", file);
@@ -35,7 +40,6 @@ const importarPrestadores = async ({ files, origem }) => {
   const response = await api.post("/prestadores/importar", formData, {
     headers: {
       "Content-Type": "multipart/form-data",
-      "x-origem": origem,
     },
   });
 
@@ -61,4 +65,5 @@ export const PrestadorService = {
   atualizarPrestador,
   importarPrestadores,
   enviarConvite,
+  excluirPrestador,
 };

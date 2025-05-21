@@ -36,7 +36,7 @@ export const AprovarForm = ({ prestadorId, documentoCadastral }) => {
   });
 
   const updatePrestador = useUpdatePrestador({
-    origem: ORIGENS.APROVACAO_DOCUMENTO_CADASTRAL,
+    origem: ORIGENS.FORM,
   });
 
   const { mutateAsync: onAprovarDocumento, isPending } = useMutation({
