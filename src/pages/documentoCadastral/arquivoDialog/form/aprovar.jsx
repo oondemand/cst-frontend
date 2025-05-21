@@ -15,6 +15,8 @@ import { useVisibleInputForm } from "../../../../hooks/useVisibleInputForms";
 import { PrestadorService } from "../../../../service/prestador";
 import { BuildForm } from "../../../../components/buildForm";
 import { DocumentosCadastraisService } from "../../../../service/documentos-cadastrais";
+import { useUpdatePrestador } from "../../../../hooks/api/prestador/useUpdatePrestador";
+import { ORIGENS } from "../../../../constants/origens";
 
 const servicoSchema = z.object({
   servicos: z.array(z.object({ _id: z.string() }).transform((e) => e._id)),
@@ -33,15 +35,8 @@ export const AprovarForm = ({ prestadorId, documentoCadastral }) => {
       }),
   });
 
-  const { mutateAsync: updatePrestadorMutation } = useMutation({
-    mutationFn: async ({ id, body }) =>
-      await PrestadorService.atualizarPrestador({ id, body }),
-    onSuccess: (data) => {
-      toaster.create({
-        title: "Prestador atualizado com sucesso",
-        type: "success",
-      });
-    },
+  const updatePrestador = useUpdatePrestador({
+    origem: ORIGENS.APROVACAO_DOCUMENTO_CADASTRAL,
   });
 
   const { mutateAsync: onAprovarDocumento, isPending } = useMutation({
@@ -69,19 +64,14 @@ export const AprovarForm = ({ prestadorId, documentoCadastral }) => {
     },
   });
 
-  const {
-    handleSubmit,
-    control,
-    reset,
-    formState: { errors },
-  } = useForm({
+  const { handleSubmit } = useForm({
     resolver: zodResolver(servicoSchema),
     defaultValues: {
       servicos: [],
     },
   });
 
-  const handleAprovarDocumento = async (data) => {
+  const handleAprovarDocumento = async () => {
     await onAprovarDocumento();
   };
 
@@ -98,7 +88,7 @@ export const AprovarForm = ({ prestadorId, documentoCadastral }) => {
       endereco: { ...rest, ...(pais.cod ? { pais } : {}) },
     };
 
-    return await updatePrestadorMutation({ id: prestadorId, body });
+    return await updatePrestador.mutateAsync({ id: prestadorId, body });
   };
 
   return (

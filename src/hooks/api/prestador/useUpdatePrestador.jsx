@@ -2,12 +2,13 @@ import { useMutation } from "@tanstack/react-query";
 import { toaster } from "../../../components/ui/toaster";
 import { PrestadorService } from "../../../service/prestador";
 
-export const useUpdatePrestador = ({ onSuccess }) =>
+export const useUpdatePrestador = ({ onSuccess, origem }) =>
   useMutation({
     mutationFn: async ({ body, id }) =>
       await PrestadorService.atualizarPrestador({
         body,
         id,
+        origem,
       }),
     onSuccess(data) {
       onSuccess?.(data?.prestador);

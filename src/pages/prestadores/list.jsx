@@ -10,6 +10,7 @@ import { formatDateToDDMMYYYY } from "../../utils/formatting";
 import { useNavigate } from "react-router-dom";
 import { useDataGrid } from "../../hooks/useDataGrid";
 import { useUpdatePrestador } from "../../hooks/api/prestador/useUpdatePrestador";
+import { ORIGENS } from "../../constants/origens";
 
 export const PrestadoresList = () => {
   const navigate = useNavigate();
@@ -23,6 +24,7 @@ export const PrestadoresList = () => {
   });
 
   const updatePrestador = useUpdatePrestador({
+    origem: ORIGENS.DATAGRID,
     onSuccess: () => {
       queryClient.refetchQueries(["listar-prestadores", { filters }]);
     },
@@ -68,7 +70,7 @@ export const PrestadoresList = () => {
               exportDataFn={getAllPrestadoresWithFilters}
               importDataFn={() => navigate("/prestadores/importacao")}
               table={table}
-              data={data?.prestadores || []}
+              data={data?.results || []}
               rowCount={data?.pagination?.totalItems}
               isDataLoading={isLoading || isFetching}
               onUpdateData={async (values) => {

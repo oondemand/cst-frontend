@@ -5,14 +5,15 @@ import { BuildForm } from "../../buildForm/index";
 import { useVisibleInputForm } from "../../../hooks/useVisibleInputForms";
 import { useMemo } from "react";
 import { createDynamicFormFields } from "../../../pages/prestadores/formFields";
-import { useMutation } from "@tanstack/react-query";
 import { api } from "../../../config/api";
-import { PrestadorService } from "../../../service/prestador";
 import { AsyncSelectAutocomplete } from "../../asyncSelectAutoComplete";
 
 import { VisibilityControlDialog } from "../../vibilityControlDialog";
 import { formatDateToDDMMYYYY } from "../../../utils/formatting";
-import { toaster } from "../../ui/toaster";
+
+import { useCreatePrestador } from "../../../hooks/api/prestador/useCreatePrestador";
+import { useUpdatePrestador } from "../../../hooks/api/prestador/useUpdatePrestador";
+import { ORIGENS } from "../../../constants/origens";
 
 export const fetchOptions = async (inputValue) => {
   return await api.get(`/prestadores?searchTerm=${inputValue}`);
@@ -52,23 +53,13 @@ export const PrestadorForm = ({
     defaultSelectedPrestador
   );
 
-  const { mutateAsync: createPrestadorMutation } = useMutation({
-    mutationFn: PrestadorService.criarPrestador,
-    onSuccess: (data) => {
-      setPrestador((prev) => data.prestador);
-    },
+  const createPrestador = useCreatePrestador({
+    onSuccess: (data) => setPrestador((prev) => data.prestador),
   });
 
-  const { mutateAsync: updatePrestadorMutation } = useMutation({
-    mutationFn: async ({ id, body }) =>
-      await PrestadorService.atualizarPrestador({ id, body }),
-    onSuccess: (data) => {
-      setPrestador((prev) => data.prestador);
-      toaster.create({
-        title: "Prestador atualizado com sucesso",
-        type: "success",
-      });
-    },
+  const updatePrestador = useUpdatePrestador({
+    onSuccess: (data) => setPrestador((prev) => data.prestador),
+    origem: ORIGENS.ESTEIRA,
   });
 
   const onSubmitPrestador = async (values) => {
@@ -83,7 +74,7 @@ export const PrestadorForm = ({
     };
 
     if (!ticket?.prestador) {
-      const { prestador } = await createPrestadorMutation({ body });
+      const { prestador } = await createPrestador.mutateAsync({ body });
 
       await updateTicketMutation({
         id: ticket._id,
@@ -93,7 +84,10 @@ export const PrestadorForm = ({
       });
     }
 
-    return await updatePrestadorMutation({ id: ticket?.prestador._id, body });
+    return await updatePrestador.mutateAsync({
+      id: ticket?.prestador._id,
+      body,
+    });
   };
 
   const handlePrestadorChange = async (e) => {

@@ -12,6 +12,7 @@ import {
   DefaultTrigger,
   IconTrigger,
 } from "../../components/formDialog/form-trigger";
+import { ORIGENS } from "../../constants/origens";
 
 export const PrestadoresDialog = ({
   defaultValues = null,
@@ -34,6 +35,7 @@ export const PrestadoresDialog = ({
   });
 
   const updatePrestador = useUpdatePrestador({
+    origem: ORIGENS.FORM,
     onSuccess: (data) => {
       if (open) {
         setData((prev) =>
