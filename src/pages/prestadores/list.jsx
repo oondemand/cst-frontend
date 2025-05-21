@@ -31,7 +31,7 @@ export const PrestadoresList = () => {
   });
 
   const getAllPrestadoresWithFilters = async (pageSize) => {
-    const { prestadores } = await PrestadorService.listarPrestadores({
+    const { results } = await PrestadorService.listarPrestadores({
       filters: {
         ...filters,
         pageSize: pageSize ? pageSize : data?.pagination?.totalItems,
@@ -39,7 +39,7 @@ export const PrestadoresList = () => {
       },
     });
 
-    return prestadores.map((e) => ({
+    return results.map((e) => ({
       ...e,
       pessoaFisica: {
         ...e.pessoaFisica,

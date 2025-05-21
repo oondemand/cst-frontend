@@ -45,12 +45,12 @@ export const makeTicketsArquivadosDynamicColumns = () => {
       },
     },
     {
-      accessorKey: "idRegistroAlterado",
-      header: "Id registro alterado",
+      accessorKey: "idRegistro",
+      header: "Id do registro",
       cell: DefaultCell,
       enableSorting: false,
       enableColumnFilter: true,
-      meta: { filterKey: "idRegistroAlterado" },
+      meta: { filterKey: "idRegistro" },
     },
     {
       accessorKey: "origem",

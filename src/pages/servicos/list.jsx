@@ -48,7 +48,7 @@ export const ServicosList = () => {
   });
 
   const getAllServicosWithFilters = async (pageSize) => {
-    const { servicos } = await ServicoService.listarServicos({
+    const { results } = await ServicoService.listarServicos({
       filters: {
         ...filters,
         pageSize: pageSize ? pageSize : data?.pagination?.totalItems,
@@ -56,7 +56,7 @@ export const ServicosList = () => {
       },
     });
 
-    return servicos.map((e) => ({
+    return results.map((e) => ({
       ...e,
       dataRegistro: formatDateToDDMMYYYY(e?.dataRegistro),
       revisionMonthProvision: formatDateToDDMMYYYY(e?.revisionMonthProvision),

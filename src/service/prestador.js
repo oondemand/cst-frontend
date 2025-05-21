@@ -1,4 +1,5 @@
 import { api } from "../config/api";
+import { ORIGENS } from "../constants/origens";
 
 const listarPrestadores = async ({ filters }) => {
   const { data } = await api.get("/prestadores", { params: filters });
@@ -46,13 +47,13 @@ const importarPrestadores = async ({ files }) => {
   return response;
 };
 
-const enviarConvite = async ({ prestador, origem }) => {
+const enviarConvite = async ({ prestador }) => {
   return await api.post(
     "/usuarios/enviar-convite",
     { prestador },
     {
       headers: {
-        "x-origem": origem,
+        "x-origem": ORIGENS.DATAGRID,
       },
     }
   );
