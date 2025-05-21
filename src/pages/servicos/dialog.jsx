@@ -11,6 +11,7 @@ import {
   DefaultTrigger,
   IconTrigger,
 } from "../../components/formDialog/form-trigger";
+import { ORIGENS } from "../../constants/origens";
 
 export const ServicosDialog = ({
   defaultValues = null,
@@ -24,10 +25,12 @@ export const ServicosDialog = ({
 
   const updateServico = useUpdateServico({
     onSuccess: (data) => open && setData((prev) => data?.servico),
+    origem: ORIGENS.FORM,
   });
 
   const createServico = useCreateServico({
     onSuccess: (data) => open && setData((prev) => data?.servico),
+    origem: ORIGENS.FORM,
   });
 
   const onSubmit = async (values) => {

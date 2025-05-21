@@ -76,7 +76,7 @@ export const PrestadoresList = () => {
               onUpdateData={async (values) => {
                 await updatePrestador.mutateAsync({
                   id: values.id,
-                  data: values.data,
+                  body: values.data,
                 });
               }}
             />

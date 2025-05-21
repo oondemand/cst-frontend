@@ -51,7 +51,7 @@ export const EtapasPage = () => {
             onUpdateData={async (values) => {
               await updateEtapa.mutateAsync({
                 id: values.id,
-                data: values.data,
+                body: values.data,
               });
             }}
           />

@@ -51,7 +51,7 @@ export const UsuariosPage = () => {
               onUpdateData={async (values) => {
                 await updateUsuario.mutateAsync({
                   id: values.id,
-                  data: values.data,
+                  body: values.data,
                 });
               }}
             />

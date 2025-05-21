@@ -99,7 +99,7 @@ export const DocumentoscadastraisList = () => {
               onUpdateData={async (values) => {
                 await updateDocumentoCadastral.mutateAsync({
                   id: values.id,
-                  data: values.data,
+                  body: values.data,
                 });
               }}
             />

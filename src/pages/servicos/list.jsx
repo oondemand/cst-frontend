@@ -10,6 +10,7 @@ import { formatDateToDDMMYYYY } from "../../utils/formatting";
 import { useNavigate } from "react-router-dom";
 import { useDataGrid } from "../../hooks/useDataGrid";
 import { useUpdateServico } from "../../hooks/api/servico/useUpdateServico";
+import { ORIGENS } from "../../constants/origens";
 
 export const ServicosList = () => {
   const navigate = useNavigate();
@@ -43,6 +44,7 @@ export const ServicosList = () => {
   const updateServico = useUpdateServico({
     onSuccess: () =>
       queryClient.refetchQueries(["listar-servicos", { filters }]),
+    origem: ORIGENS.DATAGRID,
   });
 
   const getAllServicosWithFilters = async (pageSize) => {
@@ -86,13 +88,13 @@ export const ServicosList = () => {
               exportDataFn={getAllServicosWithFilters}
               importDataFn={() => navigate("/servicos/importacao")}
               table={table}
-              data={data?.servicos || []}
+              data={data?.results || []}
               rowCount={data?.pagination?.totalItems}
               isDataLoading={isLoading || isFetching}
               onUpdateData={async (values) => {
                 await updateServico.mutateAsync({
                   id: values.id,
-                  data: values.data,
+                  body: values.data,
                 });
               }}
             />

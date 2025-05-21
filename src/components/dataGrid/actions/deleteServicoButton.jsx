@@ -1,30 +1,17 @@
 import { IconButton } from "@chakra-ui/react";
 import { Trash } from "lucide-react";
-import { useMutation } from "@tanstack/react-query";
-import { toaster } from "../../ui/toaster";
 import { queryClient } from "../../../config/react-query";
-import { api } from "../../../config/api";
 import { useConfirmation } from "../../../hooks/useConfirmation";
 import { Tooltip } from "../../ui/tooltip";
+import { useDeleteServico } from "../../../hooks/api/servico/useDeleteServico";
+import { ORIGENS } from "../../../constants/origens";
 
 export const DeleteServicoAction = ({ id }) => {
   const { requestConfirmation } = useConfirmation();
 
-  const { mutateAsync: deleteServicoMutation } = useMutation({
-    mutationFn: async () => await api.delete(`servicos/${id}`),
-    onSuccess() {
-      queryClient.refetchQueries(["listar-servicos"]);
-      toaster.create({
-        title: "Serviço excluído com sucesso",
-        type: "success",
-      });
-    },
-    onError: (error) => {
-      toaster.create({
-        title: "Ouve um erro ao excluir serviço",
-        type: "error",
-      });
-    },
+  const deleteServico = useDeleteServico({
+    onSuccess: () => queryClient.refetchQueries(["listar-servicos"]),
+    origem: ORIGENS.DATAGRID,
   });
 
   const handleDeleteServico = async () => {
@@ -34,7 +21,7 @@ export const DeleteServicoAction = ({ id }) => {
     });
 
     if (action === "confirmed") {
-      await deleteServicoMutation();
+      await deleteServico.mutateAsync({ id });
     }
   };
 

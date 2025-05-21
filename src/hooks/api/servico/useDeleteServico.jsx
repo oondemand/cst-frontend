@@ -2,21 +2,19 @@ import { useMutation } from "@tanstack/react-query";
 import { toaster } from "../../../components/ui/toaster";
 import { ServicoService } from "../../../service/servico";
 
-export const useCreateServico = ({ onSuccess, origem }) =>
+export const useDeleteServico = ({ onSuccess, origem }) =>
   useMutation({
-    mutationFn: async ({ body }) =>
-      await ServicoService.criarServico({ body, origem }),
+    mutationFn: async ({ id }) => ServicoService.deletarServico({ id, origem }),
     onSuccess(data) {
       onSuccess?.(data);
       toaster.create({
-        title: "Serviço criado com sucesso",
+        title: "Serviço excluído com sucesso",
         type: "success",
       });
     },
-
     onError: (error) => {
-      return toaster.create({
-        title: "Ouve um erro ao criar um serviço",
+      toaster.create({
+        title: "Ouve um erro ao excluir serviço",
         description: error?.response?.data?.message,
         type: "error",
       });

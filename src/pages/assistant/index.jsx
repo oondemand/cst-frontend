@@ -50,7 +50,7 @@ export const AssistenteConfigPage = () => {
             onUpdateData={async (values) => {
               await updateAssistantConfig.mutateAsync({
                 id: values.id,
-                data: values.data,
+                body: values.data,
               });
             }}
           />

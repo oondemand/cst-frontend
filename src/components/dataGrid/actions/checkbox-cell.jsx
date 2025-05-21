@@ -2,9 +2,10 @@ import { Checkbox, Flex } from "@chakra-ui/react";
 import { toaster } from "../../ui/toaster";
 import { useMutation } from "@tanstack/react-query";
 import { TicketService } from "../../../service/ticket";
-import { ServicoService } from "../../../service/servico";
 import { queryClient } from "../../../config/react-query";
 import { useConfirmation } from "../../../hooks/useConfirmation";
+import { useUpdateServico } from "../../../hooks/api/servico/useUpdateServico";
+import { ORIGENS } from "../../../constants/origens";
 
 export const CheckActionCell = ({ ...props }) => {
   const { requestConfirmation } = useConfirmation();
@@ -33,18 +34,9 @@ export const CheckActionCell = ({ ...props }) => {
     },
   });
 
-  const { mutateAsync: updateServicoMutation, isPending } = useMutation({
-    mutationFn: async ({ id, body }) =>
-      await ServicoService.atualizarServico({ id, body }),
-    onSuccess() {
-      queryClient.invalidateQueries(["listar-servicos"]);
-    },
-    onError: (error) => {
-      toaster.create({
-        title: "Ouve um erro inesperado ao realizar operação!",
-        type: "error",
-      });
-    },
+  const updateServico = useUpdateServico({
+    onSuccess: () => queryClient.invalidateQueries(["listar-servicos"]),
+    origem: ORIGENS.PLANEJAMENTO,
   });
 
   const handleCheckChange = async (e) => {
@@ -62,14 +54,14 @@ export const CheckActionCell = ({ ...props }) => {
     }
 
     if (props.row.original.status === "aberto") {
-      return await updateServicoMutation({
+      return await updateServico.mutateAsync({
         id: props.row.original._id,
         body: { status: "pendente" },
       });
     }
 
     if (props.row.original.status === "pendente") {
-      return await updateServicoMutation({
+      return await updateServico.mutateAsync({
         id: props.row.original._id,
         body: { status: "aberto" },
       });
@@ -83,7 +75,7 @@ export const CheckActionCell = ({ ...props }) => {
         variant="subtle"
         checked={checked}
         onChange={handleCheckChange}
-        disabled={isPending}
+        disabled={updateServico.isPending}
         cursor="pointer"
         _disabled={{ cursor: "not-allowed" }}
       >

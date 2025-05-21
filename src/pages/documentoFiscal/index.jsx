@@ -91,7 +91,7 @@ export const DocumentosFiscaisList = () => {
               onUpdateData={async (values) => {
                 await updateDocumentoFiscal.mutateAsync({
                   id: values.id,
-                  data: values.data,
+                  body: values.data,
                 });
               }}
             />
