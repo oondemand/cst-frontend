@@ -40,7 +40,7 @@ export const FilesForm = ({ onlyReading, defaultValues, ticketId }) => {
     mutationFn: async ({ id }) =>
       await TicketService.deleteFile({ id, ticketId }),
     onSuccess: ({ data }) => {
-      const filteredFiles = files.filter((e) => e?._id !== data?._id);
+      const filteredFiles = files.filter((e) => e?._id !== data?.arquivo?._id);
       setFiles(filteredFiles);
       toaster.create({
         title: "Arquivo deletado com sucesso",

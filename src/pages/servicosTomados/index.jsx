@@ -49,7 +49,7 @@ export const ServicosTomados = () => {
 
   const filteredTickets =
     searchTerm?.toLowerCase()?.trim()?.length > 2
-      ? data?.filter((ticket) => {
+      ? data?.tickets?.filter((ticket) => {
           const term = searchTerm?.toLowerCase()?.trim();
           return (
             ticket?.titulo?.toLowerCase()?.includes(term) ||
@@ -58,7 +58,7 @@ export const ServicosTomados = () => {
               ?.includes(term.replace(/[^a-zA-Z0-9]/g, ""))
           );
         })
-      : data;
+      : data?.tickets;
 
   return (
     <Flex flex="1" flexDir="column" py="8" px="6" bg="#F8F9FA">

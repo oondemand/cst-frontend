@@ -39,7 +39,7 @@ export const ServicoForm = ({ ticket, onlyReading }) => {
       }),
   });
 
-  const options = data?.map((e) => ({
+  const options = data?.results.map((e) => ({
     label: `${e?.tipoDocumentoFiscal ?? ""} COMP. ${e?.competencia?.mes
       .toString()
       .padStart(2, "0")}/${

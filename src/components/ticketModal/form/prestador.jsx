@@ -21,10 +21,10 @@ export const fetchOptions = async (inputValue) => {
 
 const obterPrestadores = async (inputValue) => {
   const {
-    data: { prestadores },
+    data: { results },
   } = await fetchOptions(inputValue);
 
-  return prestadores.map((item) => {
+  return results.map((item) => {
     return {
       ...item,
       value: item._id,

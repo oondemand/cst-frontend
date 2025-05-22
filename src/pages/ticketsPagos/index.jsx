@@ -35,7 +35,7 @@ export const TicketsPagosPage = () => {
           <Box bg="white" mt="4" py="6" px="4" rounded="lg" shadow="xs">
             <DataGrid
               table={table}
-              data={data?.tickets || []}
+              data={data?.results || []}
               rowCount={data?.pagination?.totalItems}
               isDataLoading={isLoading || isFetching}
             />

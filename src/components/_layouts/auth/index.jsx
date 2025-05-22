@@ -160,7 +160,7 @@ export const AuthLayout = () => {
         {navigationItems.map((item, index) => {
           if (item?.subLinks)
             return (
-              <AccordionRoot collapsible>
+              <AccordionRoot collapsible key={`${item.title}-${index}`}>
                 <AccordionItem border="none">
                   <AccordionItemTrigger
                     cursor="pointer"
@@ -186,9 +186,8 @@ export const AuthLayout = () => {
                   </AccordionItemTrigger>
                   <AccordionItemContent w="full">
                     {item?.subLinks.map((item, i) => (
-                      <Box w="full" pb="2">
+                      <Box w="full" pb="2" key={`${item.title}-${index}`}>
                         <NavLink
-                          key={`${item.title}-${index}`}
                           to={item?.href ?? "#"}
                           icon={item.icon}
                           title={item.title}
