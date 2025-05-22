@@ -25,7 +25,7 @@ export const makeDocumentoCadastralDynamicColumns = () => {
             defaultValues={{
               ...props.row.original,
               prestador: {
-                label: `${props.row.original?.prestador?.nome}-${props.row.original?.prestador?.sid}-${props.row.original?.prestador?.documento}`,
+                label: `${props.row.original?.prestador?.nome}-${props.row.original?.prestador?.documento}`,
                 value: props.row.original?.prestador?._id,
               },
             }}

@@ -1,21 +1,20 @@
 import React, { useMemo } from "react";
 
 import { Flex, Box, Text } from "@chakra-ui/react";
-import { useQuery, keepPreviousData, useMutation } from "@tanstack/react-query";
+import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import { DocumentosCadastraisService } from "../../service/documentos-cadastrais";
 import { DataGrid } from "../../components/dataGrid";
 import { useDataGrid } from "../../hooks/useDataGrid";
 
 import { makeDocumentoCadastralDynamicColumns } from "./columns";
 
-import { api } from "../../config/api";
-import { toaster } from "../../components/ui/toaster";
 import { queryClient } from "../../config/react-query";
 import { DocumentoCadastralDialog } from "./dialog";
 import { useNavigate } from "react-router-dom";
 import { useUpdateDocumentoCadastral } from "../../hooks/api/documento-cadastral/useUpdateDocumentoCadastral";
+import { ORIGENS } from "../../constants/origens";
 
-export const DocumentoscadastraisList = () => {
+export const DocumentosCadastraisList = () => {
   const navigate = useNavigate();
 
   const columns = useMemo(() => makeDocumentoCadastralDynamicColumns({}), []);
@@ -23,10 +22,6 @@ export const DocumentoscadastraisList = () => {
     {
       accessorKey: "prestador.nome",
       header: "Nome Prestador",
-    },
-    {
-      accessorKey: "prestador.sid",
-      header: "SID Prestador",
     },
     {
       accessorKey: "prestador.documento",
@@ -51,6 +46,7 @@ export const DocumentoscadastraisList = () => {
   });
 
   const updateDocumentoCadastral = useUpdateDocumentoCadastral({
+    origem: ORIGENS.DATAGRID,
     onSuccess: () =>
       queryClient.invalidateQueries([
         "listar-documentos-cadastrais",
@@ -59,7 +55,7 @@ export const DocumentoscadastraisList = () => {
   });
 
   const getAllDocumentoscadastraisWithFilters = async (pageSize) => {
-    const { documentosCadastrais } =
+    const { results } =
       await DocumentosCadastraisService.listarDocumentosCadastrais({
         filters: {
           ...filters,
@@ -68,7 +64,7 @@ export const DocumentoscadastraisList = () => {
         },
       });
 
-    return documentosCadastrais;
+    return results;
   };
 
   return (
@@ -93,7 +89,7 @@ export const DocumentoscadastraisList = () => {
               importDataFn={() => navigate("/documentos-cadastrais/importacao")}
               exportDataFn={getAllDocumentoscadastraisWithFilters}
               form={DocumentoCadastralDialog}
-              data={data?.documentosCadastrais || []}
+              data={data?.results || []}
               rowCount={data?.pagination?.totalItems}
               isDataLoading={isFetching || isLoading}
               onUpdateData={async (values) => {

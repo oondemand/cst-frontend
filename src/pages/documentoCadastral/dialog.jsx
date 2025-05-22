@@ -20,6 +20,7 @@ import {
   DefaultTrigger,
   IconTrigger,
 } from "../../components/formDialog/form-trigger";
+import { ORIGENS } from "../../constants/origens";
 
 export const DocumentoCadastralDialog = ({
   defaultValues = null,
@@ -33,16 +34,18 @@ export const DocumentoCadastralDialog = ({
   const fields = useMemo(() => createDynamicFormFields(), []);
 
   const updateDocumentoCadastral = useUpdateDocumentoCadastral({
+    origem: ORIGENS.FORM,
     onSuccess: (data) => open && setData(() => data?.documentoCadastral),
   });
 
   const createDocumentoCadastral = useCreateDocumentoCadastral({
+    origem: ORIGENS.FORM,
     onSuccess: (data) => open && setData(() => data?.documentoCadastral),
   });
 
   const uploadFile = useUploadFileToDocumentoCadastral({
-    onSuccess: (data) => {
-      const { nomeOriginal, mimetype, size, tipo, _id } = data;
+    onSuccess: ({ data }) => {
+      const { nomeOriginal, mimetype, size, tipo, _id } = data.arquivo;
       setData((prev) => ({
         ...prev,
         arquivo: { nomeOriginal, mimetype, size, tipo, _id },
@@ -130,7 +133,10 @@ export const DocumentoCadastralDialog = ({
             <FileUploadRoot
               accept={["application/pdf"]}
               onFileAccept={async (e) => {
-                await uploadFile.mutateAsync({ files: e.files[0] });
+                await uploadFile.mutateAsync({
+                  files: e.files[0],
+                  id: data?._id,
+                });
               }}
             >
               <FileUploadTrigger>

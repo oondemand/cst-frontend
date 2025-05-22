@@ -15,13 +15,21 @@ const listarDocumentosCadastraisPorPrestador = async ({
   return data;
 };
 
-const criarDocumentoCadastral = async ({ body }) => {
-  const { data } = await api.post("/documentos-cadastrais", body);
+const criarDocumentoCadastral = async ({ body, origem }) => {
+  const { data } = await api.post("/documentos-cadastrais", body, {
+    headers: {
+      "x-origem": origem,
+    },
+  });
   return data;
 };
 
-const atualizarDocumentoCadastral = async ({ id, body }) => {
-  const { data } = await api.patch(`/documentos-cadastrais/${id}`, body);
+const atualizarDocumentoCadastral = async ({ id, body, origem }) => {
+  const { data } = await api.patch(`/documentos-cadastrais/${id}`, body, {
+    headers: {
+      "x-origem": origem,
+    },
+  });
   return data;
 };
 
@@ -30,8 +38,12 @@ const atualizarStatus = async ({ ids, status }) => {
   return data;
 };
 
-const deletarDocumentoCadastral = async ({ id }) => {
-  const { data } = await api.delete(`/documentos-cadastrais/${id}`);
+const deletarDocumentoCadastral = async ({ id, origem }) => {
+  const { data } = await api.delete(`/documentos-cadastrais/${id}`, {
+    headers: {
+      "x-origem": origem,
+    },
+  });
   return data;
 };
 
@@ -73,10 +85,28 @@ const importarDocumentosCadastrais = async ({ files }) => {
   return response;
 };
 
-const aprovarDocumentoCadastral = async ({ body }) => {
+const aprovarDocumentoCadastral = async ({ id, origem }) => {
   const { data } = await api.post(
-    `/documentos-cadastrais/aprovar-documento`,
-    body
+    `/documentos-cadastrais/aprovar-documento/${id}`,
+    {},
+    {
+      headers: {
+        "x-origem": origem,
+      },
+    }
+  );
+  return data;
+};
+
+const reprovarDocumentoCadastral = async ({ id, body, origem }) => {
+  const { data } = await api.post(
+    `/documentos-cadastrais/reprovar-documento/${id}`,
+    body,
+    {
+      headers: {
+        "x-origem": origem,
+      },
+    }
   );
   return data;
 };
@@ -92,4 +122,5 @@ export const DocumentosCadastraisService = {
   deleteFile,
   importarDocumentosCadastrais,
   aprovarDocumentoCadastral,
+  reprovarDocumentoCadastral,
 };

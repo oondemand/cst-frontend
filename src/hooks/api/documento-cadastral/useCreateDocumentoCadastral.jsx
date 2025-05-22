@@ -2,10 +2,13 @@ import { useMutation } from "@tanstack/react-query";
 import { toaster } from "../../../components/ui/toaster";
 import { DocumentosCadastraisService } from "../../../service/documentos-cadastrais";
 
-export const useCreateDocumentoCadastral = ({ onSuccess }) =>
+export const useCreateDocumentoCadastral = ({ onSuccess, origem }) =>
   useMutation({
     mutationFn: async ({ body }) =>
-      await DocumentosCadastraisService.criarDocumentoCadastral({ body }),
+      await DocumentosCadastraisService.criarDocumentoCadastral({
+        body,
+        origem,
+      }),
     onSuccess(data) {
       onSuccess?.(data);
       toaster.create({

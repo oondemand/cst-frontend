@@ -3,15 +3,20 @@ import { Trash } from "lucide-react";
 import { useMutation } from "@tanstack/react-query";
 import { toaster } from "../../ui/toaster";
 import { queryClient } from "../../../config/react-query";
-import { api } from "../../../config/api";
 import { useConfirmation } from "../../../hooks/useConfirmation";
 import { Tooltip } from "../../ui/tooltip";
+import { DocumentosCadastraisService } from "../../../service/documentos-cadastrais";
+import { ORIGENS } from "../../../constants/origens";
 
 export const DeleteDocumentoCadastralAction = ({ id }) => {
   const { requestConfirmation } = useConfirmation();
 
   const { mutateAsync: deleteDocumentoCadastralMutation } = useMutation({
-    mutationFn: async () => await api.delete(`/documentos-cadastrais/${id}`),
+    mutationFn: async () =>
+      await DocumentosCadastraisService.deletarDocumentoCadastral({
+        id,
+        origem: ORIGENS.DATAGRID,
+      }),
     onSuccess() {
       queryClient.refetchQueries(["listar-documentos-cadastrais"]);
       toaster.create({

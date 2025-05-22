@@ -41,11 +41,9 @@ export const AprovarForm = ({ prestadorId, documentoCadastral }) => {
 
   const { mutateAsync: onAprovarDocumento, isPending } = useMutation({
     mutationFn: async () =>
-      await DocumentosCadastraisService.atualizarDocumentoCadastral({
-        body: {
-          statusValidacao: "aprovado",
-        },
+      await DocumentosCadastraisService.aprovarDocumentoCadastral({
         id: documentoCadastral?._id,
+        origem: ORIGENS.APROVACAO_DOCUMENTO_CADASTRAL,
       }),
     onSuccess: () => {
       queryClient.invalidateQueries({
@@ -112,7 +110,7 @@ export const AprovarForm = ({ prestadorId, documentoCadastral }) => {
             <BuildForm
               fields={fields}
               data={{
-                ...data,
+                ...data.prestador,
                 pessoaFisica: {
                   ...data?.pessoaFisica,
                   dataNascimento: formatDateToDDMMYYYY(

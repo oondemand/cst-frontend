@@ -20,7 +20,7 @@ import { EtapasPage } from "./pages/etapas";
 import { DocumentosFiscaisList } from "./pages/documentoFiscal";
 import { ImportDocumentosFiscaisPage } from "./pages/documentoFiscal/importacao";
 import { AssistenteConfigPage } from "./pages/assistant";
-import { DocumentoscadastraisList } from "./pages/documentoCadastral";
+import { DocumentosCadastraisList } from "./pages/documentoCadastral";
 import { ImportDocumentosCadastraisPage } from "./pages/documentoCadastral/importacao";
 
 export const router = createBrowserRouter([
@@ -39,7 +39,7 @@ export const router = createBrowserRouter([
       { path: "/servicos/todos", element: <ServicosList /> },
       { path: "/servicos/importacao", element: <ImportServicosPage /> },
       { path: "/documentos-fiscais", element: <DocumentosFiscaisList /> },
-      { path: "/documentos-cadastrais", element: <DocumentoscadastraisList /> },
+      { path: "/documentos-cadastrais", element: <DocumentosCadastraisList /> },
       {
         path: "/documentos-fiscais/importacao",
         element: <ImportDocumentosFiscaisPage />,

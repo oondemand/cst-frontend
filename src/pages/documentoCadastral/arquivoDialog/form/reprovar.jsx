@@ -25,6 +25,7 @@ import {
   SelectTrigger,
   SelectValueText,
 } from "../../../../components/ui/select";
+import { ORIGENS } from "../../../../constants/origens";
 
 const reprovacaoSchema = z.object({
   motivoRecusa: z.string({ message: "Selecione um motivo." }),
@@ -49,7 +50,7 @@ export const ReprovarForm = ({ documentoCadastralId }) => {
 
   const { mutateAsync: reprovarDocumento } = useMutation({
     mutationFn: async ({ motivoRecusa, observacao, observacaoPrestador }) =>
-      await DocumentosCadastraisService.atualizarDocumentoCadastral({
+      await DocumentosCadastraisService.reprovarDocumentoCadastral({
         body: {
           motivoRecusa,
           observacaoInterna: observacao,
@@ -57,6 +58,7 @@ export const ReprovarForm = ({ documentoCadastralId }) => {
           statusValidacao: "recusado",
         },
         id: documentoCadastralId,
+        origem: ORIGENS.APROVACAO_DOCUMENTO_CADASTRAL,
       }),
     onSuccess: () => {
       queryClient.invalidateQueries({

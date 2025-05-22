@@ -2,12 +2,13 @@ import { useMutation } from "@tanstack/react-query";
 import { toaster } from "../../../components/ui/toaster";
 import { DocumentosCadastraisService } from "../../../service/documentos-cadastrais";
 
-export const useUpdateDocumentoCadastral = ({ onSuccess }) =>
+export const useUpdateDocumentoCadastral = ({ onSuccess, origem }) =>
   useMutation({
     mutationFn: async ({ id, body }) =>
       await DocumentosCadastraisService.atualizarDocumentoCadastral({
         id,
         body,
+        origem,
       }),
     onSuccess(data) {
       onSuccess?.(data);
