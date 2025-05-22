@@ -37,10 +37,10 @@ export const DocumentoFiscalForm = ({ ticket, onlyReading }) => {
       }),
   });
 
-  const options = data?.map((e) => ({
-    label: `${e?.tipoDocumentoFiscal ?? ""} COMP. ${e?.competencia?.mes
-      ?.toString()
-      .padStart(2, "0")}/${e?.competencia?.ano} 
+  const options = data?.documentosFiscais?.map((e) => ({
+    label: `${e?.tipoDocumentoFiscal ?? ""} COMP. ${
+      e?.competencia?.mes?.toString()?.padStart(2, "0") ?? ""
+    }${e?.competencia?.ano ?? ""} 
       ${currency.format(e?.valor ?? 0)}`,
 
     value: e?._id,
@@ -70,8 +70,8 @@ export const DocumentoFiscalForm = ({ ticket, onlyReading }) => {
         ticketId: ticket?._id,
         documentoFiscalId,
       }),
-    onSuccess: ({ documentosFiscais }) => {
-      setDocumentosFiscais(documentosFiscais);
+    onSuccess: ({ ticket }) => {
+      setDocumentosFiscais(ticket.documentosFiscais);
       toaster.create({
         title: "Documento fiscal adicionado com sucesso!",
         type: "success",

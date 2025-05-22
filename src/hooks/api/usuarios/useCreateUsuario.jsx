@@ -2,10 +2,10 @@ import { useMutation } from "@tanstack/react-query";
 import { toaster } from "../../../components/ui/toaster";
 import { UsuarioService } from "../../../service/usuario";
 
-export const useCreateUsuario = ({ onSuccess }) =>
+export const useCreateUsuario = ({ onSuccess, origem }) =>
   useMutation({
     mutationFn: async ({ body }) =>
-      await UsuarioService.adicionarUsuario({ body }),
+      await UsuarioService.adicionarUsuario({ body, origem }),
     onSuccess(data) {
       onSuccess?.(data);
       toaster.create({

@@ -1,12 +1,20 @@
 import { api } from "../config/api";
 
-const adicionarTicket = async (ticket) => {
-  const response = await api.post("tickets", ticket);
+const adicionarTicket = async ({ body, origem }) => {
+  const response = await api.post("tickets", body, {
+    headers: {
+      "x-origem": origem,
+    },
+  });
   return response.data;
 };
 
-const alterarTicket = async ({ id, body }) => {
-  const response = await api.patch(`tickets/${id}`, body);
+const alterarTicket = async ({ id, body, origem }) => {
+  const response = await api.patch(`tickets/${id}`, body, {
+    headers: {
+      "x-origem": origem,
+    },
+  });
   return response.data;
 };
 
@@ -45,6 +53,18 @@ const uploadFiles = async ({ ticketId, files }) => {
 
 const deleteFile = async ({ id, ticketId }) => {
   return await api.delete(`/tickets/arquivo/${ticketId}/${id}`);
+};
+
+const arquivarTicket = async ({ id, origem }) => {
+  return await api.post(
+    `/tickets/arquivar/${id}`,
+    {},
+    {
+      headers: {
+        "x-origem": origem,
+      },
+    }
+  );
 };
 
 const getFile = async ({ id }) => {
@@ -93,6 +113,7 @@ export const TicketService = {
   listarTickets,
   adicionarTicket,
   alterarTicket,
+  arquivarTicket,
   aprovarTicket,
   reprovarTicket,
   deleteFile,

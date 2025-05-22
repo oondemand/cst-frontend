@@ -8,6 +8,7 @@ import { UsuariosDialog } from "./dialog";
 import { useDataGrid } from "../../hooks/useDataGrid";
 import { useUpdateUsuario } from "../../hooks/api/usuarios/useUpdateUsuario";
 import { queryClient } from "../../config/react-query";
+import { ORIGENS } from "../../constants/origens";
 
 export const UsuariosPage = () => {
   const columns = useMemo(() => makeUsuarioDynamicColumns({}), []);
@@ -23,6 +24,7 @@ export const UsuariosPage = () => {
   const updateUsuario = useUpdateUsuario({
     onSuccess: () =>
       queryClient.invalidateQueries(["listar-usuarios", { filters }]),
+    origem: ORIGENS.DATAGRID,
   });
 
   return (
@@ -45,7 +47,7 @@ export const UsuariosPage = () => {
             <DataGrid
               form={UsuariosDialog}
               table={table}
-              data={data?.usuarios || []}
+              data={data?.results || []}
               rowCount={data?.pagination?.totalItems}
               isDataLoading={isLoading || isFetching}
               onUpdateData={async (values) => {

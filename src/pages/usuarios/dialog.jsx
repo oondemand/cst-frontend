@@ -9,6 +9,7 @@ import {
   DefaultTrigger,
   IconTrigger,
 } from "../../components/formDialog/form-trigger";
+import { ORIGENS } from "../../constants/origens";
 
 export const UsuariosDialog = ({
   defaultValues = null,
@@ -27,8 +28,12 @@ export const UsuariosDialog = ({
     return createDynamicFormFields().filter((e) => e?.accessorKey !== "status");
   }, [data]);
 
-  const createUsuario = useCreateUsuario({});
-  const updateUsuario = useUpdateUsuario({});
+  const createUsuario = useCreateUsuario({
+    origem: ORIGENS.FORM,
+  });
+  const updateUsuario = useUpdateUsuario({
+    origem: ORIGENS.FORM,
+  });
 
   const onSubmit = async (values) => {
     const body = {

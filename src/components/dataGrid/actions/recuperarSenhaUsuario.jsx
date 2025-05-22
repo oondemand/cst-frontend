@@ -4,11 +4,15 @@ import { useMutation } from "@tanstack/react-query";
 import { toaster } from "../../ui/toaster";
 import { Tooltip } from "../../ui/tooltip";
 import { LoginService } from "../../../service/auth";
+import { ORIGENS } from "../../../constants/origens";
 
 export const RecuperarSenhaUsuarioAction = ({ usuario }) => {
   const { mutateAsync: enviarConviteUsuarioUsuario, isPending } = useMutation({
     mutationFn: async () =>
-      await LoginService.esqueciMinhaSenha(usuario?.email),
+      await LoginService.esqueciMinhaSenha({
+        email: usuario?.email,
+        origem: ORIGENS.DATAGRID,
+      }),
     onSuccess() {
       toaster.create({
         title: "Convite enviado!",

@@ -117,7 +117,7 @@ export const AprovarForm = ({
                   </Table.Row>
                 </Table.Header>
                 <Table.Body>
-                  {data?.map((servico) => (
+                  {data?.servicos?.map((servico) => (
                     <Table.Row key={servico._id}>
                       <Table.Cell py="1">
                         <Controller

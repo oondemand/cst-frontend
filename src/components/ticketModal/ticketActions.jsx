@@ -6,6 +6,7 @@ import { TicketService } from "../../service/ticket";
 import { useMutation } from "@tanstack/react-query";
 import { useConfirmation } from "../../hooks/useConfirmation";
 import { queryClient } from "../../config/react-query";
+import { ORIGENS } from "../../constants/origens";
 
 export const TicketActions = ({ ticketId, etapa }) => {
   const { setOpen } = useDialogContext();
@@ -14,16 +15,14 @@ export const TicketActions = ({ ticketId, etapa }) => {
   const { mutateAsync: arquiveTicketMutation, isPending: isArquivePending } =
     useMutation({
       mutationFn: async () =>
-        await TicketService.alterarTicket({
+        await TicketService.arquivarTicket({
           id: ticketId,
-          body: {
-            status: "arquivado",
-          },
+          origem: ORIGENS.ESTEIRA,
         }),
       onSuccess: () => {
         toaster.create({
           title: "Ticket arquivado com sucesso!",
-          type: "info",
+          type: "success",
         });
       },
       onError: () => {

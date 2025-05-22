@@ -39,7 +39,7 @@ export const ServicoForm = ({ ticket, onlyReading }) => {
       }),
   });
 
-  const options = data?.results.map((e) => ({
+  const options = data?.servicos?.map((e) => ({
     label: `${e?.tipoDocumentoFiscal ?? ""} COMP. ${e?.competencia?.mes
       .toString()
       .padStart(2, "0")}/${
@@ -76,8 +76,8 @@ export const ServicoForm = ({ ticket, onlyReading }) => {
         ticketId: ticket?._id,
         servicoId,
       }),
-    onSuccess: ({ servicos }) => {
-      setServicos(servicos);
+    onSuccess: ({ ticket }) => {
+      setServicos(ticket.servicos);
       toaster.create({
         title: "Serviço adicionado com sucesso!",
         type: "success",

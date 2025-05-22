@@ -29,13 +29,18 @@ import { useIaChat } from "../../hooks/useIaChat";
 import { useQuery } from "@tanstack/react-query";
 import { AssistantConfigService } from "../../service/assistant-config";
 import { DocumentosCadastraisService } from "../../service/documentos-cadastrais";
+import { ORIGENS } from "../../constants/origens";
 
 export const TicketModal = ({ open, setOpen, defaultValue, onlyReading }) => {
   const [ticket, setTicket] = useState(defaultValue);
   const { onOpen } = useIaChat();
 
   const { mutateAsync: createTicketMutation } = useMutation({
-    mutationFn: TicketService.adicionarTicket,
+    mutationFn: async ({ body }) =>
+      await TicketService.adicionarTicket({
+        body,
+        origem: ORIGENS.ESTEIRA,
+      }),
     onSuccess: (data) => {
       toaster.create({
         title: "Ticket criado com sucesso!",
@@ -48,7 +53,7 @@ export const TicketModal = ({ open, setOpen, defaultValue, onlyReading }) => {
 
   const { mutateAsync: updateTicketMutation } = useMutation({
     mutationFn: async ({ id, body }) =>
-      await TicketService.alterarTicket({ id, body }),
+      await TicketService.alterarTicket({ id, body, origem: ORIGENS.ESTEIRA }),
     onSuccess: (data) => {
       toaster.create({
         title: "Ticket atualizado com sucesso!",
@@ -61,7 +66,11 @@ export const TicketModal = ({ open, setOpen, defaultValue, onlyReading }) => {
 
   const onInputTicketFieldBlur = async ({ target: { name, value } }) => {
     if (value !== "" && !ticket) {
-      return await createTicketMutation({ [name]: value });
+      return await createTicketMutation({
+        body: {
+          [name]: value,
+        },
+      });
     }
 
     if (value !== "" && value !== ticket?.[name]) {
