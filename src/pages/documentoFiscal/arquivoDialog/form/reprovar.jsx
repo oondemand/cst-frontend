@@ -25,6 +25,9 @@ import {
   SelectTrigger,
   SelectValueText,
 } from "../../../../components/ui/select";
+import { useUpdateDocumentoFiscal } from "../../../../hooks/api/documento-fiscal/useUpdateDocumentoFiscal";
+import { ORIGENS } from "../../../../constants/origens";
+import { useReprovarDocumentoFiscal } from "../../../../hooks/api/documento-fiscal/useReprovarDocumentoFiscal";
 
 const reprovacaoSchema = z.object({
   motivoRecusa: z.string({ message: "Selecione um motivo." }),
@@ -47,32 +50,12 @@ export const ReprovarForm = ({ documentoFiscalId }) => {
       })) ?? [],
   });
 
-  const { mutateAsync: reprovarDocumento } = useMutation({
-    mutationFn: async ({ motivoRecusa, observacao, observacaoPrestador }) =>
-      await DocumentosFiscaisService.atualizarDocumentoFiscal({
-        body: {
-          motivoRecusa,
-          observacaoInterna: observacao,
-          observacaoPrestador,
-          statusValidacao: "recusado",
-        },
-        id: documentoFiscalId,
-      }),
-    onSuccess: () => {
+  const reprovarDocumento = useReprovarDocumentoFiscal({
+    onSuccess: () =>
       queryClient.invalidateQueries({
         queryKey: ["listar-documentos-fiscais"],
-      });
-      toaster.create({
-        title: "Documento fiscal reprovado com sucesso!",
-        type: "success",
-      });
-    },
-    onError: () => {
-      toaster.create({
-        title: "Ouve um erro ao reprovar o documento fiscal!",
-        type: "error",
-      });
-    },
+      }),
+    origem: ORIGENS.APROVACAO_DOCUMENTO_FISCAL,
   });
 
   const {
@@ -90,8 +73,20 @@ export const ReprovarForm = ({ documentoFiscalId }) => {
     },
   });
 
-  const handleReprovarDocumento = async (data) => {
-    await reprovarDocumento(data);
+  const handleReprovarDocumento = async ({
+    motivoRecusa,
+    observacao,
+    observacaoPrestador,
+  }) => {
+    await reprovarDocumento.mutateAsync({
+      body: {
+        motivoRecusa,
+        observacaoInterna: observacao,
+        observacaoPrestador,
+        statusValidacao: "recusado",
+      },
+      id: documentoFiscalId,
+    });
   };
 
   return (

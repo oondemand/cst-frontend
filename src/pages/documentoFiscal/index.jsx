@@ -9,6 +9,7 @@ import { DocumentosFiscaisDialog } from "./dialog";
 import { useNavigate } from "react-router-dom";
 import { useDataGrid } from "../../hooks/useDataGrid";
 import { useUpdateDocumentoFiscal } from "../../hooks/api/documento-fiscal/useUpdateDocumentoFiscal";
+import { ORIGENS } from "../../constants/origens";
 
 export const DocumentosFiscaisList = () => {
   const navigate = useNavigate();
@@ -48,19 +49,19 @@ export const DocumentosFiscaisList = () => {
   const updateDocumentoFiscal = useUpdateDocumentoFiscal({
     onSuccess: () =>
       queryClient.invalidateQueries(["listar-documentos-fiscais", { filters }]),
+    origem: ORIGENS.DATAGRID,
   });
 
   const getAllDocumentosFiscaisWithFilters = async (pageSize) => {
-    const { documentosFiscais } =
-      await DocumentosFiscaisService.listarDocumentosFiscais({
-        filters: {
-          ...filters,
-          pageSize: pageSize ? pageSize : data?.pagination?.totalItems,
-          pageIndex: 0,
-        },
-      });
+    const { results } = await DocumentosFiscaisService.listarDocumentosFiscais({
+      filters: {
+        ...filters,
+        pageSize: pageSize ? pageSize : data?.pagination?.totalItems,
+        pageIndex: 0,
+      },
+    });
 
-    return documentosFiscais;
+    return results;
   };
 
   return (
@@ -85,7 +86,7 @@ export const DocumentosFiscaisList = () => {
               form={DocumentosFiscaisDialog}
               exportDataFn={getAllDocumentosFiscaisWithFilters}
               importDataFn={() => navigate("/documentos-fiscais/importacao")}
-              data={data?.documentosFiscais || []}
+              data={data?.results || []}
               isDataLoading={isLoading || isFetching}
               rowCount={data?.pagination?.totalItems}
               onUpdateData={async (values) => {

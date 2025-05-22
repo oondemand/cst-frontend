@@ -20,6 +20,7 @@ import {
   DefaultTrigger,
   IconTrigger,
 } from "../../components/formDialog/form-trigger";
+import { ORIGENS } from "../../constants/origens";
 
 export const DocumentosFiscaisDialog = ({
   defaultValues = null,
@@ -34,15 +35,17 @@ export const DocumentosFiscaisDialog = ({
 
   const updateDocumentoFiscal = useUpdateDocumentoFiscal({
     onSuccess: (data) => open && setData(() => data?.documentoFiscal),
+    origem: ORIGENS.FORM,
   });
 
   const createDocumentoFiscal = useCreateDocumentoFiscal({
+    origem: ORIGENS.FORM,
     onSuccess: (data) => open && setData(() => data?.documentoFiscal),
   });
 
   const uploadFile = useUploadFileToDocumentoFiscal({
-    onSuccess: (data) => {
-      const { nomeOriginal, mimetype, size, tipo, _id } = data;
+    onSuccess: ({ data }) => {
+      const { nomeOriginal, mimetype, size, tipo, _id } = data.arquivo;
       setData((prev) => ({
         ...prev,
         arquivo: { nomeOriginal, mimetype, size, tipo, _id },
@@ -130,7 +133,10 @@ export const DocumentosFiscaisDialog = ({
             <FileUploadRoot
               accept={["application/pdf"]}
               onFileAccept={async (e) => {
-                await uploadFile.mutateAsync({ files: e.files });
+                await uploadFile.mutateAsync({
+                  files: e.files[0],
+                  id: data?._id,
+                });
               }}
             >
               <FileUploadTrigger>

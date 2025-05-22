@@ -10,6 +10,7 @@ import { queryClient } from "../../../../config/react-query";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { ORIGENS } from "../../../../constants/origens";
 
 const servicoSchema = z.object({
   servicos: z.array(z.object({ _id: z.string() }).transform((e) => e._id)),
@@ -31,7 +32,10 @@ export const AprovarForm = ({
 
   const { mutateAsync: onAprovarDocumento, isPending } = useMutation({
     mutationFn: async ({ body }) =>
-      await DocumentosFiscaisService.aprovarDocumentoFiscal({ body }),
+      await DocumentosFiscaisService.aprovarDocumentoFiscal({
+        body,
+        origem: ORIGENS.APROVACAO_DOCUMENTO_FISCAL,
+      }),
     onSuccess: () => {
       toaster.create({
         title: "Documento fiscal aprovado com sucesso",

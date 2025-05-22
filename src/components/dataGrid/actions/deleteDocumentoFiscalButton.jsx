@@ -3,15 +3,20 @@ import { Trash } from "lucide-react";
 import { useMutation } from "@tanstack/react-query";
 import { toaster } from "../../ui/toaster";
 import { queryClient } from "../../../config/react-query";
-import { api } from "../../../config/api";
 import { useConfirmation } from "../../../hooks/useConfirmation";
 import { Tooltip } from "../../ui/tooltip";
+import { DocumentosFiscaisService } from "../../../service/documentos-fiscais";
+import { ORIGENS } from "../../../constants/origens";
 
 export const DeleteDocumentoFiscalAction = ({ id }) => {
   const { requestConfirmation } = useConfirmation();
 
   const { mutateAsync: deleteDocumentoFiscalMutation } = useMutation({
-    mutationFn: async () => await api.delete(`/documentos-fiscais/${id}`),
+    mutationFn: async () =>
+      await DocumentosFiscaisService.deletarDocumentoFiscal({
+        id,
+        origem: ORIGENS.DATAGRID,
+      }),
     onSuccess() {
       queryClient.refetchQueries(["listar-documentos-fiscais"]);
       toaster.create({

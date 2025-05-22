@@ -15,23 +15,43 @@ const listarDocumentosFiscaisPorPrestador = async ({
   return data;
 };
 
-const criarDocumentoFiscal = async ({ body }) => {
-  const { data } = await api.post("/documentos-fiscais", body);
+const criarDocumentoFiscal = async ({ body, origem }) => {
+  const { data } = await api.post("/documentos-fiscais", body, {
+    headers: {
+      "x-origem": origem,
+    },
+  });
   return data;
 };
 
-const atualizarDocumentoFiscal = async ({ id, body }) => {
-  const { data } = await api.patch(`/documentos-fiscais/${id}`, body);
+const atualizarDocumentoFiscal = async ({ id, body, origem }) => {
+  const { data } = await api.patch(`/documentos-fiscais/${id}`, body, {
+    headers: {
+      "x-origem": origem,
+    },
+  });
   return data;
 };
 
-const atualizarStatus = async ({ ids, status }) => {
-  const { data } = await api.patch(`/documentos-fiscais`, { ids, status });
+const reprovarDocumentoFiscal = async ({ id, body, origem }) => {
+  const { data } = await api.post(
+    `/documentos-fiscais/reprovar-documento/${id}`,
+    body,
+    {
+      headers: {
+        "x-origem": origem,
+      },
+    }
+  );
   return data;
 };
 
-const deletarDocumentoFiscal = async ({ id }) => {
-  const { data } = await api.delete(`/documentos-fiscais/${id}`);
+const deletarDocumentoFiscal = async ({ id, origem }) => {
+  const { data } = await api.delete(`/documentos-fiscais/${id}`, {
+    headers: {
+      "x-origem": origem,
+    },
+  });
   return data;
 };
 
@@ -73,10 +93,11 @@ const importarDocumentosFiscais = async ({ files }) => {
   return response;
 };
 
-const aprovarDocumentoFiscal = async ({ body }) => {
+const aprovarDocumentoFiscal = async ({ body, origem }) => {
   const { data } = await api.post(
     `/documentos-fiscais/aprovar-documento`,
-    body
+    body,
+    { headers: { "x-origem": origem } }
   );
   return data;
 };
@@ -87,9 +108,9 @@ export const DocumentosFiscaisService = {
   atualizarDocumentoFiscal,
   deletarDocumentoFiscal,
   listarDocumentosFiscaisPorPrestador,
-  atualizarStatus,
   anexarArquivo,
   deleteFile,
   importarDocumentosFiscais,
   aprovarDocumentoFiscal,
+  reprovarDocumentoFiscal,
 };
