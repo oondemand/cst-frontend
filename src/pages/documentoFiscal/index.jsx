@@ -21,10 +21,6 @@ export const DocumentosFiscaisList = () => {
       header: "Nome Prestador",
     },
     {
-      accessorKey: "prestador.sid",
-      header: "SID Prestador",
-    },
-    {
       accessorKey: "prestador.documento",
       header: "Documento Prestador",
     },
