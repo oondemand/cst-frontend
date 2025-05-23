@@ -33,7 +33,10 @@ export const TicketActions = ({ ticketId, etapa }) => {
   const { mutateAsync: aproveTicketMutation, isPending: isAprovePending } =
     useMutation({
       mutationFn: async () =>
-        await TicketService.aprovarTicket({ id: ticketId }),
+        await TicketService.aprovarTicket({
+          id: ticketId,
+          origem: ORIGENS.ESTEIRA,
+        }),
       onSuccess: () => {
         queryClient.invalidateQueries(["listar-tickets"]);
         toaster.create({
@@ -49,7 +52,10 @@ export const TicketActions = ({ ticketId, etapa }) => {
   const { mutateAsync: reproveTicketMutation, isPending: isReprovePending } =
     useMutation({
       mutationFn: async () =>
-        await TicketService.reprovarTicket({ id: ticketId }),
+        await TicketService.reprovarTicket({
+          id: ticketId,
+          origem: ORIGENS.ESTEIRA,
+        }),
       onSuccess: () => {
         queryClient.invalidateQueries(["listar-tickets"]);
         toaster.create({

@@ -28,13 +28,29 @@ const listarTickets = async (filtro) => {
   return data;
 };
 
-const aprovarTicket = async ({ id }) => {
-  const response = await api.post(`/aprovacoes/${id}/aprovar`);
+const aprovarTicket = async ({ id, origem }) => {
+  const response = await api.post(
+    `/aprovacoes/${id}/aprovar`,
+    {},
+    {
+      headers: {
+        "x-origem": origem,
+      },
+    }
+  );
   return response.data;
 };
 
-const reprovarTicket = async ({ id }) => {
-  const response = await api.post(`/aprovacoes/${id}/recusar`);
+const reprovarTicket = async ({ id, origem }) => {
+  const response = await api.post(
+    `/aprovacoes/${id}/recusar`,
+    {},
+    {
+      headers: {
+        "x-origem": origem,
+      },
+    }
+  );
   return response.data;
 };
 
