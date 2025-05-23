@@ -16,7 +16,7 @@ export const SelectContaCorrenteField = ({ ...props }) => {
 
   const options = useMemo(
     () =>
-      data?.map((e) => ({
+      data?.lista?.map((e) => ({
         value: e?.nCodCC,
         label: `${e?.descricao} ${e?.nCodCC}`,
       })),

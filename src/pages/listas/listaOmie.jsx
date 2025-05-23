@@ -4,6 +4,7 @@ import { RotateCw } from "lucide-react";
 import { Tooltip } from "../../components/ui/tooltip";
 import { toaster } from "../../components/ui/toaster";
 import { ListaOmieService } from "../../service/lista-omie";
+import { ORIGENS } from "../../constants/origens";
 
 export const ListaOmieComponent = () => {
   const { data } = useQuery({
@@ -12,7 +13,8 @@ export const ListaOmieComponent = () => {
   });
 
   const { mutateAsync: onSyncOmieLista, isPending } = useMutation({
-    mutationFn: async ({ id }) => ListaOmieService.update({ id }),
+    mutationFn: async ({ id }) =>
+      ListaOmieService.update({ id, origem: ORIGENS.FORM }),
     onSuccess: () => {
       toaster.create({
         title: "Lista sincronizada com sucesso!",
@@ -30,7 +32,7 @@ export const ListaOmieComponent = () => {
 
   return (
     <Box p="4">
-      {data?.map((item) => {
+      {data?.lista?.map((item) => {
         return (
           <Flex
             key={item._id}

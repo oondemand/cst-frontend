@@ -10,8 +10,16 @@ const getListas = async () => {
   return data;
 };
 
-const update = async ({ id }) => {
-  return await api.put(`/lista-omie/sync-omie/${id}`);
+const update = async ({ id, origem }) => {
+  return await api.put(
+    `/lista-omie/sync-omie/${id}`,
+    {},
+    {
+      headers: {
+        "x-origem": origem,
+      },
+    }
+  );
 };
 
 export const ListaOmieService = {

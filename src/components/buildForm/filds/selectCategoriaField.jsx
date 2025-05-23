@@ -16,7 +16,7 @@ export const SelectCategoriaField = ({ ...props }) => {
 
   const options = useMemo(
     () =>
-      data?.map((e) => ({
+      data?.lista?.map((e) => ({
         value: e?.codigo,
         label: `${e?.descricao} ${e?.codigo}`,
       })),
