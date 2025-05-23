@@ -5,8 +5,12 @@ const obterConfiguracoesSistema = async () => {
   return data;
 };
 
-const atualizarConfiguracoesSistema = async ({ id, body }) => {
-  const { data } = await api.put(`/sistema/${id}`, body);
+const atualizarConfiguracoesSistema = async ({ id, body, origem }) => {
+  const { data } = await api.put(`/sistema/${id}`, body, {
+    headers: {
+      "x-origem": origem,
+    },
+  });
   return data;
 };
 

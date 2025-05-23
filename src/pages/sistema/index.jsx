@@ -8,6 +8,7 @@ import { toaster } from "../../components/ui/toaster";
 import { formatDate } from "../../utils/formatting";
 import { TesteEnvioEmailDialog } from "./dialog";
 import { queryClient } from "../../config/react-query";
+import { ORIGENS } from "../../constants/origens";
 
 export const SistemaPage = () => {
   const forms = useMemo(() => FORMS, []);
@@ -19,7 +20,11 @@ export const SistemaPage = () => {
 
   const { mutateAsync: updateConfigMutation } = useMutation({
     mutationFn: async ({ body, id }) =>
-      SistemaService.atualizarConfiguracoesSistema({ body, id }),
+      SistemaService.atualizarConfiguracoesSistema({
+        body,
+        id,
+        origem: ORIGENS.FORM,
+      }),
     onSuccess: () => {
       queryClient.invalidateQueries(["list-sistema"]);
       toaster.create({

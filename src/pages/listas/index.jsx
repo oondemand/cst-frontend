@@ -17,6 +17,7 @@ import { queryClient } from "../../config/react-query";
 
 import { useConfirmation } from "../../hooks/useConfirmation";
 import { ListaOmieComponent } from "./listaOmie";
+import { ORIGENS } from "../../constants/origens";
 
 export function Listas() {
   const [tab, setTab] = useStateWithStorage("LISTAS-TAB");
@@ -29,7 +30,11 @@ export function Listas() {
 
   const { mutateAsync: onAddItemMutation } = useMutation({
     mutationFn: async ({ id, values }) =>
-      await api.post(`listas/${id}`, values),
+      await api.post(`listas/${id}`, values, {
+        headers: {
+          "x-origem": ORIGENS.FORM,
+        },
+      }),
     onSuccess: () => {
       queryClient.invalidateQueries(["listas"]);
       toaster.create({
@@ -47,7 +52,11 @@ export function Listas() {
 
   const { mutateAsync: onDeleteItemMutation } = useMutation({
     mutationFn: async ({ id, itemId }) =>
-      await api.delete(`listas/${id}/${itemId}`),
+      await api.delete(`listas/${id}/${itemId}`, {
+        headers: {
+          "x-origem": ORIGENS.FORM,
+        },
+      }),
     onSuccess: () => {
       queryClient.invalidateQueries(["listas"]);
       toaster.create({
@@ -65,10 +74,18 @@ export function Listas() {
 
   const { mutateAsync: onUpdateItemMutation } = useMutation({
     mutationFn: async ({ id, itemId, key, value }) =>
-      await api.put(`listas/${id}`, {
-        itemId,
-        [key]: value,
-      }),
+      await api.put(
+        `listas/${id}`,
+        {
+          itemId,
+          [key]: value,
+        },
+        {
+          headers: {
+            "x-origem": ORIGENS.FORM,
+          },
+        }
+      ),
     onSuccess: () => {
       queryClient.invalidateQueries(["listas"]);
       toaster.create({
@@ -111,8 +128,8 @@ export function Listas() {
         >
           <Tabs.List>
             {data &&
-              data?.length > 0 &&
-              data.map((item) => (
+              data?.listas?.length > 0 &&
+              data.listas.map((item) => (
                 <Tabs.Trigger
                   color="gray.500"
                   value={item?.codigo}
@@ -128,8 +145,8 @@ export function Listas() {
             </Tabs.Trigger>
           </Tabs.List>
           {data &&
-            data?.length > 0 &&
-            data.map((lista) => (
+            data?.listas?.length > 0 &&
+            data.listas.map((lista) => (
               <Tabs.Content key={lista?.codigo} value={lista?.codigo} p="0">
                 <Box
                   px="6"
