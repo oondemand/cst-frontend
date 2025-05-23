@@ -2,10 +2,10 @@ import { useMutation } from "@tanstack/react-query";
 import { toaster } from "../../../components/ui/toaster";
 import { AssistantConfigService } from "../../../service/assistant-config";
 
-export const useCreateAssistantConfig = ({ onSuccess }) =>
+export const useCreateAssistantConfig = ({ onSuccess, origem }) =>
   useMutation({
     mutationFn: async ({ body }) =>
-      await AssistantConfigService.adicionarAssistenteConfig({ body }),
+      await AssistantConfigService.adicionarAssistenteConfig({ body, origem }),
 
     onSuccess(data) {
       onSuccess?.(data);

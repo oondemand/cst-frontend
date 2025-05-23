@@ -10,13 +10,21 @@ const listarAssistenteConfig = async ({ filters }) => {
   return data;
 };
 
-const alterarAssistenteConfig = async ({ id, body }) => {
-  const { data } = await api.put(`/assistentes/${id}`, body);
+const alterarAssistenteConfig = async ({ id, body, origem }) => {
+  const { data } = await api.put(`/assistentes/${id}`, body, {
+    headers: {
+      "x-origem": origem,
+    },
+  });
   return data;
 };
 
-const adicionarAssistenteConfig = async ({ body }) => {
-  const { data } = await api.post("/assistentes", body);
+const adicionarAssistenteConfig = async ({ body, origem }) => {
+  const { data } = await api.post("/assistentes", body, {
+    headers: {
+      "x-origem": origem,
+    },
+  });
   return data;
 };
 

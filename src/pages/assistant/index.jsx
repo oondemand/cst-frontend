@@ -8,6 +8,7 @@ import { queryClient } from "../../config/react-query";
 import { AssistenteConfigDialog } from "./dialog";
 import { AssistantConfigService } from "../../service/assistant-config";
 import { useUpdateAssistantConfig } from "../../hooks/api/assistant-config/useUpdateAssistantConfig";
+import { ORIGENS } from "../../constants/origens";
 
 export const AssistenteConfigPage = () => {
   const columns = useMemo(() => makeAssistenteConfigDynamicColumns({}), []);
@@ -21,6 +22,7 @@ export const AssistenteConfigPage = () => {
   });
 
   const updateAssistantConfig = useUpdateAssistantConfig({
+    origem: ORIGENS.DATAGRID,
     onSuccess: () =>
       queryClient.refetchQueries(["listar-assistente-config", { filters }]),
   });
@@ -44,7 +46,7 @@ export const AssistenteConfigPage = () => {
           <DataGrid
             table={table}
             form={AssistenteConfigDialog}
-            data={data?.assistentes || []}
+            data={data?.results || []}
             rowCount={data?.pagination?.totalItems}
             isDataLoading={isLoading || isFetching}
             onUpdateData={async (values) => {

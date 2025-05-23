@@ -6,12 +6,18 @@ import { queryClient } from "../../../config/react-query";
 import { api } from "../../../config/api";
 import { useConfirmation } from "../../../hooks/useConfirmation";
 import { Tooltip } from "../../ui/tooltip";
+import { ORIGENS } from "../../../constants/origens";
 
 export const DeleteAssistenteConfigAction = ({ id }) => {
   const { requestConfirmation } = useConfirmation();
 
   const { mutateAsync: deleteAssistenteConfigMutation } = useMutation({
-    mutationFn: async () => await api.delete(`assistentes/${id}`),
+    mutationFn: async () =>
+      await api.delete(`assistentes/${id}`, {
+        headers: {
+          "x-origem": ORIGENS.DATAGRID,
+        },
+      }),
     onSuccess() {
       queryClient.invalidateQueries(["listar-assistente-config"]);
       toaster.create({

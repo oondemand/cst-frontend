@@ -11,6 +11,7 @@ import {
   DefaultTrigger,
   IconTrigger,
 } from "../../components/formDialog/form-trigger";
+import { ORIGENS } from "../../constants/origens";
 
 export const AssistenteConfigDialog = ({
   defaultValues = null,
@@ -21,10 +22,12 @@ export const AssistenteConfigDialog = ({
   const fields = useMemo(() => createDynamicFormFields(), [data]);
 
   const updateAssistenteConfig = useUpdateAssistantConfig({
+    origem: ORIGENS.FORM,
     onSuccess: (data) => open && setData(data),
   });
 
   const createAssistenteConfig = useCreateAssistantConfig({
+    origem: ORIGENS.FORM,
     onSuccess: (data) => open && setData(data),
   });
 
