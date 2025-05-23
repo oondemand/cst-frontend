@@ -9,6 +9,7 @@ import { EtapaService } from "../../service/etapa";
 import { EtapasDialog } from "./dialog";
 import { useUpdateEtapa } from "../../hooks/api/etapas/useUpdateEtapa";
 import { queryClient } from "../../config/react-query";
+import { ORIGENS } from "../../constants/origens";
 
 export const EtapasPage = () => {
   const columns = useMemo(() => makeEtapasDynamicColumns({}), []);
@@ -22,6 +23,7 @@ export const EtapasPage = () => {
   });
 
   const updateEtapa = useUpdateEtapa({
+    origem: ORIGENS.DATAGRID,
     onSuccess: () =>
       queryClient.invalidateQueries(["listar-etapas", { filters }]),
   });
@@ -45,7 +47,7 @@ export const EtapasPage = () => {
           <DataGrid
             table={table}
             form={EtapasDialog}
-            data={data?.etapas || []}
+            data={data?.results || []}
             rowCount={data?.pagination?.totalItems}
             isDataLoading={isLoading || isFetching}
             onUpdateData={async (values) => {

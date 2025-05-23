@@ -2,9 +2,9 @@ import { useMutation } from "@tanstack/react-query";
 import { toaster } from "../../../components/ui/toaster";
 import { EtapaService } from "../../../service/etapa";
 
-export const useCreateEtapa = ({ onSuccess }) =>
+export const useCreateEtapa = ({ onSuccess, origem }) =>
   useMutation({
-    mutationFn: async ({ body }) => await EtapaService.adicionarEtapa({ body }),
+    mutationFn: async ({ body }) => await EtapaService.adicionarEtapa({ body, origem }),
     onSuccess(data) {
       onSuccess?.(data);
       toaster.create({

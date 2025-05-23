@@ -6,12 +6,18 @@ import { queryClient } from "../../../config/react-query";
 import { api } from "../../../config/api";
 import { useConfirmation } from "../../../hooks/useConfirmation";
 import { Tooltip } from "../../ui/tooltip";
+import { ORIGENS } from "../../../constants/origens";
 
 export const DeleteEtapaAction = ({ id }) => {
   const { requestConfirmation } = useConfirmation();
 
   const { mutateAsync: deleteEtapaMutation } = useMutation({
-    mutationFn: async () => await api.delete(`etapas/${id}`),
+    mutationFn: async () =>
+      await api.delete(`etapas/${id}`, {
+        headers: {
+          "x-origem": ORIGENS.DATAGRID,
+        },
+      }),
     onSuccess() {
       queryClient.invalidateQueries(["listar-etapas"]);
       toaster.create({

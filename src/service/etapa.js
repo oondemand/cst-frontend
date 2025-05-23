@@ -10,13 +10,21 @@ const listarEtapas = async ({ filters }) => {
   return data;
 };
 
-const alterarEtapa = async ({ id, body }) => {
-  const { data } = await api.put(`/etapas/${id}`, body);
+const alterarEtapa = async ({ id, body, origem }) => {
+  const { data } = await api.put(`/etapas/${id}`, body, {
+    headers: {
+      "x-origem": origem,
+    },
+  });
   return data;
 };
 
-const adicionarEtapa = async ({ body }) => {
-  const { data } = await api.post("/etapas", body);
+const adicionarEtapa = async ({ body, origem }) => {
+  const { data } = await api.post("/etapas", body, {
+    headers: {
+      "x-origem": origem,
+    },
+  });
   return data;
 };
 

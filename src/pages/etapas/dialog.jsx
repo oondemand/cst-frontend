@@ -9,6 +9,7 @@ import {
 } from "../../components/formDialog/form-trigger";
 import { useCreateEtapa } from "../../hooks/api/etapas/useCreateEtapa";
 import { useUpdateEtapa } from "../../hooks/api/etapas/useUpdateEtapa";
+import { ORIGENS } from "../../constants/origens";
 
 export const EtapasDialog = ({
   defaultValues = null,
@@ -18,8 +19,12 @@ export const EtapasDialog = ({
   const [open, setOpen] = useState(false);
   const fields = useMemo(() => createDynamicFormFields(), [data]);
 
-  const createEtapa = useCreateEtapa({});
-  const updateEtapa = useUpdateEtapa({});
+  const createEtapa = useCreateEtapa({
+    origem: ORIGENS.FORM,
+  });
+  const updateEtapa = useUpdateEtapa({
+    origem: ORIGENS.FORM,
+  });
 
   const onSubmit = async (values) => {
     const body = {
