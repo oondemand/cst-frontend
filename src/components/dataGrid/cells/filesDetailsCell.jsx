@@ -11,7 +11,8 @@ export const FilesDetailsCell = (props) => {
   const { requestConfirmation } = useConfirmation();
 
   const { mutateAsync: deleteFileMutation } = useMutation({
-    mutationFn: async ({ id }) => await TicketService.deleteFile({ id }),
+    mutationFn: async ({ id }) =>
+      await TicketService.deleteFile({ id, ticketId: props.row.original?._id }),
     onSuccess: ({ data }) => {
       props.row.original.arquivos = props.row.original?.arquivos?.filter(
         (e) => e?._id !== data?._id
@@ -56,7 +57,7 @@ export const FilesDetailsCell = (props) => {
         saveAs(blob, data?.nomeOriginal);
       }
     } catch (error) {
-      console.log("Error", error);
+      console.log("error");
     }
   };
 
@@ -89,8 +90,6 @@ export const FilesDetailsCell = (props) => {
               <Popover.Title>Anexos</Popover.Title>
               <Flex flexDirection="column" minH="8" justifyContent="center">
                 {props.row.original?.arquivos?.map((item) => {
-                  console.log(item);
-
                   return (
                     <Flex
                       gap="8"

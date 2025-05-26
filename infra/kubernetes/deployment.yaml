@@ -1,27 +1,27 @@
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: cst-frontend
-  namespace: cst
-spec:
-  replicas: 2
-  selector:
-    matchLabels:
-      app: cst-frontend
-  template:
-    metadata:
-      labels:
-        app: cst-frontend
-    spec:
-      containers:
-        - name: cst-frontend-container
-          image: ghcr.io/oondemand/cst-frontend:${IMAGE_TAG}-prod
-          ports:
-            - containerPort: 3000
-          resources:
-            requests:
-              memory: "256Mi"
-              cpu: "0.5"
-            limits:
-              memory: "4096Mi"
-              cpu: "4"
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   name: cst-frontend
+#   namespace: cst
+# spec:
+#   replicas: 2
+#   selector:
+#     matchLabels:
+#       app: cst-frontend
+#   template:
+#     metadata:
+#       labels:
+#         app: cst-frontend
+#     spec:
+#       containers:
+#         - name: cst-frontend-container
+#           image: ghcr.io/oondemand/cst-frontend:${IMAGE_TAG}-prod
+#           ports:
+#             - containerPort: 3000
+#           resources:
+#             requests:
+#               memory: "256Mi"
+#               cpu: "0.5"
+#             limits:
+#               memory: "4096Mi"
+#               cpu: "4"

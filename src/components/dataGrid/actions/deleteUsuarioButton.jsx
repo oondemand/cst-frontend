@@ -1,4 +1,4 @@
-import { Button, IconButton } from "@chakra-ui/react";
+import { IconButton } from "@chakra-ui/react";
 import { Trash } from "lucide-react";
 import { useMutation } from "@tanstack/react-query";
 import { toaster } from "../../ui/toaster";
@@ -6,12 +6,15 @@ import { queryClient } from "../../../config/react-query";
 import { api } from "../../../config/api";
 import { useConfirmation } from "../../../hooks/useConfirmation";
 import { Tooltip } from "../../ui/tooltip";
+import { UsuarioService } from "../../../service/usuario";
+import { ORIGENS } from "../../../constants/origens";
 
 export const DeleteUsuarioAction = ({ id }) => {
   const { requestConfirmation } = useConfirmation();
 
   const { mutateAsync: deleteUsuarioMutation } = useMutation({
-    mutationFn: async () => await api.delete(`usuarios/${id}`),
+    mutationFn: async () =>
+      await UsuarioService.excluirUsuario({ id, origem: ORIGENS.DATAGRID }),
     onSuccess() {
       queryClient.invalidateQueries(["listar-usuarios"]);
       toaster.create({

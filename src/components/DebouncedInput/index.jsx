@@ -1,4 +1,4 @@
-import { Icon, Input } from "@chakra-ui/react";
+import { Input } from "@chakra-ui/react";
 import { useState, useEffect, forwardRef } from "react";
 import { InputGroup } from "../ui/input-group";
 import { Search } from "lucide-react";

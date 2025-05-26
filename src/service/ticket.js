@@ -1,12 +1,20 @@
 import { api } from "../config/api";
 
-const adicionarTicket = async (ticket) => {
-  const response = await api.post("tickets", ticket);
+const adicionarTicket = async ({ body, origem }) => {
+  const response = await api.post("tickets", body, {
+    headers: {
+      "x-origem": origem,
+    },
+  });
   return response.data;
 };
 
-const alterarTicket = async ({ id, body }) => {
-  const response = await api.patch(`tickets/${id}`, body);
+const alterarTicket = async ({ id, body, origem }) => {
+  const response = await api.patch(`tickets/${id}`, body, {
+    headers: {
+      "x-origem": origem,
+    },
+  });
   return response.data;
 };
 
@@ -20,22 +28,30 @@ const listarTickets = async (filtro) => {
   return data;
 };
 
-const aprovarTicket = async ({ id }) => {
-  const response = await api.post(`/aprovacoes/${id}/aprovar`);
+const aprovarTicket = async ({ id, origem }) => {
+  const response = await api.post(
+    `/aprovacoes/${id}/aprovar`,
+    {},
+    {
+      headers: {
+        "x-origem": origem,
+      },
+    }
+  );
   return response.data;
 };
 
-const reprovarTicket = async ({ id }) => {
-  const response = await api.post(`/aprovacoes/${id}/recusar`);
+const reprovarTicket = async ({ id, origem }) => {
+  const response = await api.post(
+    `/aprovacoes/${id}/recusar`,
+    {},
+    {
+      headers: {
+        "x-origem": origem,
+      },
+    }
+  );
   return response.data;
-};
-
-const salvarTicket = async (ticket) => {
-  if (ticket._id) {
-    return alterarTicket(ticket._id, ticket);
-  } else {
-    return adicionarTicket(ticket);
-  }
 };
 
 const uploadFiles = async ({ ticketId, files }) => {
@@ -51,29 +67,81 @@ const uploadFiles = async ({ ticketId, files }) => {
   });
 };
 
-const deleteFile = async ({ id }) => {
-  return await api.delete(`/tickets/arquivo/${id}`);
+const deleteFile = async ({ id, ticketId }) => {
+  return await api.delete(`/tickets/arquivo/${ticketId}/${id}`);
+};
+
+const arquivarTicket = async ({ id, origem }) => {
+  return await api.post(
+    `/tickets/arquivar/${id}`,
+    {},
+    {
+      headers: {
+        "x-origem": origem,
+      },
+    }
+  );
 };
 
 const getFile = async ({ id }) => {
   return await api.get(`/tickets/arquivo/${id}`);
 };
 
-const listarArquivosDoTicket = async (filtro) => {
-  const { data } = await api.get(`/tickets/${filtro}/arquivos`);
-  return data;
-};
-
-const adicionarServico = async ({ ticketId, servicoId }) => {
+const adicionarServico = async ({ ticketId, servicoId, origem }) => {
   const { data } = await api.post(
-    `/tickets/adicionar-servico/${ticketId}/${servicoId}`
+    `/tickets/adicionar-servico/${ticketId}/${servicoId}`,
+    {},
+    {
+      headers: {
+        "x-origem": origem,
+      },
+    }
   );
 
   return data;
 };
 
-const removerServico = async ({ servicoId }) => {
-  const { data } = await api.post(`/tickets/remover-servico/${servicoId}`);
+const removerServico = async ({ servicoId, origem }) => {
+  const { data } = await api.post(
+    `/tickets/remover-servico/${servicoId}`,
+    {},
+    {
+      headers: {
+        "x-origem": origem,
+      },
+    }
+  );
+  return data;
+};
+
+const adicionarDocumentoFiscal = async ({
+  ticketId,
+  documentoFiscalId,
+  origem,
+}) => {
+  const { data } = await api.post(
+    `/tickets/adicionar-documento-fiscal/${ticketId}/${documentoFiscalId}`,
+    {},
+    {
+      headers: {
+        "x-origem": origem,
+      },
+    }
+  );
+
+  return data;
+};
+
+const removerDocumentoFiscal = async ({ documentoFiscalId, origem }) => {
+  const { data } = await api.post(
+    `/tickets/remover-documento-fiscal/${documentoFiscalId}`,
+    {},
+    {
+      headers: {
+        "x-origem": origem,
+      },
+    }
+  );
   return data;
 };
 
@@ -91,6 +159,7 @@ export const TicketService = {
   listarTickets,
   adicionarTicket,
   alterarTicket,
+  arquivarTicket,
   aprovarTicket,
   reprovarTicket,
   deleteFile,
@@ -100,4 +169,7 @@ export const TicketService = {
   adicionarServico,
   listarTicketsArquivados,
   listarTicketsPagos,
+  adicionarDocumentoFiscal,
+  removerDocumentoFiscal,
+  carregarTicket,
 };

@@ -10,12 +10,14 @@ import {
 import { useStateWithStorage } from "../../hooks/useStateStorage";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { ListaService } from "../../service/listas";
-import { DeleteIcon, Trash2 } from "lucide-react";
+import { Trash2 } from "lucide-react";
 import { toaster } from "../../components/ui/toaster";
 import { api } from "../../config/api";
 import { queryClient } from "../../config/react-query";
 
 import { useConfirmation } from "../../hooks/useConfirmation";
+import { ListaOmieComponent } from "./listaOmie";
+import { ORIGENS } from "../../constants/origens";
 
 export function Listas() {
   const [tab, setTab] = useStateWithStorage("LISTAS-TAB");
@@ -28,7 +30,11 @@ export function Listas() {
 
   const { mutateAsync: onAddItemMutation } = useMutation({
     mutationFn: async ({ id, values }) =>
-      await api.post(`listas/${id}`, values),
+      await api.post(`listas/${id}`, values, {
+        headers: {
+          "x-origem": ORIGENS.FORM,
+        },
+      }),
     onSuccess: () => {
       queryClient.invalidateQueries(["listas"]);
       toaster.create({
@@ -46,7 +52,11 @@ export function Listas() {
 
   const { mutateAsync: onDeleteItemMutation } = useMutation({
     mutationFn: async ({ id, itemId }) =>
-      await api.delete(`listas/${id}/${itemId}`),
+      await api.delete(`listas/${id}/${itemId}`, {
+        headers: {
+          "x-origem": ORIGENS.FORM,
+        },
+      }),
     onSuccess: () => {
       queryClient.invalidateQueries(["listas"]);
       toaster.create({
@@ -64,10 +74,18 @@ export function Listas() {
 
   const { mutateAsync: onUpdateItemMutation } = useMutation({
     mutationFn: async ({ id, itemId, key, value }) =>
-      await api.put(`listas/${id}`, {
-        itemId,
-        [key]: value,
-      }),
+      await api.put(
+        `listas/${id}`,
+        {
+          itemId,
+          [key]: value,
+        },
+        {
+          headers: {
+            "x-origem": ORIGENS.FORM,
+          },
+        }
+      ),
     onSuccess: () => {
       queryClient.invalidateQueries(["listas"]);
       toaster.create({
@@ -99,7 +117,7 @@ export function Listas() {
       <Text fontSize="lg" color="gray.700" fontWeight="semibold">
         Listas
       </Text>
-      <Flex mt="4">
+      <Flex mt="4" gap="4">
         <Tabs.Root
           value={tab}
           onValueChange={(e) => setTab(e.value)}
@@ -110,12 +128,9 @@ export function Listas() {
         >
           <Tabs.List>
             {data &&
-              data?.length > 0 &&
-              data.map((item) => (
+              data?.listas?.length > 0 &&
+              data.listas.map((item) => (
                 <Tabs.Trigger
-                  // fontSize="xs"
-                  // h="6"
-                  // rounded="lg"
                   color="gray.500"
                   value={item?.codigo}
                   key={item?.codigo}
@@ -124,19 +139,19 @@ export function Listas() {
                     item?.codigo.slice(1).replace(/[-_]/g, " ")}
                 </Tabs.Trigger>
               ))}
+
+            <Tabs.Trigger color="gray.500" value="omie">
+              Omie
+            </Tabs.Trigger>
           </Tabs.List>
           {data &&
-            data?.length > 0 &&
-            data.map((lista) => (
+            data?.listas?.length > 0 &&
+            data.listas.map((lista) => (
               <Tabs.Content key={lista?.codigo} value={lista?.codigo} p="0">
                 <Box
-                  // mt="8"
                   px="6"
                   py="4"
                   pb="8"
-                  // bg="white"
-                  // rounded="lg"
-                  // shadow="sm"
                   maxH="600px"
                   overflow="auto"
                   className="custom-scrollbar"
@@ -190,7 +205,7 @@ export function Listas() {
                             itemId: item._id,
                           });
                         }}
-                        variant="surface"
+                        variant="subtle"
                         colorPalette="red"
                         size="2xs"
                       >
@@ -201,6 +216,10 @@ export function Listas() {
                 </Box>
               </Tabs.Content>
             ))}
+
+          <Tabs.Content value="omie" p="0">
+            <ListaOmieComponent />
+          </Tabs.Content>
         </Tabs.Root>
       </Flex>
     </Flex>

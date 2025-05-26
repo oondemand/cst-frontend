@@ -1,6 +1,5 @@
 import { Box, Flex, Text, Button } from "@chakra-ui/react";
 import { Repeat2 } from "lucide-react";
-import { useConfirmation } from "../../../../hooks/useConfirmation";
 
 import { toaster } from "../../../../components/ui/toaster";
 import { useMutation } from "@tanstack/react-query";
@@ -8,8 +7,6 @@ import { PlanejamentoService } from "../../../../service/planejamento";
 import { queryClient } from "../../../../config/react-query";
 
 export const SincronizacaoTab = () => {
-  const { requestConfirmation } = useConfirmation();
-
   const { mutateAsync: syncEsteiraMutation, isPending } = useMutation({
     mutationFn: PlanejamentoService.sincronizarEsteira,
     onSuccess: () => {

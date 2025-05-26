@@ -1,13 +1,13 @@
 import { Table, Popover, Portal } from "@chakra-ui/react";
 import { memo } from "react";
-import { JsonView, allExpanded } from "react-json-view-lite";
+import { JsonView, allExpanded, collapseAllNested } from "react-json-view-lite";
 import "react-json-view-lite/dist/index.css";
 
 import { flexRender } from "@tanstack/react-table";
 
 const customTheme = {};
 
-const TableBody = ({ rows, columns, data }) => {
+const TableBody = ({ rows }) => {
   return (
     <Table.Body>
       {rows.map((row) => (
@@ -38,7 +38,7 @@ const TableBody = ({ rows, columns, data }) => {
                   <JsonView
                     container={{ backgroundColor: "red" }}
                     data={row.original}
-                    shouldExpandNode={allExpanded}
+                    shouldExpandNode={collapseAllNested}
                     style={customTheme}
                   />
                 </Popover.Body>

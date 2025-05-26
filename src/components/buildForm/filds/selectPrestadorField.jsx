@@ -15,7 +15,7 @@ export const SelectPrestadorField = ({ ...props }) => {
         signal: abortControllerRef.current.signal,
       });
 
-      return data?.prestadores || [];
+      return data?.results || [];
     } catch (error) {
       if (error.name !== "AbortError") {
         console.error("Erro na requisição:", error);

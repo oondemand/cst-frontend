@@ -1,8 +1,7 @@
-import { Text, Box, Flex } from "@chakra-ui/react";
+import { Text, Flex } from "@chakra-ui/react";
 import { currency } from "../../../../utils/currency";
 import { CheckActionCell } from "../../../../components/dataGrid/actions/checkbox-cell";
 import { DefaultCell } from "../../../../components/dataGrid/cells/default";
-import { DateCell } from "../../../../components/dataGrid/cells/dateCell";
 import { formatDateToDDMMYYYY } from "../../../../utils/formatting";
 import { HeaderCheckActionCell } from "../../../../components/dataGrid/actions/header-checkbox-cell";
 import { TotalSumFooterCell } from "../../../../components/dataGrid/cells/totalSumFooterCell";

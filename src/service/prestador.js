@@ -1,50 +1,70 @@
 import { api } from "../config/api";
+import { ORIGENS } from "../constants/origens";
 
-export const listarPrestadores = async ({ filters }) => {
+const listarPrestadores = async ({ filters }) => {
   const { data } = await api.get("/prestadores", { params: filters });
+  return data;
+};
+
+const obterPrestador = async ({ id }) => {
+  const { data } = await api.get(`/prestadores/${id}`);
+  return data;
+};
+
+const criarPrestador = async ({ body, origem }) => {
+  const { data } = await api.post("/prestadores", body, {
+    headers: { "x-origem": origem },
+  });
 
   return data;
 };
 
-export const criarPrestador = async ({ body }) => {
-  const { data } = await api.post("/prestadores", body);
-
+const atualizarPrestador = async ({ id, body, origem }) => {
+  const { data } = await api.patch(`/prestadores/${id}`, body, {
+    headers: { "x-origem": origem },
+  });
   return data;
 };
 
-export const atualizarPrestador = async ({ id, body }) => {
-  const { data } = await api.patch(`/prestadores/${id}`, body);
-
-  return data;
+const excluirPrestador = async ({ id, origem }) => {
+  return await api.delete(`prestadores/${id}`, {
+    headers: { "x-origem": origem },
+  });
 };
 
-export const importarPrestadores = async ({ files }) => {
+const importarPrestadores = async ({ files }) => {
   const formData = new FormData();
   for (const file of files) {
     formData.append("file", file);
   }
 
-  const response = await api.post(
-    "/acoes-etapas/importar-prestadores",
-    formData,
-    {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    }
-  );
+  const response = await api.post("/prestadores/importar", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
 
   return response;
 };
 
-export const enviarConvite = async ({ prestador }) => {
-  return await api.post("/usuarios/enviar-convite", { prestador });
+const enviarConvite = async ({ prestador }) => {
+  return await api.post(
+    "/usuarios/enviar-convite",
+    { prestador },
+    {
+      headers: {
+        "x-origem": ORIGENS.DATAGRID,
+      },
+    }
+  );
 };
 
 export const PrestadorService = {
   listarPrestadores,
+  obterPrestador,
   criarPrestador,
   atualizarPrestador,
   importarPrestadores,
   enviarConvite,
+  excluirPrestador,
 };

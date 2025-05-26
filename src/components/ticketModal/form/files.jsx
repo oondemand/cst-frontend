@@ -18,8 +18,6 @@ export const FilesForm = ({ onlyReading, defaultValues, ticketId }) => {
     mutationFn: async ({ files }) =>
       await TicketService.uploadFiles({ ticketId, files }),
     onSuccess: ({ data }) => {
-      console.log("Arquivo enviado", data);
-
       const { nomeOriginal, mimetype, size, tipo, _id } = data?.arquivos[0];
       setFiles((prev) => [
         ...prev,
@@ -39,9 +37,10 @@ export const FilesForm = ({ onlyReading, defaultValues, ticketId }) => {
   });
 
   const { mutateAsync: deleteFileMutation } = useMutation({
-    mutationFn: async ({ id }) => await TicketService.deleteFile({ id }),
+    mutationFn: async ({ id }) =>
+      await TicketService.deleteFile({ id, ticketId }),
     onSuccess: ({ data }) => {
-      const filteredFiles = files.filter((e) => e?._id !== data?._id);
+      const filteredFiles = files.filter((e) => e?._id !== data?.arquivo?._id);
       setFiles(filteredFiles);
       toaster.create({
         title: "Arquivo deletado com sucesso",
@@ -82,7 +81,7 @@ export const FilesForm = ({ onlyReading, defaultValues, ticketId }) => {
         saveAs(blob, data?.nomeOriginal);
       }
     } catch (error) {
-      console.log("Error", error);
+      console.log("error");
     }
   };
 

@@ -1,6 +1,9 @@
 import { DefaultField } from "../../components/buildForm/filds/default";
 import { z } from "zod";
-import { preprocessEmptyToUndefined } from "../../utils/zodHelpers";
+import {
+  preprocessEmptyToUndefined,
+  dateValidation,
+} from "../../utils/zodHelpers";
 import { CpfCnpjField } from "../../components/buildForm/filds/cpfCnpjField";
 import { DateField } from "../../components/buildForm/filds/dateField";
 import { SelectListaField } from "../../components/buildForm/filds/selectListaField";
@@ -9,22 +12,7 @@ import { SelectEstadoField } from "../../components/buildForm/filds/selectEstado
 import { SelectBancoField } from "../../components/buildForm/filds/selectBancoField";
 import { SelectField } from "../../components/buildForm/filds/selectField";
 import { LISTA_PAISES_OMIE } from "../../constants/omie";
-import { parse, isValid } from "date-fns";
 import { PisPasepField } from "../../components/buildForm/filds/pisField";
-
-const dateValidation = z
-  .string()
-  .transform((value) => {
-    if (!value) return undefined;
-    return format(parse(value, "dd/MM/yyyy", new Date()), "yyyy/MM/dd");
-  })
-  .refine(
-    (value) => (value ? isValid(parse(value, "yyyy/MM/dd", new Date())) : true),
-    {
-      message: "Data inválida ",
-    }
-  )
-  .optional();
 
 export const createDynamicFormFields = () => {
   return [

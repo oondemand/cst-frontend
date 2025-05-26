@@ -19,8 +19,16 @@ const firstAccess = async ({ body, code }) => {
   });
 };
 
-const esqueciMinhaSenha = async (email) => {
-  return await api.post("/auth/esqueci-minha-senha", { email });
+const esqueciMinhaSenha = async ({ email, origem }) => {
+  return await api.post(
+    "/usuarios/esqueci-minha-senha",
+    { email },
+    {
+      headers: {
+        "x-origem": origem,
+      },
+    }
+  );
 };
 
 const criarNovaSenha = async (values) => {

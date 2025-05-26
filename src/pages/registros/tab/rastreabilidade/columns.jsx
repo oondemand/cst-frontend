@@ -1,9 +1,5 @@
 import React from "react";
-
-import { TableActionsCell } from "../../../../components/dataGrid/cells/tableActionsCell";
-
 import { DefaultCell } from "../../../../components/dataGrid/cells/default";
-// import { RestaurarTicketAction } from "../../../../components/dataGrid/actions/restaurarTicketArquivado";
 import { format } from "date-fns";
 
 export const makeTicketsArquivadosDynamicColumns = () => {
@@ -34,13 +30,13 @@ export const makeTicketsArquivadosDynamicColumns = () => {
       meta: { filterKey: "usuario.nome" },
     },
     {
-      accessorKey: "tipoRegistroAlterado",
+      accessorKey: "entidade",
       header: "Tipo de registro",
       cell: DefaultCell,
       enableSorting: false,
       enableColumnFilter: true,
       meta: {
-        filterKey: "tipoRegistroAlterado",
+        filterKey: "entidade",
         filterVariant: "select",
         filterOptions: [
           { value: "usuario", label: "Usuario" },
@@ -49,12 +45,12 @@ export const makeTicketsArquivadosDynamicColumns = () => {
       },
     },
     {
-      accessorKey: "idRegistroAlterado",
-      header: "Id",
+      accessorKey: "idRegistro",
+      header: "Id do registro",
       cell: DefaultCell,
       enableSorting: false,
       enableColumnFilter: true,
-      meta: { filterKey: "idRegistroAlterado" },
+      meta: { filterKey: "idRegistro" },
     },
     {
       accessorKey: "origem",

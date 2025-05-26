@@ -12,13 +12,17 @@ const listarServicosPorPrestador = async ({ prestadorId, dataRegistro }) => {
   return data;
 };
 
-const criarServico = async ({ body }) => {
-  const { data } = await api.post("/servicos", body);
+const criarServico = async ({ body, origem }) => {
+  const { data } = await api.post("/servicos", body, {
+    headers: { "x-origem": origem },
+  });
   return data;
 };
 
-const atualizarServico = async ({ id, body }) => {
-  const { data } = await api.patch(`servicos/${id}`, body);
+const atualizarServico = async ({ id, body, origem }) => {
+  const { data } = await api.patch(`servicos/${id}`, body, {
+    headers: { "x-origem": origem },
+  });
   return data;
 };
 
@@ -27,8 +31,10 @@ const atualizarStatus = async ({ ids, status }) => {
   return data;
 };
 
-const deletarServico = async ({ id }) => {
-  const { data } = await api.delete(`servicos/${id}`);
+const deletarServico = async ({ id, origem }) => {
+  const { data } = await api.delete(`servicos/${id}`, {
+    headers: { "x-origem": origem },
+  });
   return data;
 };
 
@@ -38,7 +44,7 @@ const importarServicos = async ({ files }) => {
     formData.append("file", file);
   }
 
-  const response = await api.post("acoes-etapas/importar-servicos", formData, {
+  const response = await api.post("servicos/importar", formData, {
     headers: {
       "Content-Type": "multipart/form-data",
     },

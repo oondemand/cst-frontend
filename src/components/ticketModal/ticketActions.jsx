@@ -1,11 +1,12 @@
 import { Flex, Button, useDialogContext } from "@chakra-ui/react";
-import { Check, File, Trash, X } from "lucide-react";
+import { Check, Trash, X } from "lucide-react";
 
 import { toaster } from "../ui/toaster";
 import { TicketService } from "../../service/ticket";
 import { useMutation } from "@tanstack/react-query";
 import { useConfirmation } from "../../hooks/useConfirmation";
 import { queryClient } from "../../config/react-query";
+import { ORIGENS } from "../../constants/origens";
 
 export const TicketActions = ({ ticketId, etapa }) => {
   const { setOpen } = useDialogContext();
@@ -14,16 +15,14 @@ export const TicketActions = ({ ticketId, etapa }) => {
   const { mutateAsync: arquiveTicketMutation, isPending: isArquivePending } =
     useMutation({
       mutationFn: async () =>
-        await TicketService.alterarTicket({
+        await TicketService.arquivarTicket({
           id: ticketId,
-          body: {
-            status: "arquivado",
-          },
+          origem: ORIGENS.ESTEIRA,
         }),
       onSuccess: () => {
         toaster.create({
           title: "Ticket arquivado com sucesso!",
-          type: "info",
+          type: "success",
         });
       },
       onError: () => {
@@ -34,7 +33,10 @@ export const TicketActions = ({ ticketId, etapa }) => {
   const { mutateAsync: aproveTicketMutation, isPending: isAprovePending } =
     useMutation({
       mutationFn: async () =>
-        await TicketService.aprovarTicket({ id: ticketId }),
+        await TicketService.aprovarTicket({
+          id: ticketId,
+          origem: ORIGENS.ESTEIRA,
+        }),
       onSuccess: () => {
         queryClient.invalidateQueries(["listar-tickets"]);
         toaster.create({
@@ -50,7 +52,10 @@ export const TicketActions = ({ ticketId, etapa }) => {
   const { mutateAsync: reproveTicketMutation, isPending: isReprovePending } =
     useMutation({
       mutationFn: async () =>
-        await TicketService.reprovarTicket({ id: ticketId }),
+        await TicketService.reprovarTicket({
+          id: ticketId,
+          origem: ORIGENS.ESTEIRA,
+        }),
       onSuccess: () => {
         queryClient.invalidateQueries(["listar-tickets"]);
         toaster.create({

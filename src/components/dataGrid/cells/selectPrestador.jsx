@@ -21,7 +21,7 @@ export const SelectPrestadorCell = ({
       const { data } = await api.get(`/prestadores?searchTerm=${inputValue}`, {
         signal: abortControllerRef.current.signal,
       });
-      return data?.prestadores || [];
+      return data?.results || [];
     } catch (error) {
       if (error.name !== "AbortError") {
         console.error("Erro na requisição:", error);
@@ -59,7 +59,7 @@ export const SelectPrestadorCell = ({
   const handleUpdate = async () => {
     try {
       await table.options.meta?.updateData({
-        prestadorId: row.original._id,
+        id: row.original._id,
         data: { [column.columnDef.accessorKey]: value.value },
       });
     } catch (error) {

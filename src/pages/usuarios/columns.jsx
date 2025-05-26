@@ -7,9 +7,6 @@ import { TableActionsCell } from "../../components/dataGrid/cells/tableActionsCe
 import { DeleteUsuarioAction } from "../../components/dataGrid/actions/deleteUsuarioButton";
 import { RecuperarSenhaUsuarioAction } from "../../components/dataGrid/actions/recuperarSenhaUsuario";
 
-import { IconButton } from "@chakra-ui/react";
-import { Pencil } from "lucide-react";
-
 export const makeUsuarioDynamicColumns = () => {
   return [
     {
@@ -20,11 +17,6 @@ export const makeUsuarioDynamicColumns = () => {
         <TableActionsCell>
           <DeleteUsuarioAction id={props.row.original?._id} />
           <UsuariosDialog
-            trigger={
-              <IconButton variant="surface" colorPalette="gray" size="2xs">
-                <Pencil />
-              </IconButton>
-            }
             label="Usuario"
             defaultValues={{
               ...props.row.original,
@@ -39,6 +31,7 @@ export const makeUsuarioDynamicColumns = () => {
       header: "Nome Completo",
       cell: DefaultEditableCell,
       enableColumnFilter: true,
+      enableSorting: false,
       meta: { filterKey: "nome" },
     },
     {
@@ -54,6 +47,7 @@ export const makeUsuarioDynamicColumns = () => {
         />
       ),
       enableColumnFilter: true,
+      enableSorting: false,
       meta: {
         filterKey: "tipo",
         filterVariant: "select",
@@ -68,6 +62,7 @@ export const makeUsuarioDynamicColumns = () => {
       header: "E-mail",
       cell: DefaultEditableCell,
       enableColumnFilter: true,
+      enableSorting: false,
       meta: { filterKey: "email" },
     },
     {
@@ -83,6 +78,7 @@ export const makeUsuarioDynamicColumns = () => {
         />
       ),
       enableColumnFilter: true,
+      enableSorting: false,
       meta: {
         filterKey: "status",
         filterVariant: "select",

@@ -8,16 +8,19 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { ConfirmationProvider } from "./hooks/useConfirmation";
 import { AuthProvider } from "./hooks/useAuth";
 import { Toaster } from "./components/ui/toaster";
+import { IaChatProvider } from "./hooks/useIaChat";
 
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <ReactQueryDevtools initialIsOpen={false} />
+      {/* <ReactQueryDevtools initialIsOpen={false} /> */}
       <ChakraProvider value={system}>
         <AuthProvider>
           <ConfirmationProvider>
-            <Toaster />
-            <RouterProvider router={router} />
+            <IaChatProvider>
+              <Toaster />
+              <RouterProvider router={router} />
+            </IaChatProvider>
           </ConfirmationProvider>
         </AuthProvider>
       </ChakraProvider>

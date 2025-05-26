@@ -62,7 +62,7 @@ export const ImportPrestadoresPage = () => {
       const blob = new Blob([byteArray], { type });
       saveAs(blob, name);
     } catch (error) {
-      console.log("Error", error);
+      console.log("error");
     }
   };
 
@@ -124,7 +124,10 @@ export const ImportPrestadoresPage = () => {
                 onValueChange={(e) => setOpen(e.value)}
               >
                 <Accordion.Item value={index}>
-                  <Accordion.ItemTrigger justifyContent="space-between" alignItems="start">
+                  <Accordion.ItemTrigger
+                    justifyContent="space-between"
+                    alignItems="start"
+                  >
                     <Flex gap="4" alignItems="start">
                       <Box>
                         <Text fontWeight="semibold" fontSize="lg">
@@ -157,17 +160,6 @@ export const ImportPrestadoresPage = () => {
                                   : "..."}
                               </Text>
                             </Box>
-
-                            {/* <Box>
-                              <Text fontSize="sm" color="gray.600">
-                                Total de Serviços criados
-                              </Text>
-                              <Text fontSize="2xl" fontWeight="bold">
-                                {data
-                                  ? importacao.detalhes?.novosPrestadores
-                                  : "..."}
-                              </Text>
-                            </Box> */}
 
                             <Box>
                               <Text fontSize="sm" color="gray.600">

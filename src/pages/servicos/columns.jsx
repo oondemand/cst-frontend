@@ -8,8 +8,6 @@ import { DisabledDefaultCell } from "../../components/dataGrid/cells/disabledDef
 import { SelectPrestadorCell } from "../../components/dataGrid/cells/selectPrestador";
 import { ServicosDialog } from "./dialog";
 import { formatDateToDDMMYYYY } from "../../utils/formatting";
-import { IconButton } from "@chakra-ui/react";
-import { Pencil } from "lucide-react";
 import { TableActionsCell } from "../../components/dataGrid/cells/tableActionsCell";
 import { DeleteServicoAction } from "../../components/dataGrid/actions/deleteServicoButton";
 import { DefaultEditableCell } from "../../components/dataGrid/cells/defaultEditable";
@@ -24,11 +22,6 @@ export const makeServicoDynamicColumns = () => {
         <TableActionsCell>
           <DeleteServicoAction id={props.row.original?._id} />
           <ServicosDialog
-            trigger={
-              <IconButton variant="surface" colorPalette="gray" size="2xs">
-                <Pencil />
-              </IconButton>
-            }
             label="Serviço"
             defaultValues={{
               ...props.row.original,

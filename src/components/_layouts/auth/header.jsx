@@ -2,12 +2,11 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Flex, Box, Text } from "@chakra-ui/react";
 import { MenuContent, MenuItem, MenuRoot, MenuTrigger } from "../../ui/menu";
-import { Settings, User } from "lucide-react";
+import { User } from "lucide-react";
 import { useConfirmation } from "../../../hooks/useConfirmation";
 import { useAuth } from "../../../hooks/useAuth";
 
 export const Header = () => {
-  const { user } = useAuth();
   const { requestConfirmation } = useConfirmation();
   const { logout } = useAuth();
 
@@ -33,7 +32,6 @@ export const Header = () => {
     >
       <Link to="/">
         <Box as="span" fontSize="xl" fontWeight="bold" color="brand.500">
-          {/* <img src="/logo_rakuten_purple.png" alt="RAKUTEN" /> */}
           <Text fontSize="2xl" fontWeight="700">
             oondemand
           </Text>

@@ -15,12 +15,11 @@ import { ServicoService } from "../../../service/servico";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { toaster } from "../../ui/toaster";
 import { useConfirmation } from "../../../hooks/useConfirmation";
-import { Tooltip } from "../../ui/tooltip";
-import { ServicoTooltipCard } from "./servicoTooltipCard";
 import { TicketService } from "../../../service/ticket";
 import { Select } from "chakra-react-select";
 import { chakraStyles } from "./select-chakra-styles";
 import { formatDateToDDMMYYYY } from "../../../utils/formatting";
+import { ORIGENS } from "../../../constants/origens";
 
 export const ServicoForm = ({ ticket, onlyReading }) => {
   const [servicos, setServicos] = useState(ticket?.servicos);
@@ -41,7 +40,7 @@ export const ServicoForm = ({ ticket, onlyReading }) => {
       }),
   });
 
-  const options = data?.map((e) => ({
+  const options = data?.servicos?.map((e) => ({
     label: `${e?.tipoDocumentoFiscal ?? ""} COMP. ${e?.competencia?.mes
       .toString()
       .padStart(2, "0")}/${
@@ -56,7 +55,10 @@ export const ServicoForm = ({ ticket, onlyReading }) => {
 
   const { mutateAsync: deleteServicoMutation } = useMutation({
     mutationFn: async ({ servicoId }) =>
-      await TicketService.removerServico({ servicoId }),
+      await TicketService.removerServico({
+        servicoId,
+        origem: ORIGENS.ESTEIRA,
+      }),
     onSuccess: ({ servicos }) => {
       setServicos(servicos);
       toaster.create({
@@ -77,9 +79,10 @@ export const ServicoForm = ({ ticket, onlyReading }) => {
       await TicketService.adicionarServico({
         ticketId: ticket?._id,
         servicoId,
+        origem: ORIGENS.ESTEIRA,
       }),
-    onSuccess: ({ servicos }) => {
-      setServicos(servicos);
+    onSuccess: ({ ticket }) => {
+      setServicos(ticket.servicos);
       toaster.create({
         title: "Serviço adicionado com sucesso!",
         type: "success",
@@ -146,9 +149,9 @@ export const ServicoForm = ({ ticket, onlyReading }) => {
               <Text color="gray.600" fontSize="sm">
                 Adicionar Serviço
               </Text>
-              {/* <Text color="gray.400" fontSize="xs">
+              <Text color="gray.400" fontSize="xs">
                 {formatDateToDDMMYYYY(ticket?.dataRegistro)}
-              </Text> */}
+              </Text>
             </Flex>
             <Select
               disabled={!ticket}
@@ -172,33 +175,13 @@ export const ServicoForm = ({ ticket, onlyReading }) => {
               <Table.Header>
                 <Table.Row>
                   <Table.ColumnHeader />
-
-                  <Table.ColumnHeader
-                    width="25%"
-                    color="gray.500"
-                    fontSize="sm"
-                  >
+                  <Table.ColumnHeader color="gray.500" fontSize="sm">
                     Competência
                   </Table.ColumnHeader>
-                  <Table.ColumnHeader
-                    width="50%"
-                    color="gray.500"
-                    fontSize="sm"
-                  >
+                  <Table.ColumnHeader color="gray.500" fontSize="sm">
                     Descrição
                   </Table.ColumnHeader>
-                  {/* <Table.ColumnHeader
-                    width="25%"
-                    color="gray.500"
-                    fontSize="sm"
-                  >
-                    Valor Revisão
-                  </Table.ColumnHeader> */}
-                  <Table.ColumnHeader
-                    width="25%"
-                    color="gray.500"
-                    fontSize="sm"
-                  >
+                  <Table.ColumnHeader color="gray.500" fontSize="sm">
                     Valor
                   </Table.ColumnHeader>
                   <Table.ColumnHeader width="20px" />
@@ -206,22 +189,6 @@ export const ServicoForm = ({ ticket, onlyReading }) => {
               </Table.Header>
               <Table.Body>
                 {servicos?.map((servico) => (
-                  // <Tooltip
-                  //   key={servico._id}
-                  //   content={<ServicoTooltipCard servico={servico} />}
-                  //   positioning={{ placement: "top" }}
-                  //   openDelay={1000}
-                  //   closeDelay={50}
-                  //   contentProps={{
-                  //     css: {
-                  //       "--tooltip-bg": "transparent",
-                  //       width: "700px !important",
-                  //       minWidth: "700px !important",
-                  //       color: "gray.600",
-                  //       shadow: "none",
-                  //     },
-                  //   }}
-                  // >
                   <Table.Row>
                     <Table.Cell>
                       <Text
@@ -241,25 +208,16 @@ export const ServicoForm = ({ ticket, onlyReading }) => {
                         {servico?.competencia?.ano}
                       </Text>
                     </Table.Cell>
-
                     <Table.Cell>
                       <Text truncate fontSize="xs" color="gray.400">
                         {servico?.descricao}
                       </Text>
                     </Table.Cell>
-
-                    {/* <Table.Cell>
-                        <Text fontSize="xs" color="gray.400">
-                          {currency.format(servico?.valores?.totalRevisao)}
-                        </Text>
-                      </Table.Cell> */}
-
                     <Table.Cell>
                       <Text fontSize="xs" fontWeight="medium">
-                        {currency.format(servico?.valor)}
+                        {currency.format(servico?.valor ?? 0)}
                       </Text>
                     </Table.Cell>
-
                     <Table.Cell>
                       {!onlyReading && (
                         <Button
@@ -275,7 +233,6 @@ export const ServicoForm = ({ ticket, onlyReading }) => {
                       )}
                     </Table.Cell>
                   </Table.Row>
-                  // </Tooltip>
                 ))}
               </Table.Body>
             </Table.Root>

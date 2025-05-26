@@ -17,7 +17,7 @@ export const DateCell = ({ getValue, row, column, table, ...rest }) => {
 
       try {
         await table.options.meta?.updateData({
-          prestadorId: row.original._id,
+          id: row.original._id,
           data: {
             [column.columnDef.accessorKey]: newDate,
           },

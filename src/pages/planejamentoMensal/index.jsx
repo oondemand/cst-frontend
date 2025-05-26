@@ -13,7 +13,7 @@ export function PlanejamentoMensal() {
     "selecao-manual"
   );
 
-  const { data, error, isLoading, isFetching } = useQuery({
+  const { data } = useQuery({
     queryKey: ["planejamento-estatisticas"],
     queryFn: async () => await PlanejamentoService.estatisticas(),
     placeholderData: keepPreviousData,
@@ -89,21 +89,10 @@ export function PlanejamentoMensal() {
                     ?.prestadoresCount ?? 0)}
               </Text>
             </Box>
-
-            {/* <Box>
-              <Text fontSize="sm" color="gray.500">
-                Valor Previsto
-              </Text>
-              <Text fontWeight="semibold" fontSize="3xl" color="brand.500">
-                -
-              </Text>
-            </Box> */}
           </Flex>
         </Flex>
       </Flex>
       <Flex mt="6">
-        {/* <Box w="250px" /> */}
-
         <Tabs.Root
           value={tab}
           onValueChange={(e) => setTab(e.value)}
@@ -114,8 +103,7 @@ export function PlanejamentoMensal() {
               fontSize="xs"
               h="6"
               rounded="lg"
-              color="white"
-              bg="orange.400"
+              color="gray.600"
               value="selecao-manual"
             >
               Seleção manual
@@ -124,8 +112,7 @@ export function PlanejamentoMensal() {
               fontSize="xs"
               h="6"
               rounded="lg"
-              color="white"
-              bg="orange.400"
+              color="gray.600"
               value="sincronizar"
             >
               Sincronizar

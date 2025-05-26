@@ -1,5 +1,5 @@
 import React, { memo, useState } from "react";
-import { Box, Flex, Heading, Separator, Text, Button } from "@chakra-ui/react";
+import { Box, Flex, Heading, Text } from "@chakra-ui/react";
 import { TicketCard } from "../ticketCard";
 
 import { useRef, useMemo } from "react";
@@ -7,10 +7,8 @@ import { useVirtualizer } from "@tanstack/react-virtual";
 import "./custom-scrollbar.css";
 
 import { SquarePlus } from "lucide-react";
-import { CreateTicketModal } from "../ticketModal/modalCreate";
+import { TicketModal } from "../ticketModal";
 import { Tooltip } from "../ui/tooltip";
-import { Link } from "react-router-dom";
-import { ArrowUpDown } from "lucide-react";
 
 const _Etapa = ({ etapa, tickets }) => {
   const [open, setOpen] = useState(false);
@@ -65,7 +63,6 @@ const _Etapa = ({ etapa, tickets }) => {
               </Text>
             </Tooltip>
           )}
-        
         </Flex>
       </Box>
 
@@ -112,7 +109,7 @@ const _Etapa = ({ etapa, tickets }) => {
           </Box>
         </Box>
       )}
-      {open && <CreateTicketModal open={open} setOpen={setOpen} />}
+      {open && <TicketModal open={open} setOpen={setOpen} />}
     </Box>
   );
 };

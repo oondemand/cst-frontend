@@ -16,6 +16,12 @@ import { RegistrosPage } from "./pages/registros";
 import { Listas } from "./pages/listas";
 import { SistemaPage } from "./pages/sistema";
 import { TicketsPagosPage } from "./pages/ticketsPagos";
+import { EtapasPage } from "./pages/etapas";
+import { DocumentosFiscaisList } from "./pages/documentoFiscal";
+import { ImportDocumentosFiscaisPage } from "./pages/documentoFiscal/importacao";
+import { AssistenteConfigPage } from "./pages/assistant";
+import { DocumentosCadastraisList } from "./pages/documentoCadastral";
+import { ImportDocumentosCadastraisPage } from "./pages/documentoCadastral/importacao";
 
 export const router = createBrowserRouter([
   {
@@ -23,18 +29,33 @@ export const router = createBrowserRouter([
     element: <AuthLayout />,
     children: [
       { path: "/", element: <Dashboard /> },
-      { path: "/servicos-tomados", element: <ServicosTomados /> },
+      {
+        path: "/servicos-tomados",
+        element: <ServicosTomados />,
+      },
       { path: "/planejamento", element: <PlanejamentoMensal /> },
       { path: "/prestadores", element: <PrestadoresList /> },
       { path: "/prestadores/importacao", element: <ImportPrestadoresPage /> },
       { path: "/servicos/todos", element: <ServicosList /> },
       { path: "/servicos/importacao", element: <ImportServicosPage /> },
+      { path: "/documentos-fiscais", element: <DocumentosFiscaisList /> },
+      { path: "/documentos-cadastrais", element: <DocumentosCadastraisList /> },
+      {
+        path: "/documentos-fiscais/importacao",
+        element: <ImportDocumentosFiscaisPage />,
+      },
+      {
+        path: "/documentos-cadastrais/importacao",
+        element: <ImportDocumentosCadastraisPage />,
+      },
       { path: "/usuarios", element: <UsuariosPage /> },
       { path: "/registros", element: <RegistrosPage /> },
       { path: "/listas", element: <Listas /> },
       { path: "/sistema", element: <SistemaPage /> },
       { path: "/doc", element: <Doc /> },
       { path: "/pagos", element: <TicketsPagosPage /> },
+      { path: "/etapas", element: <EtapasPage /> },
+      { path: "/assistentes", element: <AssistenteConfigPage /> },
     ],
   },
 

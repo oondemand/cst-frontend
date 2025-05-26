@@ -25,12 +25,12 @@ export const ServicosTomados = () => {
   const [searchTerm, setSearchTerm] = useStateWithStorage("searchTerm");
 
   const {
-    data: etapas,
+    data: etapasResponseData,
     error: etapasError,
     isLoading: isEtapasLoading,
   } = useQuery({
     queryKey: ["listar-etapas"],
-    queryFn: EtapaService.listarEtapas,
+    queryFn: EtapaService.listarEtapasAtivas,
     staleTime: 1000 * 60 * 10, // 10 minutos
   });
 
@@ -49,7 +49,7 @@ export const ServicosTomados = () => {
 
   const filteredTickets =
     searchTerm?.toLowerCase()?.trim()?.length > 2
-      ? data?.filter((ticket) => {
+      ? data?.tickets?.filter((ticket) => {
           const term = searchTerm?.toLowerCase()?.trim();
           return (
             ticket?.titulo?.toLowerCase()?.includes(term) ||
@@ -58,7 +58,7 @@ export const ServicosTomados = () => {
               ?.includes(term.replace(/[^a-zA-Z0-9]/g, ""))
           );
         })
-      : data;
+      : data?.tickets;
 
   return (
     <Flex flex="1" flexDir="column" py="8" px="6" bg="#F8F9FA">
@@ -90,7 +90,7 @@ export const ServicosTomados = () => {
       <Flex flex="1" pb="2" itens="center" overflow="hidden">
         {(!isEtapasLoading || !isTicketLoading) &&
           filteredTickets &&
-          etapas && (
+          etapasResponseData.etapas && (
             <Swiper
               style={{
                 height: "100%",
@@ -103,7 +103,7 @@ export const ServicosTomados = () => {
               modules={[FreeMode, Navigation]}
               navigation={true}
             >
-              {etapas.map((etapa) => (
+              {etapasResponseData.etapas.map((etapa) => (
                 <SwiperSlide
                   key={etapa._id}
                   style={{ minWidth: "250px", maxWidth: "250px" }}

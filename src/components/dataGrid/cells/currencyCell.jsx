@@ -11,7 +11,7 @@ export const CurrencyCell = ({ getValue, row, column, table, ...props }) => {
     if (parseBRLCurrencyToNumber(value) !== initialValue) {
       try {
         await table.options.meta?.updateData({
-          prestadorId: row.original._id,
+          id: row.original._id,
           data: {
             [column.columnDef.accessorKey]: parseBRLCurrencyToNumber(value),
           },

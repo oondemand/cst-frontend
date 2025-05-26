@@ -1,15 +1,18 @@
 import { IconButton } from "@chakra-ui/react";
-import { LockKeyholeOpen, Send } from "lucide-react";
+import { LockKeyholeOpen } from "lucide-react";
 import { useMutation } from "@tanstack/react-query";
 import { toaster } from "../../ui/toaster";
-import { UsuarioService } from "../../../service/usuario";
 import { Tooltip } from "../../ui/tooltip";
 import { LoginService } from "../../../service/auth";
+import { ORIGENS } from "../../../constants/origens";
 
 export const RecuperarSenhaUsuarioAction = ({ usuario }) => {
   const { mutateAsync: enviarConviteUsuarioUsuario, isPending } = useMutation({
     mutationFn: async () =>
-      await LoginService.esqueciMinhaSenha(usuario?.email),
+      await LoginService.esqueciMinhaSenha({
+        email: usuario?.email,
+        origem: ORIGENS.DATAGRID,
+      }),
     onSuccess() {
       toaster.create({
         title: "Convite enviado!",
@@ -18,8 +21,6 @@ export const RecuperarSenhaUsuarioAction = ({ usuario }) => {
       });
     },
     onError: (error) => {
-      console.log(error);
-
       toaster.create({
         title: "Ouve um erro ao enviar convite!",
         description: "Um erro inesperado aconteceu ao enviar convite!",

@@ -1,4 +1,3 @@
-// SelectPrestadorFilter.jsx
 import { useRef } from "react";
 import { AsyncSelect } from "chakra-react-select";
 import { api } from "../../config/api";
