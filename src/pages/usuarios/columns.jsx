@@ -7,9 +7,6 @@ import { TableActionsCell } from "../../components/dataGrid/cells/tableActionsCe
 import { DeleteUsuarioAction } from "../../components/dataGrid/actions/deleteUsuarioButton";
 import { RecuperarSenhaUsuarioAction } from "../../components/dataGrid/actions/recuperarSenhaUsuario";
 
-import { IconButton } from "@chakra-ui/react";
-import { Pencil } from "lucide-react";
-
 export const makeUsuarioDynamicColumns = () => {
   return [
     {

@@ -9,6 +9,7 @@ import { useDataGrid } from "../../hooks/useDataGrid";
 import { useUpdateUsuario } from "../../hooks/api/usuarios/useUpdateUsuario";
 import { queryClient } from "../../config/react-query";
 import { ORIGENS } from "../../constants/origens";
+import { Container } from "../../components/container";
 
 export const UsuariosPage = () => {
   const columns = useMemo(() => makeUsuarioDynamicColumns({}), []);
@@ -29,16 +30,7 @@ export const UsuariosPage = () => {
 
   return (
     <>
-      <Flex
-        flex="1"
-        py="8"
-        px="6"
-        pb="2"
-        itens="center"
-        overflow="auto"
-        scrollbarWidth="thin"
-        bg="#F8F9FA"
-      >
+      <Container>
         <Box>
           <Text fontSize="lg" color="gray.700" fontWeight="semibold">
             Usuarios
@@ -59,7 +51,7 @@ export const UsuariosPage = () => {
             />
           </Box>
         </Box>
-      </Flex>
+      </Container>
     </>
   );
 };

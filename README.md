@@ -12,7 +12,11 @@
 - [3. Estrutura de Pastas](#3-estrutura-de-pastas)
 - [4. Instalação](#4-instalação)
 - [5. Introdução aos módulos](#5-introdução-aos-módulos)
-  - [5.1 Criação de novos módulos]()
+  - [5.1 Criação de novos módulos](#5.1-a-criação-de-novos-módulos)
+  - [5.2 Componente principal](#5.2-Componente-principal)
+  - [5.3 Formulário](#5.3-formulário)
+  - [5.4 Componente principal](#5.4-componente-principal)
+- [6. Pontos de melhorias](#6-pontos-de-melhorias)
 
 ## 1. Visão Geral do Projeto
 
@@ -86,7 +90,7 @@ No projeto, chamamos de **módulos** conjuntos estruturados que englobam:
 
 Essa estrutura modular facilita manutenção, reutilização e escalabilidade das funcionalidades da aplicação.
 
-### 5.1. A criação de novos módulos
+### 5.1 A criação de novos módulos
 
 Módulos seguem a seguinte estrutura de pastas
 
@@ -126,10 +130,6 @@ Podem ser utilizadas dentro de colunas do tipo "Ações", normalmente renderizad
 #### 📄 Exemplo de `columns.jsx`
 
 ```jsx
-import { DefaultEditableCell } from "../../components/dataGrid/cells/defaultEditable";
-import { TableActionsCell } from "../../components/dataGrid/cells/tableActionsCell";
-import { DeleteUsuarioAction } from "../../components/dataGrid/actions/deleteUsuarioButton";
-
 export const makeUsuarioDynamicColumns = () => {
   return [
     {
@@ -153,3 +153,183 @@ export const makeUsuarioDynamicColumns = () => {
   ];
 };
 ```
+
+### 5.2 Componente principal
+
+Depois de definir as nossa colunas podemos seguir com o nosso componente principal. E aqui temos alguns aspectos que podemos analisar.
+
+#### DataGrid
+
+Componente responsável por renderizar as informações de cada módulo. Além de acoplar o formulário e ações de exportar e importar.
+
+```jsx
+<DataGrid
+  // Formulário (opcional)
+  form={PrestadoresDialog}
+  // Função que sera chamada ao clicar no botão de exportar (opcional)
+  exportDataFn={getAllPrestadoresWithFilters}
+  // Função chamada ao clicar no botão de importar (nesse caso teremos uma página especifica para lidar com a importação, opcional)
+  importDataFn={() => navigate("/prestadores/importacao")}
+  // a seguir
+  table={table}
+  //dados a serem reenderizados
+  data={data?.results || []}
+  //informações sobre paginação fornecida pelo backend
+  rowCount={data?.pagination?.totalItems}
+  isDataLoading={isLoading || isFetching}
+  //função que será chamada ao editar uma célula do datagrid (opcional)
+  onUpdateData={async (values) => {
+    await updatePrestador.mutateAsync({
+      id: values.id,
+      body: values.data,
+    });
+  }}
+/>
+```
+
+#### useDataGrid
+
+O hook `useDataGrid` centraliza todas as configurações necessárias para exibir e controlar um `DataGrid`, incluindo paginação, filtros, ordenação e persistência do estado (colunas visíveis, tamanhos etc.).
+
+```jsx
+const { filters, table } = useDataGrid({ columns, key: "USUARIOS" });
+```
+
+- `columns`: Colunas definidas para o módulo.
+- `key`: Identificador único para salvar o estado do grid no `localStorage`.
+
+> 🔒 A `key` é essencial para manter o estado do grid (colunas ocultas, ordem, filtros etc.) entre recarregamentos.
+
+#### Exportação de Dados
+
+O `useDataGrid` também aceita a propriedade `exportModel`, usada para definir o modelo de colunas que será utilizado na exportação dos dados. Isso é útil para reorganizar ou ocultar colunas exportadas sem afetar a visualização do grid.
+
+```jsx
+const modeloDeExportacao = [
+  {
+    accessorKey: "prestador.nome",
+    header: "Nome Prestador",
+  },
+  {
+    accessorKey: "prestador.documento",
+    header: "Documento Prestador",
+  },
+  ...columns.filter((e) => e.accessorKey !== "prestador"),
+];
+
+const { filters, table } = useDataGrid({
+  columns,
+  exportModel: modeloDeExportacao,
+  key: "DOCUMENTOS_FISCAIS",
+});
+```
+
+#### Configurações Avançadas
+
+O hook também repassa todas as configurações aceitas pelo `useTable` da biblioteca [`@tanstack/react-table`](https://tanstack.com/table), o que permite controle completo sobre o comportamento do grid.
+
+### 5.3 Criação de formulário
+
+Ao criar um novo formulário, o primeiro passo é definir os campos que estarão disponíveis `formFields.jsx` — assim como fazemos com as colunas no DataGrid. A definição segue a mesma premissa de modularidade e configuração externa.
+
+#### 🔹 Campos Personalizadas (`fields`)
+
+Fields são campos com personalizado seja com mascaras, formatações ou funções especificas. Eles estão localizados em
+
+```
+src/components/buildForm/filds/
+```
+
+Exemplo de `formFields.jsx`
+
+```jsx
+export const createDynamicFormFields = () => {
+  return [
+    {
+      accessorKey: "nome",
+      label: "Nome Completo",
+      render: DefaultField,
+      validation: z.coerce
+        .string()
+        .min(3, { message: "Nome precisa ter pelo menos 3 caracteres" }),
+      colSpan: 2,
+    },
+    {
+      accessorKey: "tipo",
+      label: "Tipo",
+      render: SelectField,
+      validation: z.string({ message: "Tipo é um campo obrigatório" }),
+      colSpan: 2,
+      options: [
+        { value: "central", label: "Central" },
+        { value: "admin", label: "Administrador" },
+      ],
+    },
+  ];
+};
+```
+
+### 5.4 Componente principal
+
+Da mesma forma, temos o nosso componente principal `dialog.jsx` em que temos o componente central do formulário.
+
+#### FormDialog
+
+Componente responsável por montar o dialog e formulário.
+
+```jsx
+<FormDialog
+  // opcional, caso seja `atualizar`
+  data={data}
+  // campos disponíveis
+  fields={fields}
+  label={label}
+  // função chamada ao fazer blur no campo
+  onSubmit={onSubmit}
+  // função executada ao fechar o dialog
+  onOpenChange={() => {
+    queryClient.invalidateQueries(["listar-usuarios"]);
+    setOpen(false);
+    setData();
+  }}
+  open={open}
+  key="USUARIOS"
+/>
+```
+
+> Da mesma forma temos uma key que é usado para guardar o `estado` do formulário (visibilidade dos campos) em `localstorage`
+
+## 6 Guia de Contribuição
+
+Obrigado por querer contribuir com este projeto! 🎉  
+Siga os passos abaixo para garantir que sua contribuição seja bem-sucedida.
+
+### 6.1 Como contribuir
+
+- [ ] Faça um fork do repositório
+- [ ] Crie uma nova branch descritiva: `git checkout -b feat/nome-da-sua-feature`
+- [ ] Faça suas alterações e adicione testes, se necessário
+- [ ] Confirme as alterações: `git commit -m "feat: adiciona nova feature"`
+- [ ] Envie a branch: `git push origin feat/nome-da-sua-feature`
+- [ ] Crie um Pull Request explicando as mudanças realizadas
+
+### 6.2 Padrões de código
+
+- Mantenha o código limpo e legível
+- Siga a estrutura e padrões já existentes
+- Evite adicionar dependências desnecessárias
+
+### 6.3 Commits
+
+Use o [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/):
+
+Exemplos:
+
+- `feat: adiciona botão de login`
+- `fix: corrige erro ao carregar usuários`
+- `refactor: melhora performance do datagrid`
+
+### 6.4 Feedback
+
+Se tiver dúvidas ou sugestões, abra uma **Issue** para discutirmos.  
+Sua colaboração é sempre bem-vinda! 🚀
