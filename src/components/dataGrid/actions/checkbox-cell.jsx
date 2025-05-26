@@ -22,7 +22,10 @@ export const CheckActionCell = ({ ...props }) => {
 
   const { mutateAsync: deleteServicoMutation } = useMutation({
     mutationFn: async ({ servicoId }) =>
-      await TicketService.removerServico({ servicoId }),
+      await TicketService.removerServico({
+        servicoId,
+        origem: ORIGENS.PLANEJAMENTO,
+      }),
     onSuccess: () => {
       queryClient.invalidateQueries(["listar-servicos"]);
     },

@@ -87,30 +87,60 @@ const getFile = async ({ id }) => {
   return await api.get(`/tickets/arquivo/${id}`);
 };
 
-const adicionarServico = async ({ ticketId, servicoId }) => {
+const adicionarServico = async ({ ticketId, servicoId, origem }) => {
   const { data } = await api.post(
-    `/tickets/adicionar-servico/${ticketId}/${servicoId}`
+    `/tickets/adicionar-servico/${ticketId}/${servicoId}`,
+    {},
+    {
+      headers: {
+        "x-origem": origem,
+      },
+    }
   );
 
   return data;
 };
 
-const removerServico = async ({ servicoId }) => {
-  const { data } = await api.post(`/tickets/remover-servico/${servicoId}`);
+const removerServico = async ({ servicoId, origem }) => {
+  const { data } = await api.post(
+    `/tickets/remover-servico/${servicoId}`,
+    {},
+    {
+      headers: {
+        "x-origem": origem,
+      },
+    }
+  );
   return data;
 };
 
-const adicionarDocumentoFiscal = async ({ ticketId, documentoFiscalId }) => {
+const adicionarDocumentoFiscal = async ({
+  ticketId,
+  documentoFiscalId,
+  origem,
+}) => {
   const { data } = await api.post(
-    `/tickets/adicionar-documento-fiscal/${ticketId}/${documentoFiscalId}`
+    `/tickets/adicionar-documento-fiscal/${ticketId}/${documentoFiscalId}`,
+    {},
+    {
+      headers: {
+        "x-origem": origem,
+      },
+    }
   );
 
   return data;
 };
 
-const removerDocumentoFiscal = async ({ documentoFiscalId }) => {
+const removerDocumentoFiscal = async ({ documentoFiscalId, origem }) => {
   const { data } = await api.post(
-    `/tickets/remover-documento-fiscal/${documentoFiscalId}`
+    `/tickets/remover-documento-fiscal/${documentoFiscalId}`,
+    {},
+    {
+      headers: {
+        "x-origem": origem,
+      },
+    }
   );
   return data;
 };

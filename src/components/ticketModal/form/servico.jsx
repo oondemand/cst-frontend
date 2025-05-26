@@ -19,6 +19,7 @@ import { TicketService } from "../../../service/ticket";
 import { Select } from "chakra-react-select";
 import { chakraStyles } from "./select-chakra-styles";
 import { formatDateToDDMMYYYY } from "../../../utils/formatting";
+import { ORIGENS } from "../../../constants/origens";
 
 export const ServicoForm = ({ ticket, onlyReading }) => {
   const [servicos, setServicos] = useState(ticket?.servicos);
@@ -54,7 +55,10 @@ export const ServicoForm = ({ ticket, onlyReading }) => {
 
   const { mutateAsync: deleteServicoMutation } = useMutation({
     mutationFn: async ({ servicoId }) =>
-      await TicketService.removerServico({ servicoId }),
+      await TicketService.removerServico({
+        servicoId,
+        origem: ORIGENS.ESTEIRA,
+      }),
     onSuccess: ({ servicos }) => {
       setServicos(servicos);
       toaster.create({
@@ -75,6 +79,7 @@ export const ServicoForm = ({ ticket, onlyReading }) => {
       await TicketService.adicionarServico({
         ticketId: ticket?._id,
         servicoId,
+        origem: ORIGENS.ESTEIRA,
       }),
     onSuccess: ({ ticket }) => {
       setServicos(ticket.servicos);

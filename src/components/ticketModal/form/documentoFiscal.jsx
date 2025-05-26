@@ -18,6 +18,7 @@ import { useConfirmation } from "../../../hooks/useConfirmation";
 import { TicketService } from "../../../service/ticket";
 import { Select } from "chakra-react-select";
 import { chakraStyles } from "./select-chakra-styles";
+import { ORIGENS } from "../../../constants/origens";
 
 export const DocumentoFiscalForm = ({ ticket, onlyReading }) => {
   const [documentosFiscais, setDocumentosFiscais] = useState(
@@ -48,7 +49,10 @@ export const DocumentoFiscalForm = ({ ticket, onlyReading }) => {
 
   const { mutateAsync: deleteDocumentoFiscalMutation } = useMutation({
     mutationFn: async ({ documentoFiscalId }) =>
-      await TicketService.removerDocumentoFiscal({ documentoFiscalId }),
+      await TicketService.removerDocumentoFiscal({
+        documentoFiscalId,
+        origem: ORIGENS.ESTEIRA,
+      }),
     onSuccess: ({ documentosFiscais }) => {
       setDocumentosFiscais(documentosFiscais);
       toaster.create({
@@ -69,6 +73,7 @@ export const DocumentoFiscalForm = ({ ticket, onlyReading }) => {
       await TicketService.adicionarDocumentoFiscal({
         ticketId: ticket?._id,
         documentoFiscalId,
+        origem: ORIGENS.ESTEIRA,
       }),
     onSuccess: ({ ticket }) => {
       setDocumentosFiscais(ticket.documentosFiscais);
