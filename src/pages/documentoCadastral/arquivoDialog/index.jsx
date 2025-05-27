@@ -34,10 +34,13 @@ export const ArquivoDetailsDialog = ({ documentoCadastral }) => {
   });
 
   useEffect(() => {
-    if (response?.data?.buffer?.data) {
-      const pdfBlob = new Blob([new Uint8Array(response.data.buffer.data)], {
-        type: "application/pdf",
-      });
+    if (response?.data?.arquivo?.buffer?.data) {
+      const pdfBlob = new Blob(
+        [new Uint8Array(response.data.arquivo.buffer.data)],
+        {
+          type: "application/pdf",
+        }
+      );
       const url = URL.createObjectURL(pdfBlob);
       setPdfUrl(url);
 

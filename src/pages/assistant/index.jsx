@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { Flex, Box, Text } from "@chakra-ui/react";
+import { Box, Text } from "@chakra-ui/react";
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import { DataGrid } from "../../components/dataGrid";
 import { useDataGrid } from "../../hooks/useDataGrid";
@@ -9,6 +9,7 @@ import { AssistenteConfigDialog } from "./dialog";
 import { AssistantConfigService } from "../../service/assistant-config";
 import { useUpdateAssistantConfig } from "../../hooks/api/assistant-config/useUpdateAssistantConfig";
 import { ORIGENS } from "../../constants/origens";
+import { Container } from "../../components/container";
 
 export const AssistenteConfigPage = () => {
   const columns = useMemo(() => makeAssistenteConfigDynamicColumns({}), []);
@@ -28,16 +29,7 @@ export const AssistenteConfigPage = () => {
   });
 
   return (
-    <Flex
-      flex="1"
-      py="8"
-      px="6"
-      pb="2"
-      itens="center"
-      overflow="auto"
-      scrollbarWidth="thin"
-      bg="#F8F9FA"
-    >
+    <Container>
       <Box>
         <Text fontSize="lg" color="gray.700" fontWeight="semibold">
           Assistentes
@@ -58,6 +50,6 @@ export const AssistenteConfigPage = () => {
           />
         </Box>
       </Box>
-    </Flex>
+    </Container>
   );
 };

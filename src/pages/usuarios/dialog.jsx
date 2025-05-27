@@ -1,5 +1,5 @@
 import { Box } from "@chakra-ui/react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { queryClient } from "../../config/react-query";
 import { createDynamicFormFields } from "./formFields";
 import { useCreateUsuario } from "../../hooks/api/usuarios/useCreateUsuario";
@@ -45,6 +45,10 @@ export const UsuariosDialog = ({
     return await updateUsuario.mutateAsync({ id: data._id, body });
   };
 
+  useEffect(() => {
+    setData(defaultValues);
+  }, [defaultValues]);
+
   return (
     <Box>
       <Box onClick={() => setOpen(true)} asChild>
@@ -62,7 +66,7 @@ export const UsuariosDialog = ({
         onOpenChange={() => {
           queryClient.invalidateQueries(["listar-usuarios"]);
           setOpen(false);
-          setData();
+          setData(defaultValues);
         }}
         open={open}
         key="USUARIOS"

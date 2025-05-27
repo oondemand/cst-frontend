@@ -15,7 +15,7 @@ export const FilesDetailsCell = (props) => {
       await TicketService.deleteFile({ id, ticketId: props.row.original?._id }),
     onSuccess: ({ data }) => {
       props.row.original.arquivos = props.row.original?.arquivos?.filter(
-        (e) => e?._id !== data?._id
+        (e) => e?._id !== data?.arquivo?._id
       );
 
       toaster.create({

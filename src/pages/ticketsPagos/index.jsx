@@ -5,6 +5,7 @@ import { DataGrid } from "../../components/dataGrid";
 import { makeTicketsArquivadosDynamicColumns } from "./columns";
 import { TicketService } from "../../service/ticket";
 import { useDataGrid } from "../../hooks/useDataGrid";
+import { Container } from "../../components/container";
 
 export const TicketsPagosPage = () => {
   const columns = useMemo(() => makeTicketsArquivadosDynamicColumns({}), []);
@@ -17,31 +18,20 @@ export const TicketsPagosPage = () => {
   });
 
   return (
-    <>
-      <Flex
-        flex="1"
-        py="8"
-        px="6"
-        pb="2"
-        itens="center"
-        overflow="auto"
-        scrollbarWidth="thin"
-        bg="#F8F9FA"
-      >
-        <Box>
-          <Text fontSize="lg" color="gray.700" fontWeight="semibold">
-            Tickets pagos
-          </Text>
-          <Box bg="white" mt="4" py="6" px="4" rounded="lg" shadow="xs">
-            <DataGrid
-              table={table}
-              data={data?.results || []}
-              rowCount={data?.pagination?.totalItems}
-              isDataLoading={isLoading || isFetching}
-            />
-          </Box>
+    <Container>
+      <Box>
+        <Text fontSize="lg" color="gray.700" fontWeight="semibold">
+          Tickets pagos
+        </Text>
+        <Box bg="white" mt="4" py="6" px="4" rounded="lg" shadow="xs">
+          <DataGrid
+            table={table}
+            data={data?.results || []}
+            rowCount={data?.pagination?.totalItems}
+            isDataLoading={isLoading || isFetching}
+          />
         </Box>
-      </Flex>
-    </>
+      </Box>
+    </Container>
   );
 };

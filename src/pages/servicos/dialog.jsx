@@ -52,7 +52,7 @@ export const ServicosDialog = ({
   };
 
   useEffect(() => {
-    defaultValues && setData(defaultValues);
+    setData(defaultValues);
   }, [defaultValues]);
 
   return (
@@ -73,10 +73,10 @@ export const ServicosDialog = ({
         onOpenAssistantDialog={() => onOpen(data, assistant)}
         onOpenChange={() => {
           queryClient.invalidateQueries(["listar-servicos"]);
+          setData(defaultValues);
           setOpen(false);
-          setData();
         }}
-        key="SERVICOS"
+        stateKey="SERVICOS"
       />
     </Box>
   );

@@ -1,5 +1,5 @@
 import { Box } from "@chakra-ui/react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { queryClient } from "../../config/react-query";
 import { createDynamicFormFields } from "./formFields";
 import { formatDateToDDMMYYYY } from "../../utils/formatting";
@@ -71,6 +71,10 @@ export const PrestadoresDialog = ({
     return await updatePrestador.mutateAsync({ body, id: data._id });
   };
 
+  useEffect(() => {
+    setData(defaultValues);
+  }, [defaultValues]);
+
   return (
     <Box>
       <Box onClick={() => setOpen(true)} asChild>
@@ -89,7 +93,7 @@ export const PrestadoresDialog = ({
         onOpenChange={() => {
           queryClient.invalidateQueries(["listar-prestadores"]);
           setOpen(false);
-          setData();
+          setData(defaultValues);
         }}
         open={open}
         key="PRESTADORES"

@@ -1,5 +1,5 @@
 import { Box } from "@chakra-ui/react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { queryClient } from "../../config/react-query";
 import { createDynamicFormFields } from "./formFields";
 import { FormDialog } from "../../components/formDialog";
@@ -39,6 +39,10 @@ export const EtapasDialog = ({
     return await updateEtapa.mutateAsync({ id: data._id, body });
   };
 
+  useEffect(() => {
+    setData(defaultValues);
+  }, [defaultValues]);
+
   return (
     <Box>
       <Box onClick={() => setOpen(true)} asChild>
@@ -56,7 +60,7 @@ export const EtapasDialog = ({
         onOpenChange={() => {
           queryClient.invalidateQueries(["listar-etapas"]);
           setOpen(false);
-          setData();
+          setData(defaultValues);
         }}
         open={open}
         key="ETAPAS"

@@ -155,7 +155,7 @@ export const makeServicoDynamicColumns = () => {
       cell: (props) => (
         <Flex minH="8">
           <Text alignSelf="center" fontSize="sm" truncate>
-            {currency.format(props.getValue())}
+            {currency.format(props.getValue() ?? 0)}
           </Text>
         </Flex>
       ),

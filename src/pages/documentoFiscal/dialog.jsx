@@ -106,7 +106,7 @@ export const DocumentosFiscaisDialog = ({
   };
 
   useEffect(() => {
-    defaultValues && setData(defaultValues);
+    setData(defaultValues);
   }, [defaultValues]);
 
   return (
@@ -126,8 +126,8 @@ export const DocumentosFiscaisDialog = ({
         onSubmit={onSubmit}
         onOpenChange={() => {
           queryClient.invalidateQueries(["listar-prestadores"]);
+          setData(defaultValues);
           setOpen(false);
-          setData();
         }}
         open={open}
         key="DOCUMENTOS_FISCAIS"
