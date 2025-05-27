@@ -41,14 +41,6 @@ export const makePrestadorDynamicColumns = () => {
       ),
     },
     {
-      accessorKey: "manager",
-      header: "Manager",
-      cell: (props) => <SelectListaCell {...props} cod="manager" />,
-      enableColumnFilter: true,
-      enableSorting: false,
-      meta: { filterKey: "manager" },
-    },
-    {
       accessorKey: "nome",
       header: "Nome Completo",
       cell: DefaultEditableCell,

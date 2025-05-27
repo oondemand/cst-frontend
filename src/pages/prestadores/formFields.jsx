@@ -55,14 +55,6 @@ export const createDynamicFormFields = () => {
       colSpan: 1,
     },
     {
-      accessorKey: "manager",
-      label: "Manager",
-      render: SelectListaField,
-      cod: "manager",
-      validation: z.string().optional(),
-      colSpan: 1,
-    },
-    {
       accessorKey: "pessoaFisica.dataNascimento",
       label: "Data Nascimento",
       render: DateField,

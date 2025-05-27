@@ -21,7 +21,6 @@ export const ENTIDADES = {
   CONFIGURACAO_ASSISTENTE: "configuracao.assistente",
   CONFIGURACAO_ETAPA: "configuracao.etapa",
   CONFIGURACAO_LISTA_CAMPANHA: "configuracao.lista.campanha",
-  CONFIGURACAO_LISTA_MANAGER: "configuracao.lista.manager",
   CONFIGURACAO_LISTA_TIPO_DOCUMENTO: "configuracao.lista.tipo-documento",
   CONFIGURACAO_LISTA_TIPO_DOCUMENTO_FISCAL:
     "configuracao.lista.tipo-documento-fiscal",
