@@ -54,12 +54,16 @@ export const PrestadorForm = ({
   );
 
   const createPrestador = useCreatePrestador({
-    onSuccess: (data) => setPrestador((prev) => data.prestador),
+    onSuccess: (data) => {
+      setPrestador((prev) => data);
+    },
     origem: ORIGENS.FORM,
   });
 
   const updatePrestador = useUpdatePrestador({
-    onSuccess: (data) => setPrestador((prev) => data.prestador),
+    onSuccess: (data) => {
+      setPrestador((prev) => data);
+    },
     origem: ORIGENS.FORM,
   });
 
