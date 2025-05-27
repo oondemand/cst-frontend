@@ -1,5 +1,5 @@
 import { Box } from "@chakra-ui/react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { queryClient } from "../../config/react-query";
 import { createDynamicFormFields } from "./formFields";
 import { useIaChat } from "../../hooks/useIaChat";
@@ -51,9 +51,13 @@ export const ServicosDialog = ({
     return await updateServico.mutateAsync({ id: data._id, body });
   };
 
+  useEffect(() => {
+    defaultValues && setData(defaultValues);
+  }, [defaultValues]);
+
   return (
     <Box>
-      <Box onClick={() => setOpen(true)} asChild>
+      <Box onClick={() => setOpen(true)}>
         {defaultValues ? (
           <IconTrigger />
         ) : (

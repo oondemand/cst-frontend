@@ -4,10 +4,10 @@ import { ServicoService } from "../../../service/servico";
 
 export const useUpdateServico = ({ onSuccess, origem }) =>
   useMutation({
-    mutationFn: async ({ id, body }) => {
-      await ServicoService.atualizarServico({ id, body, origem });
-    },
+    mutationFn: async ({ id, body }) =>
+      await ServicoService.atualizarServico({ id, body, origem }),
     onSuccess(data) {
+      console.log("DATA", data);
       onSuccess?.(data);
       toaster.create({
         title: "Servico atualizado com sucesso",
