@@ -15,7 +15,6 @@ const criarPrestador = async ({ body, origem }) => {
   const { data } = await api.post("/prestadores", body, {
     headers: { "x-origem": origem },
   });
-
   return data;
 };
 
@@ -37,13 +36,9 @@ const importarPrestadores = async ({ files }) => {
   for (const file of files) {
     formData.append("file", file);
   }
-
   const response = await api.post("/prestadores/importar", formData, {
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
+    headers: { "Content-Type": "multipart/form-data" },
   });
-
   return response;
 };
 
@@ -51,11 +46,7 @@ const enviarConvite = async ({ prestador }) => {
   return await api.post(
     "/usuarios/enviar-convite",
     { prestador },
-    {
-      headers: {
-        "x-origem": ORIGENS.DATAGRID,
-      },
-    }
+    { headers: { "x-origem": ORIGENS.DATAGRID } }
   );
 };
 

@@ -72,6 +72,20 @@ export const createDynamicFormFields = () => {
       colSpan: 1,
     },
     {
+      accessorKey: "pessoaFisica.rg.numero",
+      label: "RG Número",
+      render: DefaultField,
+      validation: z.string().optional(),
+      colSpan: 1,
+    },
+    {
+      accessorKey: "pessoaFisica.rg.orgaoEmissor",
+      label: "Órgão Emissor",
+      render: DefaultField,
+      validation: z.string().optional(),
+      colSpan: 1,
+    },
+    {
       accessorKey: "pessoaJuridica.nomeFantasia",
       label: "Nome Fantasia",
       render: DefaultField,
@@ -79,35 +93,62 @@ export const createDynamicFormFields = () => {
       colSpan: 2,
     },
     {
-      accessorKey: "endereco.rua",
+      accessorKey: "pessoaJuridica.codigoCNAE",
+      label: "Código CNAE",
+      render: DefaultField,
+      validation: z.string().optional(),
+      colSpan: 1,
+    },
+    {
+      accessorKey: "pessoaJuridica.codigoServicoNacional",
+      label: "Código Serviço Nacional",
+      render: DefaultField,
+      validation: z.string().optional(),
+      colSpan: 1,
+    },
+    {
+      accessorKey: "pessoaJuridica.regimeTributario",
+      label: "Regime Tributário",
+      render: SelectField,
+      validation: z.string().optional(),
+      colSpan: 1,
+      options: [
+        { value: "MEI", label: "MEI" },
+        { value: "Simples Nacional", label: "Simples Nacional" },
+        { value: "Lucro Presumido", label: "Lucro Presumido" },
+        { value: "Lucro Real", label: "Lucro Real" },
+      ],
+    },
+    {
+      accessorKey: "endereco.rua", // updated key
       label: "Logradouro",
       render: DefaultField,
       validation: z.string().optional(),
       colSpan: 2,
     },
     {
-      accessorKey: "endereco.numero",
+      accessorKey: "endereco.numero", // updated key
       label: "Número",
       render: DefaultField,
       validation: z.string().optional(),
       colSpan: 1,
     },
     {
-      accessorKey: "endereco.complemento",
+      accessorKey: "endereco.complemento", // updated key
       label: "Complemento",
       render: DefaultField,
       validation: z.string().optional(),
       colSpan: 1,
     },
     {
-      accessorKey: "endereco.cidade",
+      accessorKey: "endereco.cidade", // updated key
       label: "Cidade",
       render: DefaultField,
       validation: z.string().optional(),
       colSpan: 1,
     },
     {
-      accessorKey: "endereco.cep",
+      accessorKey: "endereco.cep", // updated key
       label: "CEP",
       render: CepField,
       validation: preprocessEmptyToUndefined(
@@ -122,14 +163,14 @@ export const createDynamicFormFields = () => {
       colSpan: 1,
     },
     {
-      accessorKey: "endereco.estado",
+      accessorKey: "endereco.estado", // updated key
       label: "Estado",
       render: SelectEstadoField,
       validation: z.string().optional(),
       colSpan: 1,
     },
     {
-      accessorKey: "endereco.pais.cod",
+      accessorKey: "endereco.pais.cod", // updated key
       label: "País",
       render: SelectField,
       validation: z.coerce.string().optional(),
@@ -141,7 +182,7 @@ export const createDynamicFormFields = () => {
       defaultValue: "1058",
     },
     {
-      accessorKey: "dadosBancarios.banco",
+      accessorKey: "dadosBancarios.banco", // updated key
       label: "Banco",
       render: SelectBancoField,
       cod: "bancos",
@@ -149,21 +190,21 @@ export const createDynamicFormFields = () => {
       colSpan: 1,
     },
     {
-      accessorKey: "dadosBancarios.agencia",
+      accessorKey: "dadosBancarios.agencia", // updated key
       label: "Agência",
       render: DefaultField,
       validation: z.string().optional(),
       colSpan: 1,
     },
     {
-      accessorKey: "dadosBancarios.conta",
+      accessorKey: "dadosBancarios.conta", // updated key
       label: "Conta",
       render: DefaultField,
       validation: z.string().optional(),
       colSpan: 1,
     },
     {
-      accessorKey: "dadosBancarios.tipoConta",
+      accessorKey: "dadosBancarios.tipoConta", // updated key
       label: "Tipo de Conta",
       render: SelectField,
       validation: z.string().optional(),
@@ -172,6 +213,26 @@ export const createDynamicFormFields = () => {
         { value: "corrente", label: "Conta Corrente" },
         { value: "poupanca", label: "Conta poupança" },
       ],
+    },
+    {
+      accessorKey: "dadosBancarios.tipoChavePix",
+      label: "Tipo de Chave Pix",
+      render: SelectField,
+      validation: z.string().optional(),
+      colSpan: 1,
+      options: [
+        { value: "cpf", label: "CPF" },
+        { value: "email", label: "E-mail" },
+        { value: "telefone", label: "Telefone" },
+        { value: "aleatoria", label: "Aleatória" },
+      ],
+    },
+    {
+      accessorKey: "dadosBancarios.chavePix",
+      label: "Chave Pix",
+      render: DefaultField,
+      validation: z.string().optional(),
+      colSpan: 1,
     },
   ];
 };
