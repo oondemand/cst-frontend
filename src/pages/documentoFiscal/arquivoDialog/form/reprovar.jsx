@@ -44,7 +44,7 @@ export const ReprovarForm = ({ documentoFiscalId }) => {
 
   const motivoRecusaList = createListCollection({
     items:
-      data?.valores?.map((item) => ({
+      data?.lista?.valores?.map((item) => ({
         value: item?.valor,
         label: item?.valor,
       })) ?? [],

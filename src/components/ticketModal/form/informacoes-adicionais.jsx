@@ -34,7 +34,7 @@ export const InformacoesAdicionaisForm = ({
       label: "Codigo categoria",
       render: SelectCategoriaField,
       validation: z
-        .string()
+        .string({ message: "Código categoria é um campo obrigatório" })
         .nonempty("Código categoria é um campo obrigatório"),
       colSpan: 1,
     },
@@ -42,7 +42,9 @@ export const InformacoesAdicionaisForm = ({
       accessorKey: "conta_corrente",
       label: "Conta corrente",
       render: SelectContaCorrenteField,
-      validation: z.number(),
+      validation: z.number({
+        message: "Conta corrente é um campo obrigatório",
+      }),
       colSpan: 1,
     },
   ];

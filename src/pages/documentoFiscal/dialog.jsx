@@ -1,5 +1,5 @@
 import { Box, Button, Flex, Text } from "@chakra-ui/react";
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { queryClient } from "../../config/react-query";
 import { createDynamicFormFields } from "./formFields";
 import { TicketService } from "../../service/ticket";
@@ -104,6 +104,10 @@ export const DocumentosFiscaisDialog = ({
       await deleteFileFromDocumentoFiscal.mutateAsync({ id, data });
     }
   };
+
+  useEffect(() => {
+    defaultValues && setData(defaultValues);
+  }, [defaultValues]);
 
   return (
     <Box>
