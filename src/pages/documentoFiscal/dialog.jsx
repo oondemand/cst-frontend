@@ -10,7 +10,7 @@ import {
 import { Paperclip, CircleX, Download } from "lucide-react";
 import { useConfirmation } from "../../hooks/useConfirmation";
 import { useIaChat } from "../../hooks/useIaChat";
-import { useLoadAssistant } from "../../hooks/api/useLoadAssistant";
+import { useLoadAssistant } from "../../hooks/api/assistant-config/useLoadAssistant";
 import { useUpdateDocumentoFiscal } from "../../hooks/api/documento-fiscal/useUpdateDocumentoFiscal";
 import { useCreateDocumentoFiscal } from "../../hooks/api/documento-fiscal/useCreateDocumentoFiscal";
 import { useUploadFileToDocumentoFiscal } from "../../hooks/api/documento-fiscal/useUploadFIle";

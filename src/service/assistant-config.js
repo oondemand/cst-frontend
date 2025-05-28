@@ -28,9 +28,18 @@ const adicionarAssistenteConfig = async ({ body, origem }) => {
   return data;
 };
 
+const deleteAssistantConfig = async ({ id, origem }) => {
+  return await api.delete(`assistentes/${id}`, {
+    headers: {
+      "x-origem": origem,
+    },
+  });
+};
+
 export const AssistantConfigService = {
   listarAssistenteConfig,
   alterarAssistenteConfig,
   adicionarAssistenteConfig,
   listarAssistenteAtivos,
+  deleteAssistantConfig,
 };

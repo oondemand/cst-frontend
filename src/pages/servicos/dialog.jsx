@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import { queryClient } from "../../config/react-query";
 import { createDynamicFormFields } from "./formFields";
 import { useIaChat } from "../../hooks/useIaChat";
-import { useLoadAssistant } from "../../hooks/api/useLoadAssistant";
+import { useLoadAssistant } from "../../hooks/api/assistant-config/useLoadAssistant";
 import { useUpdateServico } from "../../hooks/api/servico/useUpdateServico";
 import { useCreateServico } from "../../hooks/api/servico/useCreateServico";
 import { FormDialog } from "../../components/formDialog";

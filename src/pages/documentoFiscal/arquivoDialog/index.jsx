@@ -19,7 +19,7 @@ import { AprovarForm } from "./form/aprovar";
 import { ReprovarForm } from "./form/reprovar";
 import { useIaChat } from "../../../hooks/useIaChat";
 import { Oondemand } from "../../../components/svg/oondemand";
-import { useLoadAssistant } from "../../../hooks/api/useLoadAssistant";
+import { useLoadAssistant } from "../../../hooks/api/assistant-config/useLoadAssistant";
 
 export const ArquivoDetailsDialog = ({ documentoFiscal }) => {
   const [open, setOpen] = useState(false);

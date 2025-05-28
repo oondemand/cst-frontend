@@ -5,7 +5,7 @@ import { createDynamicFormFields } from "./formFields";
 import { formatDateToDDMMYYYY } from "../../utils/formatting";
 import { useUpdatePrestador } from "../../hooks/api/prestador/useUpdatePrestador";
 import { useCreatePrestador } from "../../hooks/api/prestador/useCreatePrestador";
-import { useLoadAssistant } from "../../hooks/api/useLoadAssistant";
+import { useLoadAssistant } from "../../hooks/api/assistant-config/useLoadAssistant";
 import { useIaChat } from "../../hooks/useIaChat";
 import { FormDialog } from "../../components/formDialog";
 import {
@@ -73,7 +73,7 @@ export const PrestadoresDialog = ({
 
   useEffect(() => {
     setData(defaultValues);
-  }, [defaultValues]);
+  }, [defaultValues])
 
   return (
     <Box>

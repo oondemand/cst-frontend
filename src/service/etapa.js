@@ -28,9 +28,18 @@ const adicionarEtapa = async ({ body, origem }) => {
   return data;
 };
 
+const deletarEtapa = async ({ id, origem }) => {
+  return await api.delete(`etapas/${id}`, {
+    headers: {
+      "x-origem": origem,
+    },
+  });
+};
+
 export const EtapaService = {
   listarEtapas,
   alterarEtapa,
   adicionarEtapa,
   listarEtapasAtivas,
+  deletarEtapa,
 };

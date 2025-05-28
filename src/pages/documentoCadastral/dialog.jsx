@@ -14,7 +14,7 @@ import { useUpdateDocumentoCadastral } from "../../hooks/api/documento-cadastral
 import { useCreateDocumentoCadastral } from "../../hooks/api/documento-cadastral/useCreateDocumentoCadastral";
 import { useUploadFileToDocumentoCadastral } from "../../hooks/api/documento-cadastral/useUploadFIle";
 import { useDeleteFileFromDocumentoCadastral } from "../../hooks/api/documento-cadastral/useDeleteFileFromDocumentoCadastral";
-import { useLoadAssistant } from "../../hooks/api/useLoadAssistant";
+import { useLoadAssistant } from "../../hooks/api/assistant-config/useLoadAssistant";
 import { FormDialog } from "../../components/formDialog";
 import {
   DefaultTrigger,

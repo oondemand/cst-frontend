@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
-import { AssistantConfigService } from "../../service/assistant-config";
+import { AssistantConfigService } from "../../../service/assistant-config";
 
 export const useLoadAssistant = (modulo) => {
   const { data, isLoading, error } = useQuery({
