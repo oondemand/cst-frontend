@@ -1,9 +1,9 @@
 import { Box } from "@chakra-ui/react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { queryClient } from "../../config/react-query";
 import { createDynamicFormFields } from "./formFields";
 import { useIaChat } from "../../hooks/useIaChat";
-import { useLoadAssistant } from "../../hooks/api/useLoadAssistant";
+import { useLoadAssistant } from "../../hooks/api/assistant-config/useLoadAssistant";
 import { useUpdateServico } from "../../hooks/api/servico/useUpdateServico";
 import { useCreateServico } from "../../hooks/api/servico/useCreateServico";
 import { FormDialog } from "../../components/formDialog";
@@ -51,9 +51,13 @@ export const ServicosDialog = ({
     return await updateServico.mutateAsync({ id: data._id, body });
   };
 
+  useEffect(() => {
+    setData(defaultValues);
+  }, [defaultValues]);
+
   return (
     <Box>
-      <Box onClick={() => setOpen(true)} asChild>
+      <Box onClick={() => setOpen(true)}>
         {defaultValues ? (
           <IconTrigger />
         ) : (
@@ -69,10 +73,10 @@ export const ServicosDialog = ({
         onOpenAssistantDialog={() => onOpen(data, assistant)}
         onOpenChange={() => {
           queryClient.invalidateQueries(["listar-servicos"]);
+          setData(defaultValues);
           setOpen(false);
-          setData();
         }}
-        key="SERVICOS"
+        stateKey="SERVICOS"
       />
     </Box>
   );

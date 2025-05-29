@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 
-import { Flex, Box, Text } from "@chakra-ui/react";
+import { Box, Text } from "@chakra-ui/react";
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import { DataGrid } from "../../components/dataGrid";
 import { useDataGrid } from "../../hooks/useDataGrid";
@@ -10,6 +10,7 @@ import { EtapasDialog } from "./dialog";
 import { useUpdateEtapa } from "../../hooks/api/etapas/useUpdateEtapa";
 import { queryClient } from "../../config/react-query";
 import { ORIGENS } from "../../constants/origens";
+import { Container } from "../../components/container";
 
 export const EtapasPage = () => {
   const columns = useMemo(() => makeEtapasDynamicColumns({}), []);
@@ -29,16 +30,7 @@ export const EtapasPage = () => {
   });
 
   return (
-    <Flex
-      flex="1"
-      py="8"
-      px="6"
-      pb="2"
-      itens="center"
-      overflow="auto"
-      scrollbarWidth="thin"
-      bg="#F8F9FA"
-    >
+    <Container>
       <Box>
         <Text fontSize="lg" color="gray.700" fontWeight="semibold">
           Etapas
@@ -59,6 +51,6 @@ export const EtapasPage = () => {
           />
         </Box>
       </Box>
-    </Flex>
+    </Container>
   );
 };

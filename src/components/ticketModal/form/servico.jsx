@@ -59,8 +59,8 @@ export const ServicoForm = ({ ticket, onlyReading }) => {
         servicoId,
         origem: ORIGENS.ESTEIRA,
       }),
-    onSuccess: ({ servicos }) => {
-      setServicos(servicos);
+    onSuccess: ({ ticket }) => {
+      setServicos(ticket.servicos);
       toaster.create({
         title: "Serviço removido com sucesso!",
         type: "success",

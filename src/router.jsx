@@ -22,6 +22,7 @@ import { ImportDocumentosFiscaisPage } from "./pages/documentoFiscal/importacao"
 import { AssistenteConfigPage } from "./pages/assistant";
 import { DocumentosCadastraisList } from "./pages/documentoCadastral";
 import { ImportDocumentosCadastraisPage } from "./pages/documentoCadastral/importacao";
+import { Ativacao } from "./pages/ativacao";
 
 export const router = createBrowserRouter([
   {
@@ -65,6 +66,7 @@ export const router = createBrowserRouter([
     children: [
       { path: "/login", element: <LoginPage /> },
       { path: "/alterar-senha", element: <AlterarSenha /> },
+      { path: "/ativacao", element: <Ativacao /> },
     ],
   },
 ]);

@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { Flex, Box, Text } from "@chakra-ui/react";
+import { Box, Text } from "@chakra-ui/react";
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import { DocumentosFiscaisService } from "../../service/documentos-fiscais";
 import { DataGrid } from "../../components/dataGrid";
@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { useDataGrid } from "../../hooks/useDataGrid";
 import { useUpdateDocumentoFiscal } from "../../hooks/api/documento-fiscal/useUpdateDocumentoFiscal";
 import { ORIGENS } from "../../constants/origens";
+import { Container } from "../../components/container";
 
 export const DocumentosFiscaisList = () => {
   const navigate = useNavigate();
@@ -61,40 +62,29 @@ export const DocumentosFiscaisList = () => {
   };
 
   return (
-    <>
-      <Flex
-        flex="1"
-        py="8"
-        px="6"
-        pb="2"
-        itens="center"
-        overflow="auto"
-        scrollbarWidth="thin"
-        bg="#F8F9FA"
-      >
-        <Box>
-          <Text fontSize="lg" color="gray.700" fontWeight="semibold">
-            Documentos fiscais
-          </Text>
-          <Box mt="4" bg="white" py="6" px="4" rounded="lg" shadow="xs">
-            <DataGrid
-              table={table}
-              form={DocumentosFiscaisDialog}
-              exportDataFn={getAllDocumentosFiscaisWithFilters}
-              importDataFn={() => navigate("/documentos-fiscais/importacao")}
-              data={data?.results || []}
-              isDataLoading={isLoading || isFetching}
-              rowCount={data?.pagination?.totalItems}
-              onUpdateData={async (values) => {
-                await updateDocumentoFiscal.mutateAsync({
-                  id: values.id,
-                  body: values.data,
-                });
-              }}
-            />
-          </Box>
+    <Container>
+      <Box>
+        <Text fontSize="lg" color="gray.700" fontWeight="semibold">
+          Documentos fiscais
+        </Text>
+        <Box mt="4" bg="white" py="6" px="4" rounded="lg" shadow="xs">
+          <DataGrid
+            table={table}
+            form={DocumentosFiscaisDialog}
+            exportDataFn={getAllDocumentosFiscaisWithFilters}
+            importDataFn={() => navigate("/documentos-fiscais/importacao")}
+            data={data?.results || []}
+            isDataLoading={isLoading || isFetching}
+            rowCount={data?.pagination?.totalItems}
+            onUpdateData={async (values) => {
+              await updateDocumentoFiscal.mutateAsync({
+                id: values.id,
+                body: values.data,
+              });
+            }}
+          />
         </Box>
-      </Flex>
-    </>
+      </Box>
+    </Container>
   );
 };

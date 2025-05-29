@@ -7,29 +7,15 @@ import { useConfirmation } from "../../../hooks/useConfirmation";
 import { Tooltip } from "../../ui/tooltip";
 import { DocumentosCadastraisService } from "../../../service/documentos-cadastrais";
 import { ORIGENS } from "../../../constants/origens";
+import { useDeleteDocumentoCadastral } from "../../../hooks/api/documento-cadastral/useDeleteDocumentoCadastral";
 
 export const DeleteDocumentoCadastralAction = ({ id }) => {
   const { requestConfirmation } = useConfirmation();
 
-  const { mutateAsync: deleteDocumentoCadastralMutation } = useMutation({
-    mutationFn: async () =>
-      await DocumentosCadastraisService.deletarDocumentoCadastral({
-        id,
-        origem: ORIGENS.DATAGRID,
-      }),
-    onSuccess() {
-      queryClient.refetchQueries(["listar-documentos-cadastrais"]);
-      toaster.create({
-        title: "Documento cadastral excluído com sucesso",
-        type: "success",
-      });
-    },
-    onError: (error) => {
-      toaster.create({
-        title: "Ouve um erro ao excluir documento cadastral",
-        type: "error",
-      });
-    },
+  const deleteDocumentoCadastral = useDeleteDocumentoCadastral({
+    origem: ORIGENS.DATAGRID,
+    onSuccess: () =>
+      queryClient.refetchQueries(["listar-documentos-cadastrais"]),
   });
 
   const handleDeleteDocumentoCadastral = async () => {
@@ -39,7 +25,7 @@ export const DeleteDocumentoCadastralAction = ({ id }) => {
     });
 
     if (action === "confirmed") {
-      await deleteDocumentoCadastralMutation();
+      await deleteDocumentoCadastral.mutateAsync({ id });
     }
   };
 

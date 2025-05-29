@@ -1,5 +1,5 @@
 import { Box, Button, Flex, Text } from "@chakra-ui/react";
-import { useMemo, useState } from "react";
+import { useMemo, useEffect, useState } from "react";
 import { queryClient } from "../../config/react-query";
 import { createDynamicFormFields } from "./formFields";
 import { TicketService } from "../../service/ticket";
@@ -14,7 +14,7 @@ import { useUpdateDocumentoCadastral } from "../../hooks/api/documento-cadastral
 import { useCreateDocumentoCadastral } from "../../hooks/api/documento-cadastral/useCreateDocumentoCadastral";
 import { useUploadFileToDocumentoCadastral } from "../../hooks/api/documento-cadastral/useUploadFIle";
 import { useDeleteFileFromDocumentoCadastral } from "../../hooks/api/documento-cadastral/useDeleteFileFromDocumentoCadastral";
-import { useLoadAssistant } from "../../hooks/api/useLoadAssistant";
+import { useLoadAssistant } from "../../hooks/api/assistant-config/useLoadAssistant";
 import { FormDialog } from "../../components/formDialog";
 import {
   DefaultTrigger,
@@ -105,6 +105,10 @@ export const DocumentoCadastralDialog = ({
     }
   };
 
+  useEffect(() => {
+    setData(defaultValues);
+  }, [defaultValues]);
+
   return (
     <Box>
       <Box onClick={() => setOpen(true)} asChild>
@@ -123,7 +127,7 @@ export const DocumentoCadastralDialog = ({
         onOpenChange={() => {
           queryClient.invalidateQueries(["listar-documentos-cadastrais"]);
           setOpen(false);
-          setData();
+          setData(defaultValues);
         }}
         open={open}
         key="DOCUMENTOS_CADASTRAIS"

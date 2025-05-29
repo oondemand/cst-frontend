@@ -24,11 +24,11 @@ export const FormDialog = ({
   fields,
   data,
   onSubmit,
-  key,
+  stateKey,
   children,
 }) => {
   const { inputsVisibility, setInputsVisibility } = useVisibleInputForm({
-    key,
+    key: stateKey,
   });
 
   return (

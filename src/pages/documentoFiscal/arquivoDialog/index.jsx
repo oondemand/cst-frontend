@@ -19,7 +19,7 @@ import { AprovarForm } from "./form/aprovar";
 import { ReprovarForm } from "./form/reprovar";
 import { useIaChat } from "../../../hooks/useIaChat";
 import { Oondemand } from "../../../components/svg/oondemand";
-import { useLoadAssistant } from "../../../hooks/api/useLoadAssistant";
+import { useLoadAssistant } from "../../../hooks/api/assistant-config/useLoadAssistant";
 
 export const ArquivoDetailsDialog = ({ documentoFiscal }) => {
   const [open, setOpen] = useState(false);
@@ -34,10 +34,13 @@ export const ArquivoDetailsDialog = ({ documentoFiscal }) => {
   });
 
   useEffect(() => {
-    if (response?.data?.buffer?.data) {
-      const pdfBlob = new Blob([new Uint8Array(response.data.buffer.data)], {
-        type: "application/pdf",
-      });
+    if (response?.data?.arquivo?.buffer?.data) {
+      const pdfBlob = new Blob(
+        [new Uint8Array(response.data.arquivo.buffer.data)],
+        {
+          type: "application/pdf",
+        }
+      );
       const url = URL.createObjectURL(pdfBlob);
       setPdfUrl(url);
 

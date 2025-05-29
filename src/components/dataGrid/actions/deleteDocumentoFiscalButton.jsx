@@ -7,29 +7,14 @@ import { useConfirmation } from "../../../hooks/useConfirmation";
 import { Tooltip } from "../../ui/tooltip";
 import { DocumentosFiscaisService } from "../../../service/documentos-fiscais";
 import { ORIGENS } from "../../../constants/origens";
+import { useDeleteDocumentoFiscal } from "../../../hooks/api/documento-fiscal/useDeleteDocumentoFiscal";
 
 export const DeleteDocumentoFiscalAction = ({ id }) => {
   const { requestConfirmation } = useConfirmation();
 
-  const { mutateAsync: deleteDocumentoFiscalMutation } = useMutation({
-    mutationFn: async () =>
-      await DocumentosFiscaisService.deletarDocumentoFiscal({
-        id,
-        origem: ORIGENS.DATAGRID,
-      }),
-    onSuccess() {
-      queryClient.refetchQueries(["listar-documentos-fiscais"]);
-      toaster.create({
-        title: "Documento fiscal excluído com sucesso",
-        type: "success",
-      });
-    },
-    onError: (error) => {
-      toaster.create({
-        title: "Ouve um erro ao excluir documento fiscal",
-        type: "error",
-      });
-    },
+  const deleteDocumentoFiscal = useDeleteDocumentoFiscal({
+    onSuccess: () => queryClient.refetchQueries(["listar-documentos-fiscais"]),
+    origem: ORIGENS.DATAGRID,
   });
 
   const handleDeleteDocumentoFiscal = async () => {
@@ -39,7 +24,7 @@ export const DeleteDocumentoFiscalAction = ({ id }) => {
     });
 
     if (action === "confirmed") {
-      await deleteDocumentoFiscalMutation();
+      await deleteDocumentoFiscal.mutateAsync({ id });
     }
   };
 

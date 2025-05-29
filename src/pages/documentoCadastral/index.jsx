@@ -13,6 +13,7 @@ import { DocumentoCadastralDialog } from "./dialog";
 import { useNavigate } from "react-router-dom";
 import { useUpdateDocumentoCadastral } from "../../hooks/api/documento-cadastral/useUpdateDocumentoCadastral";
 import { ORIGENS } from "../../constants/origens";
+import { Container } from "../../components/container";
 
 export const DocumentosCadastraisList = () => {
   const navigate = useNavigate();
@@ -68,40 +69,29 @@ export const DocumentosCadastraisList = () => {
   };
 
   return (
-    <>
-      <Flex
-        flex="1"
-        py="8"
-        px="6"
-        pb="2"
-        itens="center"
-        overflow="auto"
-        scrollbarWidth="thin"
-        bg="#F8F9FA"
-      >
-        <Box>
-          <Text fontSize="lg" color="gray.700" fontWeight="semibold">
-            Documentos cadastrais
-          </Text>
-          <Box mt="4" bg="white" py="6" px="4" rounded="lg" shadow="xs">
-            <DataGrid
-              table={table}
-              importDataFn={() => navigate("/documentos-cadastrais/importacao")}
-              exportDataFn={getAllDocumentoscadastraisWithFilters}
-              form={DocumentoCadastralDialog}
-              data={data?.results || []}
-              rowCount={data?.pagination?.totalItems}
-              isDataLoading={isFetching || isLoading}
-              onUpdateData={async (values) => {
-                await updateDocumentoCadastral.mutateAsync({
-                  id: values.id,
-                  body: values.data,
-                });
-              }}
-            />
-          </Box>
+    <Container>
+      <Box>
+        <Text fontSize="lg" color="gray.700" fontWeight="semibold">
+          Documentos cadastrais
+        </Text>
+        <Box mt="4" bg="white" py="6" px="4" rounded="lg" shadow="xs">
+          <DataGrid
+            table={table}
+            importDataFn={() => navigate("/documentos-cadastrais/importacao")}
+            exportDataFn={getAllDocumentoscadastraisWithFilters}
+            form={DocumentoCadastralDialog}
+            data={data?.results || []}
+            rowCount={data?.pagination?.totalItems}
+            isDataLoading={isFetching || isLoading}
+            onUpdateData={async (values) => {
+              await updateDocumentoCadastral.mutateAsync({
+                id: values.id,
+                body: values.data,
+              });
+            }}
+          />
         </Box>
-      </Flex>
-    </>
+      </Box>
+    </Container>
   );
 };

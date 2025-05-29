@@ -8,26 +8,14 @@ import { useConfirmation } from "../../../hooks/useConfirmation";
 import { Tooltip } from "../../ui/tooltip";
 import { UsuarioService } from "../../../service/usuario";
 import { ORIGENS } from "../../../constants/origens";
+import { useDeleteUsuario } from "../../../hooks/api/usuarios/useDeleteUsuario";
 
 export const DeleteUsuarioAction = ({ id }) => {
   const { requestConfirmation } = useConfirmation();
 
-  const { mutateAsync: deleteUsuarioMutation } = useMutation({
-    mutationFn: async () =>
-      await UsuarioService.excluirUsuario({ id, origem: ORIGENS.DATAGRID }),
-    onSuccess() {
-      queryClient.invalidateQueries(["listar-usuarios"]);
-      toaster.create({
-        title: "Usuario excluído com sucesso",
-        type: "success",
-      });
-    },
-    onError: (error) => {
-      toaster.create({
-        title: "Ouve um erro ao excluir usuario",
-        type: "error",
-      });
-    },
+  const deleteUsuario = useDeleteUsuario({
+    onSuccess: () => queryClient.invalidateQueries(["listar-usuarios"]),
+    origem: ORIGENS.DATAGRID,
   });
 
   const handleDeleteUsuario = async () => {
@@ -37,7 +25,7 @@ export const DeleteUsuarioAction = ({ id }) => {
     });
 
     if (action === "confirmed") {
-      await deleteUsuarioMutation();
+      await deleteUsuario.mutateAsync({ id });
     }
   };
 

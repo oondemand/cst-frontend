@@ -3,34 +3,17 @@ import { Trash } from "lucide-react";
 import { useMutation } from "@tanstack/react-query";
 import { toaster } from "../../ui/toaster";
 import { queryClient } from "../../../config/react-query";
-import { api } from "../../../config/api";
 import { useConfirmation } from "../../../hooks/useConfirmation";
 import { Tooltip } from "../../ui/tooltip";
 import { ORIGENS } from "../../../constants/origens";
+import { useDeleteEtapa } from "../../../hooks/api/etapas/useDeleteEtapa";
 
 export const DeleteEtapaAction = ({ id }) => {
   const { requestConfirmation } = useConfirmation();
 
-  const { mutateAsync: deleteEtapaMutation } = useMutation({
-    mutationFn: async () =>
-      await api.delete(`etapas/${id}`, {
-        headers: {
-          "x-origem": ORIGENS.DATAGRID,
-        },
-      }),
-    onSuccess() {
-      queryClient.invalidateQueries(["listar-etapas"]);
-      toaster.create({
-        title: "Etapa excluído com sucesso",
-        type: "success",
-      });
-    },
-    onError: (error) => {
-      toaster.create({
-        title: "Ouve um erro ao excluir etapa",
-        type: "error",
-      });
-    },
+  const deleteEtapa = useDeleteEtapa({
+    onSuccess: () => queryClient.invalidateQueries(["listar-etapas"]),
+    origem: ORIGENS.DATAGRID,
   });
 
   const handleDeleteEtapa = async () => {
@@ -40,7 +23,7 @@ export const DeleteEtapaAction = ({ id }) => {
     });
 
     if (action === "confirmed") {
-      await deleteEtapaMutation();
+      await deleteEtapa.mutateAsync({ id });
     }
   };
 

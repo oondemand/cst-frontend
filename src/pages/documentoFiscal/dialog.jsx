@@ -1,5 +1,5 @@
 import { Box, Button, Flex, Text } from "@chakra-ui/react";
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { queryClient } from "../../config/react-query";
 import { createDynamicFormFields } from "./formFields";
 import { TicketService } from "../../service/ticket";
@@ -10,7 +10,7 @@ import {
 import { Paperclip, CircleX, Download } from "lucide-react";
 import { useConfirmation } from "../../hooks/useConfirmation";
 import { useIaChat } from "../../hooks/useIaChat";
-import { useLoadAssistant } from "../../hooks/api/useLoadAssistant";
+import { useLoadAssistant } from "../../hooks/api/assistant-config/useLoadAssistant";
 import { useUpdateDocumentoFiscal } from "../../hooks/api/documento-fiscal/useUpdateDocumentoFiscal";
 import { useCreateDocumentoFiscal } from "../../hooks/api/documento-fiscal/useCreateDocumentoFiscal";
 import { useUploadFileToDocumentoFiscal } from "../../hooks/api/documento-fiscal/useUploadFIle";
@@ -105,6 +105,10 @@ export const DocumentosFiscaisDialog = ({
     }
   };
 
+  useEffect(() => {
+    setData(defaultValues);
+  }, [defaultValues]);
+
   return (
     <Box>
       <Box onClick={() => setOpen(true)} asChild>
@@ -122,8 +126,8 @@ export const DocumentosFiscaisDialog = ({
         onSubmit={onSubmit}
         onOpenChange={() => {
           queryClient.invalidateQueries(["listar-prestadores"]);
+          setData(defaultValues);
           setOpen(false);
-          setData();
         }}
         open={open}
         key="DOCUMENTOS_FISCAIS"

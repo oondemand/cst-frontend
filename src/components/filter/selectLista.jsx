@@ -3,13 +3,13 @@ import { useQuery } from "@tanstack/react-query";
 import { ListaService } from "../../service/listas";
 
 export function SelectListaFilter({ onChange, value, cod, ...props }) {
-  const { data: lista } = useQuery({
+  const { data } = useQuery({
     queryFn: async () => ListaService.getListByCode({ cod }),
     queryKey: [`list-${cod}`],
     staleTime: 1000 * 60 * 10, //10 minutos
   });
 
-  const options = lista?.valores?.map((e) => ({
+  const options = data?.lista?.valores?.map((e) => ({
     label: e?.valor,
     value: e?.valor,
   }));

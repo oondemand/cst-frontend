@@ -53,8 +53,8 @@ export const DocumentoFiscalForm = ({ ticket, onlyReading }) => {
         documentoFiscalId,
         origem: ORIGENS.ESTEIRA,
       }),
-    onSuccess: ({ documentosFiscais }) => {
-      setDocumentosFiscais(documentosFiscais);
+    onSuccess: ({ ticket }) => {
+      setDocumentosFiscais(ticket.documentosFiscais);
       toaster.create({
         title: "Documento fiscal removido com sucesso!",
         type: "success",

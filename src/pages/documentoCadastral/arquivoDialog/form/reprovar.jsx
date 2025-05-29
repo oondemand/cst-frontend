@@ -42,7 +42,7 @@ export const ReprovarForm = ({ documentoCadastralId }) => {
 
   const motivoRecusaList = createListCollection({
     items:
-      data?.valores?.map((item) => ({
+      data?.lista?.valores?.map((item) => ({
         value: item?.valor,
         label: item?.valor,
       })) ?? [],

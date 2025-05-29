@@ -90,7 +90,7 @@ export const ServicosTomados = () => {
       <Flex flex="1" pb="2" itens="center" overflow="hidden">
         {(!isEtapasLoading || !isTicketLoading) &&
           filteredTickets &&
-          etapasResponseData.etapas && (
+          etapasResponseData?.etapas && (
             <Swiper
               style={{
                 height: "100%",
@@ -103,7 +103,7 @@ export const ServicosTomados = () => {
               modules={[FreeMode, Navigation]}
               navigation={true}
             >
-              {etapasResponseData.etapas.map((etapa) => (
+              {etapasResponseData?.etapas?.map((etapa) => (
                 <SwiperSlide
                   key={etapa._id}
                   style={{ minWidth: "250px", maxWidth: "250px" }}

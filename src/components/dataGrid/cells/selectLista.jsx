@@ -11,7 +11,7 @@ export const SelectListaCell = ({
   cod,
   ...rest
 }) => {
-  const { data: lista } = useQuery({
+  const { data } = useQuery({
     queryKey: [`list-${cod}`],
     queryFn: () => ListaService.getListByCode({ cod }),
     staleTime: 1000 * 60 * 10, // 10 minutos em milissegundos
@@ -21,7 +21,7 @@ export const SelectListaCell = ({
   const [value, setValue] = useState("");
 
   const options =
-    lista?.valores?.map((item) => ({
+    data?.lista?.valores?.map((item) => ({
       label: item.valor,
       value: item.valor,
     })) || [];
@@ -66,7 +66,7 @@ export const SelectListaCell = ({
 
   useEffect(() => {
     initializeValue();
-  }, [initialValue, lista]);
+  }, [initialValue, data]);
   return (
     <SelectAutocomplete
       placeholder={value}

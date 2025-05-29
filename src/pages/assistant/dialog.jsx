@@ -1,5 +1,5 @@
 import { Box } from "@chakra-ui/react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { queryClient } from "../../config/react-query";
 import { createDynamicFormFields } from "./formFields";
 
@@ -44,6 +44,10 @@ export const AssistenteConfigDialog = ({
     return await updateAssistenteConfig.mutateAsync({ id: data._id, body });
   };
 
+  useEffect(() => {
+    setData(defaultValues);
+  }, [defaultValues]);
+
   return (
     <Box>
       <Box onClick={() => setOpen(true)} asChild>
@@ -61,7 +65,7 @@ export const AssistenteConfigDialog = ({
         onOpenChange={() => {
           queryClient.invalidateQueries(["listar-assistente-config"]);
           setOpen(false);
-          setData();
+          setData(defaultValues);
         }}
         open={open}
         key="ASSISTENTE_CONFIG"

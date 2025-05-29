@@ -13,13 +13,14 @@ const useDebouncedLoadOptions = (delay = 700) => {
 
     timeoutRef.current = setTimeout(async () => {
       try {
-        const {
-          data: { prestadores },
-        } = await api.get(`/prestadores?searchTerm=${inputValue}`, {
-          signal: abortControllerRef.current.signal,
-        });
+        const { data } = await api.get(
+          `/prestadores?searchTerm=${inputValue}`,
+          {
+            signal: abortControllerRef.current.signal,
+          }
+        );
 
-        const options = prestadores.map((item) => ({
+        const options = data?.results.map((item) => ({
           ...item,
           value: item._id,
           label: `${item.nome} ${`${

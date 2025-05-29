@@ -7,30 +7,15 @@ import { api } from "../../../config/api";
 import { useConfirmation } from "../../../hooks/useConfirmation";
 import { Tooltip } from "../../ui/tooltip";
 import { ORIGENS } from "../../../constants/origens";
+import { useDeleteAssistantConfig } from "../../../hooks/api/assistant-config/useDeleteAssistantCongig";
 
 export const DeleteAssistenteConfigAction = ({ id }) => {
   const { requestConfirmation } = useConfirmation();
 
-  const { mutateAsync: deleteAssistenteConfigMutation } = useMutation({
-    mutationFn: async () =>
-      await api.delete(`assistentes/${id}`, {
-        headers: {
-          "x-origem": ORIGENS.DATAGRID,
-        },
-      }),
-    onSuccess() {
-      queryClient.invalidateQueries(["listar-assistente-config"]);
-      toaster.create({
-        title: "Assistente excluído com sucesso",
-        type: "success",
-      });
-    },
-    onError: (error) => {
-      toaster.create({
-        title: "Ouve um erro ao excluir assistente",
-        type: "error",
-      });
-    },
+  const deleteAssistantConfig = useDeleteAssistantConfig({
+    onSuccess: () =>
+      queryClient.invalidateQueries(["listar-assistente-config"]),
+    origem: ORIGENS.DATAGRID,
   });
 
   const handleDeleteAssistenteConfig = async () => {
@@ -40,7 +25,7 @@ export const DeleteAssistenteConfigAction = ({ id }) => {
     });
 
     if (action === "confirmed") {
-      await deleteAssistenteConfigMutation();
+      await deleteAssistantConfig.mutateAsync({ id });
     }
   };
 

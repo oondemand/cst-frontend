@@ -1,21 +1,24 @@
 import { useMutation } from "@tanstack/react-query";
 import { toaster } from "../../../components/ui/toaster";
-import { ServicoService } from "../../../service/servico";
+import { EtapaService } from "../../../service/etapa";
 
-export const useUpdateServico = ({ onSuccess, origem }) =>
+export const useDeleteEtapa = ({ onSuccess, origem }) =>
   useMutation({
-    mutationFn: async ({ id, body }) =>
-      await ServicoService.atualizarServico({ id, body, origem }),
+    mutationFn: async ({ id }) =>
+      await EtapaService.deletarEtapa({
+        id,
+        origem,
+      }),
     onSuccess(data) {
       onSuccess?.(data);
       toaster.create({
-        title: "Servico atualizado com sucesso",
+        title: "Etapa excluído com sucesso",
         type: "success",
       });
     },
     onError: (error) => {
       toaster.create({
-        title: "Ouve um erro ao atualizar o serviço",
+        title: "Ouve um erro ao excluir etapa",
         description: error?.response?.data?.message,
         type: "error",
       });
