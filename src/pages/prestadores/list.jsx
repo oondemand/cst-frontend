@@ -15,7 +15,17 @@ import { ORIGENS } from "../../constants/origens";
 export const PrestadoresList = () => {
   const navigate = useNavigate();
   const columns = useMemo(() => makePrestadorDynamicColumns(), []);
-  const { filters, table } = useDataGrid({ columns, key: "PRESTADORES" });
+  const { filters, table } = useDataGrid({
+    columns,
+    key: "PRESTADORES",
+    exportModel: columns.map((e) => {
+      if (e.accessorKey === "endereco.pais.cod") {
+        return { ...e, accessorKey: "endereco.pais.nome" };
+      }
+
+      return e;
+    }),
+  });
 
   const { data, isLoading, isFetching } = useQuery({
     queryKey: ["listar-prestadores", { filters }],
