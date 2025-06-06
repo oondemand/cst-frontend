@@ -30,6 +30,7 @@ import { useQuery } from "@tanstack/react-query";
 import { AssistantConfigService } from "../../service/assistant-config";
 import { DocumentosCadastraisService } from "../../service/documentos-cadastrais";
 import { ORIGENS } from "../../constants/origens";
+import { useLoadAssistant } from "../../hooks/api/assistant-config/useLoadAssistant";
 
 export const TicketModal = ({ open, setOpen, defaultValue, onlyReading }) => {
   const [ticket, setTicket] = useState(defaultValue);
@@ -104,34 +105,7 @@ export const TicketModal = ({ open, setOpen, defaultValue, onlyReading }) => {
     enabled: open,
   });
 
-  const {
-    data: assistantConfig,
-    isLoading,
-    isFetching,
-  } = useQuery({
-    queryKey: ["listar-assistente-config"],
-    queryFn: async () => await AssistantConfigService.listarAssistenteAtivos(),
-    staleTime: 1000 * 60 * 1, // 1 minute
-    enabled: open,
-  });
-
-  const loadAssistantByEtapa = () => {
-    let assistant = assistantConfig?.find((e) => {
-      return e?.modulo.includes(data?.etapa);
-    });
-
-    if (!assistant) {
-      assistant = assistantConfig?.find((e) => {
-        return e?.modulo === "ticket";
-      });
-    }
-
-    return assistant?.assistente;
-  };
-
-  const handleOpenIaChat = () => {
-    onOpen({ ...data, documentosCadastrais }, loadAssistantByEtapa());
-  };
+  const { assistant } = useLoadAssistant(data?.ticket?.etapa ?? "ticket");
 
   return (
     <DialogRoot
@@ -161,7 +135,9 @@ export const TicketModal = ({ open, setOpen, defaultValue, onlyReading }) => {
               aria-label="Abrir IA"
               cursor="pointer"
               variant="unstyled"
-              onClick={handleOpenIaChat}
+              onClick={() =>
+                onOpen({ ...data, documentosCadastrais }, assistant)
+              }
             >
               <Oondemand />
             </Box>
